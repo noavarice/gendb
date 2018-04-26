@@ -14,3 +14,13 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
+
+task generateModel {
+    doLast {
+        exec {
+            commandLine "xjc", "-d", "src", "-p", "main.java.com.gendb.model", "src/main/resources/config-schema.xsd"
+        }
+    }
+}
+
+tasks.build.dependsOn(generateModel)
