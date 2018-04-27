@@ -18,9 +18,9 @@ dependencies {
 task generateModel {
     doLast {
         exec {
-            commandLine "xjc", "-d", "src", "-p", "main.java.com.gendb.model", "src/main/resources/config-schema.xsd"
+            commandLine "xjc", "-d", "src/main/java", "-p", "com.gendb.model", "src/main/resources/config-schema.xsd"
         }
     }
 }
 
-tasks.build.dependsOn(generateModel)
+tasks.compileJava.dependsOn(generateModel)

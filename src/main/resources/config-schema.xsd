@@ -1,10 +1,52 @@
 <?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="column" type="column"/>
-  <xs:complexType name="column">
+  <xs:simpleType name="IntegerTypes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="smallint"/>
+      <xs:enumeration value="int"/>
+      <xs:enumeration value="bigint"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="FixedPointTypes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="numeric"/>
+      <xs:enumeration value="decimal"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="IntegerType">
+    <xs:attribute name="type" type="IntegerTypes"/>
+    <xs:attribute name="unsigned" type="xs:boolean" default="false"/>
+  </xs:complexType>
+
+  <xs:complexType name="FixedPointType">
+    <xs:attribute name="type" type="FixedPointTypes"/>
+    <xs:attribute name="precision" type="xs:int" default="10"/>
+    <xs:attribute name="scale" type="xs:int" default="0"/>
+  </xs:complexType>
+
+  <xs:element name="column" type="Column"/>
+  <xs:complexType name="Column">
+    <xs:choice>
+      <xs:element name="integer" type="IntegerType"/>
+      <xs:element name="fixedPoint" type="FixedPointType"/>
+    </xs:choice>
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="null" type="xs:string"/>
+    <xs:attribute name="default" type="xs:string" default="null"/>
+  </xs:complexType>
+
+  <xs:element name="table" type="table"/>
+  <xs:complexType name="table">
     <xs:sequence>
       <xs:element name="name" type="xs:string"/>
-      <xs:element name="type" type="xs:string"/>
+      <xs:sequence>
+        <xs:element name="id" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:sequence>
+        <xs:element name="columns" type="Column" maxOccurs="unbounded"/>
+      </xs:sequence>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
