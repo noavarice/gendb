@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'net.ltgt.apt' version '0.8'
 }
 
 group 'gendb'
@@ -12,13 +13,16 @@ repositories {
 }
 
 dependencies {
+    compile 'org.mapstruct:mapstruct-jdk8:1.2.0.Final'
+    apt 'org.mapstruct:mapstruct-processor:1.2.0.Final'
+
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
 task generateModel {
     doLast {
         exec {
-            commandLine "xjc", "-d", "src/main/java", "-p", "com.gendb.dto", "src/main/resources/config-schema.xsd"
+            commandLine "xjc", "-d", "src/main/java", "-p", "com.gendb.dto", "src/main/resources/config-schema.xsd", "-readOnly", "-no-header"
         }
     }
 }

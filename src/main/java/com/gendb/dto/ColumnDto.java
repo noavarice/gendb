@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="type" type="{}DataTypeDto"/&gt;
  *       &lt;/all&gt;
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
- *       &lt;attribute name="nullable" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute name="nullable" type="{http://www.w3.org/2001/XMLSchema}boolean" default="true" /&gt;
  *       &lt;attribute name="defaultValue" type="{http://www.w3.org/2001/XMLSchema}string" default="null" /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -41,7 +41,7 @@ public class ColumnDto {
     @XmlAttribute(name = "name")
     protected String name;
     @XmlAttribute(name = "nullable")
-    protected String nullable;
+    protected Boolean nullable;
     @XmlAttribute(name = "defaultValue")
     protected String defaultValue;
 
@@ -98,11 +98,15 @@ public class ColumnDto {
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Boolean }
      *     
      */
-    public String getNullable() {
-        return nullable;
+    public boolean isNullable() {
+        if (nullable == null) {
+            return true;
+        } else {
+            return nullable;
+        }
     }
 
     /**
@@ -110,10 +114,10 @@ public class ColumnDto {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link Boolean }
      *     
      */
-    public void setNullable(String value) {
+    public void setNullable(Boolean value) {
         this.nullable = value;
     }
 

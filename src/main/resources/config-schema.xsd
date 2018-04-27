@@ -25,14 +25,14 @@
       <xs:element name="type" type="DataTypeDto"/>
     </xs:all>
     <xs:attribute name="name" type="xs:string"/>
-    <xs:attribute name="nullable" type="xs:string"/>
+    <xs:attribute name="nullable" type="xs:boolean" default="true"/>
     <xs:attribute name="defaultValue" type="xs:string" default="null"/>
   </xs:complexType>
 
   <!-- Describes SQL table -->
   <xs:complexType name="TableDto">
     <xs:sequence>
-      <xs:element name="columns" type="ColumnDto" maxOccurs="unbounded"/>
+      <xs:element name="column" type="ColumnDto" maxOccurs="unbounded"/>
       <xs:element name="id" minOccurs="0">
         <xs:complexType>
           <xs:sequence>

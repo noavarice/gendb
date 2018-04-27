@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="columns" type="{}ColumnDto" maxOccurs="unbounded"/&gt;
+ *         &lt;element name="column" type="{}ColumnDto" maxOccurs="unbounded"/&gt;
  *         &lt;element name="id" minOccurs="0"&gt;
  *           &lt;complexType&gt;
  *             &lt;complexContent&gt;
@@ -43,30 +43,30 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "TableDto", propOrder = {
-    "columns",
+    "column",
     "id"
 })
 public class TableDto {
 
     @XmlElement(required = true)
-    protected List<ColumnDto> columns;
+    protected List<ColumnDto> column;
     protected TableDto.Id id;
     @XmlAttribute(name = "name")
     protected String name;
 
     /**
-     * Gets the value of the columns property.
+     * Gets the value of the column property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the columns property.
+     * This is why there is not a <CODE>set</CODE> method for the column property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getColumns().add(newItem);
+     *    getColumn().add(newItem);
      * </pre>
      * 
      * 
@@ -76,11 +76,11 @@ public class TableDto {
      * 
      * 
      */
-    public List<ColumnDto> getColumns() {
-        if (columns == null) {
-            columns = new ArrayList<ColumnDto>();
+    public List<ColumnDto> getColumn() {
+        if (column == null) {
+            column = new ArrayList<ColumnDto>();
         }
-        return this.columns;
+        return this.column;
     }
 
     /**
