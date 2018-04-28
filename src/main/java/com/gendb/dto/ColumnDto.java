@@ -20,9 +20,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;all&gt;
  *         &lt;element name="type" type="{}DataTypeDto"/&gt;
  *       &lt;/all&gt;
- *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
- *       &lt;attribute name="nullable" type="{http://www.w3.org/2001/XMLSchema}boolean" default="true" /&gt;
- *       &lt;attribute name="defaultValue" type="{http://www.w3.org/2001/XMLSchema}string" default="null" /&gt;
+ *       &lt;attribute name="name" use="required" type="{}Attribute" /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -38,12 +36,8 @@ public class ColumnDto {
 
     @XmlElement(required = true)
     protected DataTypeDto type;
-    @XmlAttribute(name = "name")
+    @XmlAttribute(name = "name", required = true)
     protected String name;
-    @XmlAttribute(name = "nullable")
-    protected Boolean nullable;
-    @XmlAttribute(name = "defaultValue")
-    protected String defaultValue;
 
     /**
      * Gets the value of the type property.
@@ -91,62 +85,6 @@ public class ColumnDto {
      */
     public void setName(String value) {
         this.name = value;
-    }
-
-    /**
-     * Gets the value of the nullable property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *     
-     */
-    public boolean isNullable() {
-        if (nullable == null) {
-            return true;
-        } else {
-            return nullable;
-        }
-    }
-
-    /**
-     * Sets the value of the nullable property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *     
-     */
-    public void setNullable(Boolean value) {
-        this.nullable = value;
-    }
-
-    /**
-     * Gets the value of the defaultValue property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDefaultValue() {
-        if (defaultValue == null) {
-            return "null";
-        } else {
-            return defaultValue;
-        }
-    }
-
-    /**
-     * Sets the value of the defaultValue property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDefaultValue(String value) {
-        this.defaultValue = value;
     }
 
 }

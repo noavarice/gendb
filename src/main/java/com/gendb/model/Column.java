@@ -6,10 +6,6 @@ public class Column {
 
   private String name;
 
-  private boolean nullable;
-
-  private String defaultValue;
-
   public DataType getType() {
     return type;
   }
@@ -24,21 +20,5 @@ public class Column {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public boolean isNullable() {
-    return nullable;
-  }
-
-  public void setNullable(boolean nullable) {
-    this.nullable = nullable;
-  }
-
-  public String getDefaultValue() {
-    return defaultValue;
-  }
-
-  public void setDefaultValue(String defaultValue) {
-    this.defaultValue = defaultValue;
   }
 }

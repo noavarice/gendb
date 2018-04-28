@@ -16,7 +16,9 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="DataTypeDto"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
- *       &lt;attribute name="name" type="{}DataTypes" /&gt;
+ *       &lt;attribute name="name" use="required" type="{}DataTypes" /&gt;
+ *       &lt;attribute name="nullable" type="{http://www.w3.org/2001/XMLSchema}boolean" default="true" /&gt;
+ *       &lt;attribute name="defaultValue" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
  *       &lt;attribute name="precision" type="{http://www.w3.org/2001/XMLSchema}int" default="10" /&gt;
  *       &lt;attribute name="scale" type="{http://www.w3.org/2001/XMLSchema}int" default="0" /&gt;
  *     &lt;/restriction&gt;
@@ -30,8 +32,12 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "DataTypeDto")
 public class DataTypeDto {
 
-    @XmlAttribute(name = "name")
+    @XmlAttribute(name = "name", required = true)
     protected DataTypes name;
+    @XmlAttribute(name = "nullable")
+    protected Boolean nullable;
+    @XmlAttribute(name = "defaultValue")
+    protected String defaultValue;
     @XmlAttribute(name = "precision")
     protected Integer precision;
     @XmlAttribute(name = "scale")
@@ -59,6 +65,58 @@ public class DataTypeDto {
      */
     public void setName(DataTypes value) {
         this.name = value;
+    }
+
+    /**
+     * Gets the value of the nullable property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *     
+     */
+    public boolean isNullable() {
+        if (nullable == null) {
+            return true;
+        } else {
+            return nullable;
+        }
+    }
+
+    /**
+     * Sets the value of the nullable property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *     
+     */
+    public void setNullable(Boolean value) {
+        this.nullable = value;
+    }
+
+    /**
+     * Gets the value of the defaultValue property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    /**
+     * Sets the value of the defaultValue property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setDefaultValue(String value) {
+        this.defaultValue = value;
     }
 
     /**

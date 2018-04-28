@@ -22,8 +22,8 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence&gt;
  *         &lt;element name="table" type="{}TableDto" maxOccurs="unbounded"/&gt;
  *       &lt;/sequence&gt;
- *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
- *       &lt;attribute name="dbms" type="{}SupportedDBMS" /&gt;
+ *       &lt;attribute name="name" use="required" type="{}Attribute" /&gt;
+ *       &lt;attribute name="dbms" use="required" type="{}SupportedDBMS" /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -39,9 +39,9 @@ public class DatabaseDto {
 
     @XmlElement(required = true)
     protected List<TableDto> table;
-    @XmlAttribute(name = "name")
+    @XmlAttribute(name = "name", required = true)
     protected String name;
-    @XmlAttribute(name = "dbms")
+    @XmlAttribute(name = "dbms", required = true)
     protected SupportedDBMS dbms;
 
     /**

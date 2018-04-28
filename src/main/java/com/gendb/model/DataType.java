@@ -4,6 +4,10 @@ public class DataType {
 
   private String name;
 
+  private boolean nullable;
+
+  private String defaultValue;
+
   private int precision;
 
   private int scale;
@@ -30,5 +34,21 @@ public class DataType {
 
   public void setScale(int scale) {
     this.scale = scale;
+  }
+
+  public boolean isNullable() {
+    return nullable;
+  }
+
+  public void setNullable(boolean nullable) {
+    this.nullable = nullable;
+  }
+
+  public String getDefaultValue() {
+    return defaultValue;
+  }
+
+  public void setDefaultValue(String defaultValue) {
+    this.defaultValue = defaultValue;
   }
 }

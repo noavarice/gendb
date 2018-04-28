@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
  *           &lt;/complexType&gt;
  *         &lt;/element&gt;
  *       &lt;/sequence&gt;
- *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *       &lt;attribute name="name" use="required" type="{}Attribute" /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -51,7 +51,7 @@ public class TableDto {
     @XmlElement(required = true)
     protected List<ColumnDto> column;
     protected TableDto.Id id;
-    @XmlAttribute(name = "name")
+    @XmlAttribute(name = "name", required = true)
     protected String name;
 
     /**
