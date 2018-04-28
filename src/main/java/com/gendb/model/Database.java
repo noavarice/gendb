@@ -33,4 +33,9 @@ public class Database {
   public void setDbmsName(String dbmsName) {
     this.dbmsName = dbmsName;
   }
+
+  @Override
+  public String toString() {
+    return name;
+  }
 }

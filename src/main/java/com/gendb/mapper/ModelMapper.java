@@ -10,12 +10,9 @@ import com.gendb.model.Database;
 import com.gendb.model.Table;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface ModelMapper {
-
-  ModelMapper INSTANCE = Mappers.getMapper(ModelMapper.class);
 
   @Mapping(target = "name", expression = "java(dto.getName().value())")
   DataType toModel(final DataTypeDto dto);
