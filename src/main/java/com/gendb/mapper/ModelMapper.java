@@ -20,7 +20,6 @@ public interface ModelMapper {
   Column toModel(final ColumnDto dto);
 
   @Mapping(target = "columns", source = "column")
-  @Mapping(target = "id", expression = "java(dto.getId().getColumn())")
   Table toModel(final TableDto dto);
 
   @Mapping(target = "tables", source = "table")

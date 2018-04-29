@@ -34,19 +34,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TableDto }
-     * 
-     */
-    public TableDto createTableDto() {
-        return new TableDto();
-    }
-
-    /**
      * Create an instance of {@link DatabaseDto }
      * 
      */
     public DatabaseDto createDatabaseDto() {
         return new DatabaseDto();
+    }
+
+    /**
+     * Create an instance of {@link TableDto }
+     * 
+     */
+    public TableDto createTableDto() {
+        return new TableDto();
     }
 
     /**
@@ -66,20 +66,8 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link TableDto.Id }
+     * Create an instance of {@link JAXBElement }{@code <}{@link DatabaseDto }{@code >}}
      * 
-     */
-    public TableDto.Id createTableDtoId() {
-        return new TableDto.Id();
-    }
-
-    /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link DatabaseDto }{@code >}
-     * 
-     * @param value
-     *     Java instance representing xml element's value.
-     * @return
-     *     the new instance of {@link JAXBElement }{@code <}{@link DatabaseDto }{@code >}
      */
     @XmlElementDecl(namespace = "", name = "database")
     public JAXBElement<DatabaseDto> createDatabase(DatabaseDto value) {

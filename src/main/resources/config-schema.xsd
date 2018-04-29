@@ -40,12 +40,10 @@
   <xs:complexType name="TableDto">
     <xs:sequence>
       <xs:element name="column" type="ColumnDto" maxOccurs="unbounded"/>
-      <xs:element name="id" minOccurs="0">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="column" type="xs:string" maxOccurs="unbounded"/>
-          </xs:sequence>
-        </xs:complexType>
+      <xs:element name="id">
+        <xs:simpleType>
+          <xs:list itemType="xs:string"/>
+        </xs:simpleType>
       </xs:element>
     </xs:sequence>
     <xs:attribute name="name" type="Attribute" use="required"/>

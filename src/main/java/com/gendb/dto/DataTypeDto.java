@@ -10,20 +10,20 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * <p>Java class for DataTypeDto complex type.
  * 
- * <p>The following schema fragment specifies the expected         content contained within this class.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="DataTypeDto"&gt;
- *   &lt;complexContent&gt;
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
- *       &lt;attribute name="name" use="required" type="{}DataTypes" /&gt;
- *       &lt;attribute name="nullable" type="{http://www.w3.org/2001/XMLSchema}boolean" default="true" /&gt;
- *       &lt;attribute name="defaultValue" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
- *       &lt;attribute name="precision" type="{http://www.w3.org/2001/XMLSchema}int" default="10" /&gt;
- *       &lt;attribute name="scale" type="{http://www.w3.org/2001/XMLSchema}int" default="0" /&gt;
- *     &lt;/restriction&gt;
- *   &lt;/complexContent&gt;
- * &lt;/complexType&gt;
+ * &lt;complexType name="DataTypeDto">
+ *   &lt;complexContent>
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *       &lt;attribute name="name" use="required" type="{}DataTypes" />
+ *       &lt;attribute name="nullable" type="{http://www.w3.org/2001/XMLSchema}boolean" default="true" />
+ *       &lt;attribute name="defaultValue" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="precision" type="{http://www.w3.org/2001/XMLSchema}int" default="10" />
+ *       &lt;attribute name="scale" type="{http://www.w3.org/2001/XMLSchema}int" default="0" />
+ *     &lt;/restriction>
+ *   &lt;/complexContent>
+ * &lt;/complexType>
  * </pre>
  * 
  * 
