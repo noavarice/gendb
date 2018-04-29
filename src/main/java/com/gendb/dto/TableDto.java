@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="column" type="{}ColumnDto" maxOccurs="unbounded"/>
- *         &lt;element name="id">
+ *         &lt;element name="id" minOccurs="0">
  *           &lt;simpleType>
  *             &lt;list itemType="{http://www.w3.org/2001/XMLSchema}string" />
  *           &lt;/simpleType>
@@ -46,7 +46,6 @@ public class TableDto {
     @XmlElement(required = true)
     protected List<ColumnDto> column;
     @XmlList
-    @XmlElement(required = true)
     protected List<String> id;
     @XmlAttribute(name = "name", required = true)
     protected String name;
