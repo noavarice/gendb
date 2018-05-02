@@ -1,7 +1,10 @@
 package com.gendb.model;
 
+import javax.validation.Valid;
+
 public class Column {
 
+  @Valid
   private DataType type;
 
   private String name;

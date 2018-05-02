@@ -1,5 +1,7 @@
 package com.gendb.model;
 
+import javax.validation.constraints.PositiveOrZero;
+
 public class DataType {
 
   private String name;
@@ -8,8 +10,10 @@ public class DataType {
 
   private String defaultValue;
 
+  @PositiveOrZero
   private int precision;
 
+  @PositiveOrZero
   private int scale;
 
   public String getName() {

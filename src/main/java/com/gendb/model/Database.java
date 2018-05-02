@@ -1,11 +1,13 @@
 package com.gendb.model;
 
 import java.util.List;
+import javax.validation.Valid;
 
 public class Database {
 
   private String name;
 
+  @Valid
   private List<Table> tables;
 
   private String dbmsName;
