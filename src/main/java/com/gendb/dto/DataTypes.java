@@ -9,18 +9,18 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * <p>Java class for DataTypes.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>The following schema fragment specifies the expected         content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="DataTypes">
- *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="smallint"/>
- *     &lt;enumeration value="int"/>
- *     &lt;enumeration value="bigint"/>
- *     &lt;enumeration value="numeric"/>
- *     &lt;enumeration value="decimal"/>
- *   &lt;/restriction>
- * &lt;/simpleType>
+ * &lt;simpleType name="DataTypes"&gt;
+ *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
+ *     &lt;enumeration value="smallint"/&gt;
+ *     &lt;enumeration value="int"/&gt;
+ *     &lt;enumeration value="bigint"/&gt;
+ *     &lt;enumeration value="numeric"/&gt;
+ *     &lt;enumeration value="decimal"/&gt;
+ *   &lt;/restriction&gt;
+ * &lt;/simpleType&gt;
  * </pre>
  * 
  */

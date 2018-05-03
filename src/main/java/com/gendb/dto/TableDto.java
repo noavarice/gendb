@@ -14,24 +14,24 @@ import javax.xml.bind.annotation.XmlType;
 /**
  * <p>Java class for TableDto complex type.
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>The following schema fragment specifies the expected         content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="TableDto">
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="column" type="{}ColumnDto" maxOccurs="unbounded"/>
- *         &lt;element name="id" minOccurs="0">
- *           &lt;simpleType>
- *             &lt;list itemType="{http://www.w3.org/2001/XMLSchema}string" />
- *           &lt;/simpleType>
- *         &lt;/element>
- *       &lt;/sequence>
- *       &lt;attribute name="name" use="required" type="{}Attribute" />
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
+ * &lt;complexType name="TableDto"&gt;
+ *   &lt;complexContent&gt;
+ *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *       &lt;sequence&gt;
+ *         &lt;element name="column" type="{}ColumnDto" maxOccurs="unbounded"/&gt;
+ *         &lt;element name="id" minOccurs="0"&gt;
+ *           &lt;simpleType&gt;
+ *             &lt;list itemType="{http://www.w3.org/2001/XMLSchema}string" /&gt;
+ *           &lt;/simpleType&gt;
+ *         &lt;/element&gt;
+ *       &lt;/sequence&gt;
+ *       &lt;attribute name="name" use="required" type="{}Attribute" /&gt;
+ *     &lt;/restriction&gt;
+ *   &lt;/complexContent&gt;
+ * &lt;/complexType&gt;
  * </pre>
  * 
  * 
