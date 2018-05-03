@@ -9,9 +9,7 @@ import java.io.OutputStream;
 import java.util.ServiceLoader;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -21,7 +19,6 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import org.hibernate.validator.internal.engine.ValidatorImpl;
 import org.xml.sax.SAXException;
 
 /**
@@ -82,22 +79,17 @@ public final class Generator {
     return mapper.toModel(element.getValue());
   }
 
-  /**
-   * Returns obtained {@link Validator} instance
-   */
-  private static Validator createValidator() {
-    return Validation.buildDefaultValidatorFactory().getValidator();
+  private final Validator validator;
+
+  public Generator(final Validator validator) {
+    this.validator = validator;
   }
 
-  public static void fromStream(final InputStream input, final OutputStream output) throws JAXBException {
+  public void fromStream(final InputStream input, final OutputStream output) throws JAXBException {
     final Database db = getConfig(input);
-    final Validator validator = createValidator();
     final Set<ConstraintViolation<Database>> violations = validator.validate(db);
     if (!violations.isEmpty()) {
-      for (final ConstraintViolation v: violations) {
-        System.out.println(v.getMessage());
-      }
-
+      violations.forEach(v -> System.out.println(v.getMessage()));
       return;
     }
 

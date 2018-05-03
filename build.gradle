@@ -14,16 +14,16 @@ repositories {
 
 ext {
     mapstructVersion = "1.2.0.Final"
-    hibernateValidatorVersion = "6.0.0.Final"
+    validationApiVersion = "2.0.0.Final"
 }
 
 dependencies {
-    compile "org.mapstruct:mapstruct-jdk8:$mapstructVersion"
+    implementation "org.mapstruct:mapstruct-jdk8:$mapstructVersion"
+    implementation "javax.validation:validation-api:$validationApiVersion"
+
     apt "org.mapstruct:mapstruct-processor:$mapstructVersion"
 
-    compile "org.hibernate.validator:hibernate-validator:$hibernateValidatorVersion"
-
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
 task generateModel {
