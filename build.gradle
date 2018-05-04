@@ -32,7 +32,7 @@ dependencies {
 sourceSets {
     main {
         java {
-            srcDirs = srcDirs + ['build/generated/xjc']
+            srcDir 'build/generated/xjc'
         }
     }
 }
