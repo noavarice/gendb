@@ -16,9 +16,9 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
  *     &lt;enumeration value="smallint"/&gt;
  *     &lt;enumeration value="int"/&gt;
- *     &lt;enumeration value="bigint"/&gt;
- *     &lt;enumeration value="numeric"/&gt;
  *     &lt;enumeration value="decimal"/&gt;
+ *     &lt;enumeration value="char"/&gt;
+ *     &lt;enumeration value="varchar"/&gt;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
@@ -32,12 +32,12 @@ public enum DataTypes {
     SMALLINT("smallint"),
     @XmlEnumValue("int")
     INT("int"),
-    @XmlEnumValue("bigint")
-    BIGINT("bigint"),
-    @XmlEnumValue("numeric")
-    NUMERIC("numeric"),
     @XmlEnumValue("decimal")
-    DECIMAL("decimal");
+    DECIMAL("decimal"),
+    @XmlEnumValue("char")
+    CHAR("char"),
+    @XmlEnumValue("varchar")
+    VARCHAR("varchar");
     private final String value;
 
     DataTypes(String v) {

@@ -1,7 +1,11 @@
 package com.gendb.model;
 
+import com.gendb.validation.Violations;
+import com.gendb.validation.type.DecimalPropertiesPresent;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
+@DecimalPropertiesPresent
 public class DataType {
 
   private String name;
@@ -10,11 +14,14 @@ public class DataType {
 
   private String defaultValue;
 
-  @PositiveOrZero
-  private int precision;
+  @Positive(message = Violations.NON_POSITIVE_PRECISION)
+  private Integer precision;
 
-  @PositiveOrZero
-  private int scale;
+  @PositiveOrZero(message = Violations.NEGATIVE_PRECISION)
+  private Integer scale;
+
+  @Positive
+  private int length;
 
   public String getName() {
     return name;
@@ -24,19 +31,19 @@ public class DataType {
     this.name = name;
   }
 
-  public int getPrecision() {
+  public Integer getPrecision() {
     return precision;
   }
 
-  public void setPrecision(int precision) {
+  public void setPrecision(Integer precision) {
     this.precision = precision;
   }
 
-  public int getScale() {
+  public Integer getScale() {
     return scale;
   }
 
-  public void setScale(int scale) {
+  public void setScale(Integer scale) {
     this.scale = scale;
   }
 
@@ -54,5 +61,13 @@ public class DataType {
 
   public void setDefaultValue(String defaultValue) {
     this.defaultValue = defaultValue;
+  }
+
+  public int getLength() {
+    return length;
+  }
+
+  public void setLength(int length) {
+    this.length = length;
   }
 }

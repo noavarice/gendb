@@ -1,7 +1,8 @@
-package com.gendb.validation.table.impl;
+package com.gendb.validation.table.validator;
 
 import com.gendb.model.Column;
 import com.gendb.model.Table;
+import com.gendb.validation.ValidationUtils;
 import com.gendb.validation.table.ValidIdColumns;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,10 +21,7 @@ public class ValidIdColumnsValidator implements ConstraintValidator<ValidIdColum
     final List<String> tableColumns = table.getColumns().stream().map(Column::getName).collect(Collectors.toList());
     final boolean result = tableColumns.containsAll(idColumns);
     if (!result) {
-      final String template = context.getDefaultConstraintMessageTemplate();
-      context.buildConstraintViolationWithTemplate(String.format(template, table.getName()))
-        .addConstraintViolation()
-        .disableDefaultConstraintViolation();
+      ValidationUtils.addViolation(context, table.getName());
     }
 
     return result;

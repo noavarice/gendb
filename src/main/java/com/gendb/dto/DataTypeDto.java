@@ -19,8 +19,9 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;attribute name="name" use="required" type="{}DataTypes" /&gt;
  *       &lt;attribute name="nullable" type="{http://www.w3.org/2001/XMLSchema}boolean" default="true" /&gt;
  *       &lt;attribute name="defaultValue" type="{http://www.w3.org/2001/XMLSchema}string" /&gt;
- *       &lt;attribute name="precision" type="{http://www.w3.org/2001/XMLSchema}int" default="10" /&gt;
- *       &lt;attribute name="scale" type="{http://www.w3.org/2001/XMLSchema}int" default="0" /&gt;
+ *       &lt;attribute name="precision" type="{http://www.w3.org/2001/XMLSchema}int" /&gt;
+ *       &lt;attribute name="scale" type="{http://www.w3.org/2001/XMLSchema}int" /&gt;
+ *       &lt;attribute name="length" type="{http://www.w3.org/2001/XMLSchema}int" default="1" /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
@@ -42,6 +43,8 @@ public class DataTypeDto {
     protected Integer precision;
     @XmlAttribute(name = "scale")
     protected Integer scale;
+    @XmlAttribute(name = "length")
+    protected Integer length;
 
     /**
      * Gets the value of the name property.
@@ -127,12 +130,8 @@ public class DataTypeDto {
      *     {@link Integer }
      *     
      */
-    public int getPrecision() {
-        if (precision == null) {
-            return  10;
-        } else {
-            return precision;
-        }
+    public Integer getPrecision() {
+        return precision;
     }
 
     /**
@@ -155,12 +154,8 @@ public class DataTypeDto {
      *     {@link Integer }
      *     
      */
-    public int getScale() {
-        if (scale == null) {
-            return  0;
-        } else {
-            return scale;
-        }
+    public Integer getScale() {
+        return scale;
     }
 
     /**
@@ -173,6 +168,34 @@ public class DataTypeDto {
      */
     public void setScale(Integer value) {
         this.scale = value;
+    }
+
+    /**
+     * Gets the value of the length property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public int getLength() {
+        if (length == null) {
+            return  1;
+        } else {
+            return length;
+        }
+    }
+
+    /**
+     * Sets the value of the length property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setLength(Integer value) {
+        this.length = value;
     }
 
 }
