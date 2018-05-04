@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'idea'
     id 'net.ltgt.apt' version '0.8'
 }
 
@@ -13,6 +14,8 @@ repositories {
 }
 
 ext {
+    xjcSourcesPath = project.buildDir.absolutePath + "/generated/xjc"
+
     mapstructVersion = "1.2.0.Final"
     validationApiVersion = "2.0.0.Final"
 }
@@ -26,10 +29,22 @@ dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
 
+sourceSets {
+    main {
+        java {
+            srcDirs = srcDirs + ['build/generated/xjc']
+        }
+    }
+}
+
 task generateModel {
+    doFirst {
+        mkdir xjcSourcesPath
+    }
+
     doLast {
         exec {
-            commandLine "xjc", "-d", "src/main/java", "-p", "com.gendb.dto", "src/main/resources/config-schema.xsd", "-readOnly", "-no-header"
+            commandLine "xjc", "-d", xjcSourcesPath, "-p", "com.gendb.dto", "src/main/resources/config-schema.xsd", "-readOnly", "-no-header"
         }
     }
 }
