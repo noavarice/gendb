@@ -56,7 +56,7 @@ public class Table {
   }
 
   public String getCreateStatement() {
-    final StringJoiner sj = new StringJoiner("(", ",", ")");
+    final StringJoiner sj = new StringJoiner(",", "(", ")");
     for (final Column col: columns) {
       sj.add(col.getColumnDefinition());
     }

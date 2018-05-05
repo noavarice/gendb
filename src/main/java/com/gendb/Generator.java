@@ -2,23 +2,18 @@ package com.gendb;
 
 import com.gendb.dto.DatabaseDto;
 import com.gendb.dto.ObjectFactory;
-import com.gendb.handler.TypeHandler;
 import com.gendb.mapper.ModelMapper;
-import com.gendb.model.Column;
-import com.gendb.model.DataType;
 import com.gendb.model.Database;
 import com.gendb.model.Table;
 import com.gendb.random.RandomValueProvider;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.xml.XMLConstants;
@@ -125,7 +120,7 @@ public final class Generator {
       final StringJoiner rowJoiner = new StringJoiner(",\n");
       while (rowIterator.hasNext()) {
         final List<Object> row = rowIterator.next();
-        final StringJoiner columnJoiner = new StringJoiner("(", ",", ")");
+        final StringJoiner columnJoiner = new StringJoiner(",", "(", ")");
         for (final Object value: row) {
           if (value instanceof String) {
             columnJoiner.add('"' + value.toString() + '"');
