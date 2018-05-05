@@ -2,6 +2,7 @@ package com.gendb.model;
 
 import com.gendb.validation.Violations;
 import com.gendb.validation.type.DecimalPropertiesPresent;
+import com.gendb.validation.type.HandlerClassExist;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
@@ -13,6 +14,9 @@ public class DataType {
   private boolean nullable;
 
   private String defaultValue;
+
+  @HandlerClassExist
+  private String handlerClass;
 
   @Positive(message = Violations.NON_POSITIVE_PRECISION)
   private Integer precision;
@@ -69,5 +73,13 @@ public class DataType {
 
   public void setLength(int length) {
     this.length = length;
+  }
+
+  public String getHandlerClass() {
+    return handlerClass;
+  }
+
+  public void setHandlerClass(String handlerClass) {
+    this.handlerClass = handlerClass;
   }
 }

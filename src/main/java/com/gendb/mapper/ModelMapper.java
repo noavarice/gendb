@@ -13,6 +13,7 @@ import org.mapstruct.Mapping;
 public interface ModelMapper {
 
   @Mapping(target = "name", expression = "java(dto.getName().value())")
+  @Mapping(target = "handlerClass", source = "handler")
   DataType toModel(final DataTypeDto dto);
 
   @Mapping(target = "columns", source = "column")
