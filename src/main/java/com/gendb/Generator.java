@@ -115,6 +115,7 @@ public final class Generator {
       return;
     }
 
+    final StringBuilder queryBuilder = new StringBuilder(db.getCreateStatement());
     for (final Table t : db.getTables()) {
       final Iterator<List<Object>> rowIterator = t.getValuesIterator(random);
       final StringJoiner rowJoiner = new StringJoiner(",\n");
@@ -132,9 +133,9 @@ public final class Generator {
         rowJoiner.add(columnJoiner.toString());
       }
 
-      final StringBuilder sb = new StringBuilder(t.getCreateStatement());
-      sb.append('\n').append(rowJoiner.toString());
-      output.write(sb.toString().getBytes());
+      queryBuilder.append(String.format(t.getInsertStatement(), rowJoiner.toString())).append('\n');
     }
+
+    output.write(queryBuilder.toString().getBytes());
   }
 }

@@ -40,4 +40,8 @@ public class Database {
   public String toString() {
     return name;
   }
+
+  public String getCreateStatement() {
+    return String.format("CREATE DATABASE %1$s;\nUSE %1$s;\n", name);
+  }
 }
