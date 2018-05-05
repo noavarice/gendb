@@ -2,11 +2,32 @@ package com.gendb.random;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class RandomValueProvider {
 
-  private static final byte START_CODE = (byte)('0');
+  private static final List<Character> DIGITS = new ArrayList<Character>() {{
+    for (char c = '0'; c <= '9'; ++c) {
+      add(c);
+    }
+  }};
+
+  private static final List<Character> ALPHANUMERIC = new ArrayList<Character>() {{
+    for (char c = 'a'; c <= 'z'; ++c) {
+      add(c);
+    }
+
+    for (char c = 'A'; c <= 'Z'; ++c) {
+      add(c);
+    }
+
+    addAll(DIGITS);
+    add(' ');
+  }};
+
+  private static final int ALPHANUMERIC_CHARS_COUNT = ALPHANUMERIC.size();
 
   private final Random rnd;
 
@@ -28,20 +49,21 @@ public class RandomValueProvider {
   }
 
   private String nextRandomNumeric(final int length) {
-    final byte distance = 10;
     final boolean negative = rnd.nextBoolean();
     final int finalLength = length + (negative ? 1 : 0);
     final byte[] bytes = new byte[finalLength];
+    final char[] chars = new char[finalLength];
     rnd.nextBytes(bytes);
     for (int i = 0; i < finalLength; ++i) {
-      bytes[i] = (byte)(START_CODE + bytes[i] % distance);
+      final int index = (bytes[i] - Byte.MIN_VALUE) % 10;
+      chars[i] = DIGITS.get(index);
     }
 
     if (negative) {
-      bytes[0] = '-';
+      chars[0] = '-';
     }
 
-    return new String(bytes);
+    return new String(chars);
   }
 
   public Short getSmallint() {
@@ -65,14 +87,13 @@ public class RandomValueProvider {
     return new BigDecimal(bi, scale);
   }
 
-  public String getString(final int length) {
-    if (length == 1) {
-      return new String(Character.toChars(rnd.nextInt()));
-    }
-
+  public String getAlphanumericString(final int length) {
     final StringBuilder sb = new StringBuilder(length * 2);
+    final byte[] bytes = new byte[length];
+    rnd.nextBytes(bytes);
     for (int i = 0; i < length; ++i) {
-      sb.append(Character.toChars(rnd.nextInt()));
+      final int index = (bytes[i] - Byte.MIN_VALUE) % ALPHANUMERIC_CHARS_COUNT;
+      sb.append(ALPHANUMERIC.get(index));
     }
 
     return sb.toString();

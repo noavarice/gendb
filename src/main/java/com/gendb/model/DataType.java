@@ -1,5 +1,6 @@
 package com.gendb.model;
 
+import com.gendb.handler.TypeHandler;
 import com.gendb.validation.Violations;
 import com.gendb.validation.type.DecimalPropertiesPresent;
 import com.gendb.validation.type.HandlerClassExist;
@@ -13,8 +14,6 @@ public class DataType {
 
   private boolean nullable;
 
-  private String defaultValue;
-
   @HandlerClassExist
   private String handlerClass;
 
@@ -25,7 +24,7 @@ public class DataType {
   private Integer scale;
 
   @Positive
-  private int length;
+  private Integer length;
 
   public String getName() {
     return name;
@@ -59,19 +58,11 @@ public class DataType {
     this.nullable = nullable;
   }
 
-  public String getDefaultValue() {
-    return defaultValue;
-  }
-
-  public void setDefaultValue(String defaultValue) {
-    this.defaultValue = defaultValue;
-  }
-
-  public int getLength() {
+  public Integer getLength() {
     return length;
   }
 
-  public void setLength(int length) {
+  public void setLength(Integer length) {
     this.length = length;
   }
 
@@ -81,5 +72,30 @@ public class DataType {
 
   public void setHandlerClass(String handlerClass) {
     this.handlerClass = handlerClass;
+  }
+
+  public String getTypeDefinition() {
+    final StringBuilder sb = new StringBuilder(name.toUpperCase());
+    if (name.equals("decimal")) {
+      sb.append(String.format("(%1$s,%2$s)", precision, scale));
+    } else if (name.equals("char") || name.equals("varchar")) {
+      sb.append(String.format("(%1$s)", length));
+    }
+
+    if (!nullable) {
+      sb.append(" NOT NULL");
+    }
+
+    return sb.toString();
+  }
+
+  public TypeHandler getHandler() {
+    try {
+      final TypeHandler h = (((Class<? extends TypeHandler>) Class.forName(handlerClass)).newInstance());
+      h.init(this);
+      return h;
+    } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+      return null;
+    }
   }
 }

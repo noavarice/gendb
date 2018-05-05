@@ -23,7 +23,6 @@
   <xs:complexType name="DataTypeDto">
     <xs:attribute name="name" type="DataTypes" use="required"/>
     <xs:attribute name="nullable" type="xs:boolean" default="true"/>
-    <xs:attribute name="defaultValue" type="xs:string"/>
     <xs:attribute name="handler" type="Attribute"/>
     <xs:attribute name="precision" type="xs:int"/>
     <xs:attribute name="scale" type="xs:int"/>
@@ -45,6 +44,7 @@
     </xs:sequence>
     <xs:attribute name="name" type="Attribute" use="required"/>
     <xs:attribute name="idColumnName" type="Attribute" default="id"/>
+    <xs:attribute name="rows" type="xs:int" use="required"/>
   </xs:complexType>
 
   <!-- Set of supported RDBMS -->

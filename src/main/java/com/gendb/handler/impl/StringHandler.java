@@ -15,6 +15,6 @@ public class StringHandler implements TypeHandler {
 
   @Override
   public Object yield(final RandomValueProvider provider) {
-    return provider.getString(length);
+    return provider.getAlphanumericString(length);
   }
 }

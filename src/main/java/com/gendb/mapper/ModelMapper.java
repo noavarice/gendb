@@ -17,6 +17,7 @@ public interface ModelMapper {
   DataType toModel(final DataTypeDto dto);
 
   @Mapping(target = "columns", source = "column")
+  @Mapping(target = "rowsCount", source = "rows")
   Table toModel(final TableDto dto);
 
   @Mapping(target = "tables", source = "table")

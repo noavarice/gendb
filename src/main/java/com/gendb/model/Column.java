@@ -24,4 +24,8 @@ public class Column {
   public void setName(String name) {
     this.name = name;
   }
+
+  public String getColumnDefinition() {
+    return name + ' ' + type.getTypeDefinition();
+  }
 }
