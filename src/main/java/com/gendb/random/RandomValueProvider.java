@@ -66,20 +66,36 @@ public class RandomValueProvider {
     return new String(chars);
   }
 
-  public Short getSmallint() {
+  public Short getSignedSmallint() {
     return nextRandom().shortValue();
   }
 
-  public Short getSmallint(final short min, final short max) {
+  public Short getSignedSmallint(final short min, final short max) {
     return nextRandom(min, max).shortValue();
   }
 
-  public Integer getInt() {
+  public Integer getUnsignedSmallint() {
+    return nextRandom().intValue() - Short.MIN_VALUE;
+  }
+
+  public Integer getUnsignedSmallint(final short min, final short max) {
+    return nextRandom(min, max).intValue() - Short.MIN_VALUE;
+  }
+
+  public Integer getSignedInt() {
     return nextRandom().intValue();
   }
 
-  public Integer getInt(final int min, final int max) {
+  public Integer getSignedInt(final int min, final int max) {
     return nextRandom(min, max).intValue();
+  }
+
+  public Long getUnsignedInt() {
+    return nextRandom() - Integer.MIN_VALUE;
+  }
+
+  public Long getUnsignedInt(final int min, final int max) {
+    return nextRandom(min, max) - Integer.MIN_VALUE;
   }
 
   public BigDecimal getDecimal(final int precision, final int scale) {
