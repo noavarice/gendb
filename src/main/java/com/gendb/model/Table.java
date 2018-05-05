@@ -2,6 +2,7 @@ package com.gendb.model;
 
 import com.gendb.handler.TypeHandler;
 import com.gendb.random.RandomValueProvider;
+import com.gendb.validation.table.UniqueColumnNames;
 import com.gendb.validation.table.ValidIdColumnName;
 import java.util.Iterator;
 import java.util.List;
@@ -11,6 +12,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
 @ValidIdColumnName
+@UniqueColumnNames
 public class Table {
 
   private String name;
