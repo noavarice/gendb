@@ -1,7 +1,7 @@
 package com.gendb.validation.table;
 
 import com.gendb.validation.Violations;
-import com.gendb.validation.table.validator.ValidIdColumnsValidator;
+import com.gendb.validation.table.validator.ValidIdColumnNameValidator;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,11 +12,11 @@ import javax.validation.Payload;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ValidIdColumnsValidator.class)
+@Constraint(validatedBy = ValidIdColumnNameValidator.class)
 @Documented
-public @interface ValidIdColumns {
+public @interface ValidIdColumnName {
 
-  String message() default Violations.UNKNOWN_ID_COLUMN;
+  String message() default Violations.ID_COLUMN_NAME_ALREADY_USED;
 
   Class<?>[] groups() default {};
 

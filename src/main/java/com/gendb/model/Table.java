@@ -1,18 +1,18 @@
 package com.gendb.model;
 
-import com.gendb.validation.table.ValidIdColumns;
+import com.gendb.validation.table.ValidIdColumnName;
 import java.util.List;
 import javax.validation.Valid;
 
-@ValidIdColumns
+@ValidIdColumnName
 public class Table {
 
   private String name;
 
+  private String idColumnName;
+
   @Valid
   private List<Column> columns;
-
-  private List<String> id;
 
   public String getName() {
     return name;
@@ -30,11 +30,11 @@ public class Table {
     this.columns = columns;
   }
 
-  public List<String> getId() {
-    return id;
+  public String getIdColumnName() {
+    return idColumnName;
   }
 
-  public void setId(List<String> id) {
-    this.id = id;
+  public void setIdColumnName(String idColumnName) {
+    this.idColumnName = idColumnName;
   }
 }

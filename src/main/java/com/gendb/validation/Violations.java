@@ -6,7 +6,7 @@ package com.gendb.validation;
  */
 public class Violations {
 
-  public static final String UNKNOWN_ID_COLUMN = "%1$s: unknown columns are used as part of table ID";
+  public static final String ID_COLUMN_NAME_ALREADY_USED = "%1$s: name of ID column already used";
 
   public static final String NON_POSITIVE_PRECISION = "Precision is set to non-positive value";
 

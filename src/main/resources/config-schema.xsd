@@ -41,13 +41,9 @@
   <xs:complexType name="TableDto">
     <xs:sequence>
       <xs:element name="column" type="ColumnDto" maxOccurs="unbounded"/>
-      <xs:element name="id" minOccurs="0">
-        <xs:simpleType>
-          <xs:list itemType="xs:string"/>
-        </xs:simpleType>
-      </xs:element>
     </xs:sequence>
     <xs:attribute name="name" type="Attribute" use="required"/>
+    <xs:attribute name="idColumnName" type="Attribute" default="id"/>
   </xs:complexType>
 
   <!-- Set of supported RDBMS -->
