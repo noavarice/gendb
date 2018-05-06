@@ -8,6 +8,10 @@ import java.util.Random;
 
 public class RandomValueProvider {
 
+  private static final long MAX_UNSIGNED_INT = (long)(Integer.MAX_VALUE) - Integer.MIN_VALUE;
+
+  private static final int MAX_UNSIGNED_SHORT = (int)(Short.MAX_VALUE) - Short.MIN_VALUE;
+
   private static final List<Character> DIGITS = new ArrayList<Character>() {{
     for (char c = '0'; c <= '9'; ++c) {
       add(c);
@@ -44,8 +48,11 @@ public class RandomValueProvider {
   }
 
   private Long nextRandom(final long min, final long max) {
-    final long diff = max - min;
-    return min + rnd.nextInt() % diff;
+    if (min == max) {
+      return min;
+    }
+
+    return min + Math.abs(rnd.nextLong()) % (max - min);
   }
 
   private String nextRandomNumeric(final int length) {
@@ -75,11 +82,11 @@ public class RandomValueProvider {
   }
 
   public int getUnsignedSmallint() {
-    return nextRandom().shortValue() - Short.MIN_VALUE;
+    return Math.abs(nextRandom().intValue()) % MAX_UNSIGNED_SHORT;
   }
 
   public int getUnsignedSmallint(final short min, final short max) {
-    return nextRandom(min, max).shortValue() - Short.MIN_VALUE;
+    return nextRandom(min, max).intValue();
   }
 
   public int getSignedInt() {
@@ -91,11 +98,11 @@ public class RandomValueProvider {
   }
 
   public long getUnsignedInt() {
-    return nextRandom().intValue() - Integer.MIN_VALUE;
+    return Math.abs(nextRandom()) % MAX_UNSIGNED_INT;
   }
 
   public long getUnsignedInt(final long min, final long max) {
-    return nextRandom(min, max).intValue() - Integer.MIN_VALUE;
+    return nextRandom(min, max);
   }
 
   public BigDecimal getDecimal(final int precision, final int scale) {
