@@ -45,7 +45,7 @@ public class RandomValueProvider {
 
   private Long nextRandom(final long min, final long max) {
     final long diff = max - min;
-    return min + rnd.nextLong() % diff;
+    return min + rnd.nextInt() % diff;
   }
 
   private String nextRandomNumeric(final int length) {
@@ -66,36 +66,36 @@ public class RandomValueProvider {
     return new String(chars);
   }
 
-  public Short getSignedSmallint() {
+  public short getSignedSmallint() {
     return nextRandom().shortValue();
   }
 
-  public Short getSignedSmallint(final short min, final short max) {
+  public short getSignedSmallint(final short min, final short max) {
     return nextRandom(min, max).shortValue();
   }
 
-  public Integer getUnsignedSmallint() {
-    return nextRandom().intValue() - Short.MIN_VALUE;
+  public int getUnsignedSmallint() {
+    return nextRandom().shortValue() - Short.MIN_VALUE;
   }
 
-  public Integer getUnsignedSmallint(final short min, final short max) {
-    return nextRandom(min, max).intValue() - Short.MIN_VALUE;
+  public int getUnsignedSmallint(final short min, final short max) {
+    return nextRandom(min, max).shortValue() - Short.MIN_VALUE;
   }
 
-  public Integer getSignedInt() {
+  public int getSignedInt() {
     return nextRandom().intValue();
   }
 
-  public Integer getSignedInt(final int min, final int max) {
+  public int getSignedInt(final int min, final int max) {
     return nextRandom(min, max).intValue();
   }
 
-  public Long getUnsignedInt() {
-    return nextRandom() - Integer.MIN_VALUE;
+  public long getUnsignedInt() {
+    return nextRandom().intValue() - Integer.MIN_VALUE;
   }
 
-  public Long getUnsignedInt(final int min, final int max) {
-    return nextRandom(min, max) - Integer.MIN_VALUE;
+  public long getUnsignedInt(final long min, final long max) {
+    return nextRandom(min, max).intValue() - Integer.MIN_VALUE;
   }
 
   public BigDecimal getDecimal(final int precision, final int scale) {
