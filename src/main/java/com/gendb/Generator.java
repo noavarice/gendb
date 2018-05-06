@@ -99,6 +99,38 @@ public final class Generator {
     this.random = random;
   }
 
+  private static final int MAX_ROWS_IN_LINE = 10;
+
+  private void writeToStream(final Database db, final OutputStream output) throws IOException {
+    output.write(db.getCreateStatement().getBytes());
+    for (final Table t : db.getTables()) {
+      output.write(t.getInsertStatement().getBytes());
+      final Iterator<List<Object>> rowIterator = t.getValuesIterator(random);
+      StringJoiner rowJoiner = new StringJoiner(",");
+      int rowsInLine = 0;
+      while (rowIterator.hasNext()) {
+        final List<Object> row = rowIterator.next();
+        final StringJoiner columnJoiner = new StringJoiner(",", "(", ")");
+        for (final Object value: row) {
+          if (value instanceof String) {
+            columnJoiner.add('"' + value.toString() + '"');
+          } else {
+            columnJoiner.add(value.toString());
+          }
+        }
+
+        rowJoiner.add(columnJoiner.toString());
+        if (++rowsInLine == MAX_ROWS_IN_LINE) {
+          rowsInLine = 0;
+          output.write((rowJoiner.toString() + ",\n").getBytes());
+          rowJoiner = new StringJoiner(",");
+        }
+      }
+
+      output.write((rowJoiner.toString() + ';').getBytes());
+    }
+  }
+
   public void fromStream(final InputStream input, final OutputStream output) throws IOException {
     final Database db;
     try {
@@ -115,27 +147,6 @@ public final class Generator {
       return;
     }
 
-    final StringBuilder queryBuilder = new StringBuilder(db.getCreateStatement());
-    for (final Table t : db.getTables()) {
-      final Iterator<List<Object>> rowIterator = t.getValuesIterator(random);
-      final StringJoiner rowJoiner = new StringJoiner(",\n");
-      while (rowIterator.hasNext()) {
-        final List<Object> row = rowIterator.next();
-        final StringJoiner columnJoiner = new StringJoiner(",", "(", ")");
-        for (final Object value: row) {
-          if (value instanceof String) {
-            columnJoiner.add('"' + value.toString() + '"');
-          } else {
-            columnJoiner.add(value.toString());
-          }
-        }
-
-        rowJoiner.add(columnJoiner.toString());
-      }
-
-      queryBuilder.append(String.format(t.getInsertStatement(), rowJoiner.toString())).append('\n');
-    }
-
-    output.write(queryBuilder.toString().getBytes());
+    writeToStream(db, output);
   }
 }

@@ -70,7 +70,7 @@ public class Table {
     final String columnNames = columns.stream()
       .map(Column::getName)
       .collect(Collectors.joining(","));
-    return String.format("INSERT INTO %1$s (%2$s) VALUES\n", name, columnNames) + "%1$s;";
+    return String.format("INSERT INTO %1$s (%2$s) VALUES\n", name, columnNames);
   }
 
   public Iterator<List<Object>> getValuesIterator(final RandomValueProvider provider) {
