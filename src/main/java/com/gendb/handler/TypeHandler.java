@@ -5,7 +5,7 @@ import com.gendb.random.RandomValueProvider;
 
 public interface TypeHandler {
 
-  default void init(final DataType type) {}
+  default void init(final DataType type, final RandomValueProvider provider) {}
 
-  Object yield(final RandomValueProvider provider);
+  Object yield();
 }

@@ -1,6 +1,7 @@
 package com.gendb.model;
 
 import com.gendb.handler.TypeHandler;
+import com.gendb.random.RandomValueProvider;
 import com.gendb.validation.Violations;
 import com.gendb.validation.type.DecimalPropertiesPresent;
 import com.gendb.validation.type.HandlerClassExist;
@@ -25,6 +26,12 @@ public class DataType {
 
   @Positive
   private Integer length;
+
+  private boolean unsigned;
+
+  private Double min;
+
+  private Double max;
 
   public String getName() {
     return name;
@@ -89,13 +96,37 @@ public class DataType {
     return sb.toString();
   }
 
-  public TypeHandler getHandler() {
+  public TypeHandler getHandler(final RandomValueProvider provider) {
     try {
       final TypeHandler h = (((Class<? extends TypeHandler>) Class.forName(handlerClass)).newInstance());
-      h.init(this);
+      h.init(this, provider);
       return h;
     } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
       return null;
     }
+  }
+
+  public boolean isUnsigned() {
+    return unsigned;
+  }
+
+  public void setUnsigned(boolean unsigned) {
+    this.unsigned = unsigned;
+  }
+
+  public Double getMin() {
+    return min;
+  }
+
+  public void setMin(Double min) {
+    this.min = min;
+  }
+
+  public Double getMax() {
+    return max;
+  }
+
+  public void setMax(Double max) {
+    this.max = max;
   }
 }

@@ -76,8 +76,8 @@ public class Table {
   public Iterator<List<Object>> getValuesIterator(final RandomValueProvider provider) {
     final List<TypeHandler> handlers = columns.stream()
       .map(Column::getType)
-      .map(DataType::getHandler)
+      .map(type -> type.getHandler(provider))
       .collect(Collectors.toList());
-    return new ValueTupleIterator(rowsCount, handlers, provider);
+    return new ValueTupleIterator(rowsCount, handlers);
   }
 }
