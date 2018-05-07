@@ -3,6 +3,7 @@ package com.gendb.handler.impl;
 import com.gendb.handler.TypeHandler;
 import com.gendb.model.DataType;
 import com.gendb.model.wrapper.DefaultWrapper;
+import com.gendb.model.wrapper.impl.TimestampWrapper;
 import com.gendb.random.RandomValueProvider;
 
 public class TimestampHandler implements TypeHandler {
@@ -16,6 +17,6 @@ public class TimestampHandler implements TypeHandler {
 
   @Override
   public DefaultWrapper yield() {
-    return new DefaultWrapper(provider.getTimestamp());
+    return new TimestampWrapper(provider.getTimestamp());
   }
 }

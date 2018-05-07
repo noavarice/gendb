@@ -2,9 +2,8 @@ package com.gendb.random;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -35,9 +34,7 @@ public class RandomValueProvider {
 
   private static final int ALPHANUMERIC_CHARS_COUNT = ALPHANUMERIC.size();
 
-  private static final int START_YEAR = 1970;
-
-  private static final int CURRENT_YEAR = Calendar.getInstance().get(Calendar.YEAR);
+  private static final long TIMESTAMP_DIFF = Instant.now().getEpochSecond() - Instant.EPOCH.getEpochSecond();
 
   private static final String DATE_TEMPLATE = "%1$d-01-01 00:00:00";
 
@@ -130,14 +127,7 @@ public class RandomValueProvider {
     return sb.toString();
   }
 
-  private static long startOfYearTimestamp(final long year) {
-    return Timestamp.valueOf(String.format(DATE_TEMPLATE, year)).getTime();
-  }
-
   public long getTimestamp() {
-    final int year = START_YEAR + Math.abs(rnd.nextInt()) % (CURRENT_YEAR - START_YEAR - 1);
-    final long start = startOfYearTimestamp(year);
-    final long end = startOfYearTimestamp(year + 1);
-    return start + Math.abs(rnd.nextLong()) % (end - start);
+    return Instant.EPOCH.getEpochSecond() + Math.abs(rnd.nextLong()) % TIMESTAMP_DIFF;
   }
 }

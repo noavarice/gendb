@@ -6,6 +6,7 @@ import com.gendb.model.wrapper.DefaultWrapper;
 import com.gendb.model.wrapper.impl.StringDateWrapper;
 import com.gendb.random.RandomValueProvider;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 
 public class DateHandler implements TypeHandler {
@@ -22,6 +23,7 @@ public class DateHandler implements TypeHandler {
 
   @Override
   public DefaultWrapper yield() {
-    return new StringDateWrapper(sdf.format(new Date(provider.getTimestamp())));
+    final Date date = Date.from(Instant.ofEpochSecond(provider.getTimestamp()));
+    return new StringDateWrapper(sdf.format(date));
   }
 }
