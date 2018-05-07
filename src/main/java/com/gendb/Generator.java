@@ -5,6 +5,7 @@ import com.gendb.dto.ObjectFactory;
 import com.gendb.mapper.ModelMapper;
 import com.gendb.model.Database;
 import com.gendb.model.Table;
+import com.gendb.model.wrapper.DefaultWrapper;
 import com.gendb.random.RandomValueProvider;
 import java.io.IOException;
 import java.io.InputStream;
@@ -104,25 +105,26 @@ public final class Generator {
   private void writeToStream(final Database db, final OutputStream output) throws IOException {
     output.write(db.getCreateStatement().getBytes());
     for (final Table t : db.getTables()) {
-      output.write(t.getInsertStatement().getBytes());
-      final Iterator<List<Object>> rowIterator = t.getValuesIterator(random);
+      output.write((t.getCreateStatement() + t.getInsertStatement()).getBytes());
+      final Iterator<List<DefaultWrapper>> rowIterator = t.getValuesIterator(random);
       StringJoiner rowJoiner = new StringJoiner(",");
       int rowsInLine = 0;
-      while (rowIterator.hasNext()) {
-        final List<Object> row = rowIterator.next();
+      if (rowIterator.hasNext()) {
+        final List<DefaultWrapper> row = rowIterator.next();
         final StringJoiner columnJoiner = new StringJoiner(",", "(", ")");
-        for (final Object value: row) {
-          if (value instanceof String) {
-            columnJoiner.add('"' + value.toString() + '"');
-          } else {
-            columnJoiner.add(value.toString());
-          }
-        }
+        row.forEach(wrapper -> columnJoiner.add(wrapper.processed()));
+        output.write(columnJoiner.toString().getBytes());
+        ++rowsInLine;
+      }
 
+      while (rowIterator.hasNext()) {
+        final List<DefaultWrapper> row = rowIterator.next();
+        final StringJoiner columnJoiner = new StringJoiner(",", "(", ")");
+        row.forEach(wrapper -> columnJoiner.add(wrapper.processed()));
         rowJoiner.add(columnJoiner.toString());
         if (++rowsInLine == MAX_ROWS_IN_LINE) {
           rowsInLine = 0;
-          output.write((rowJoiner.toString() + ",\n").getBytes());
+          output.write((",\n" + rowJoiner.toString()).getBytes());
           rowJoiner = new StringJoiner(",");
         }
       }

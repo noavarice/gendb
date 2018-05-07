@@ -2,6 +2,7 @@ package com.gendb.handler.impl;
 
 import com.gendb.handler.TypeHandler;
 import com.gendb.model.DataType;
+import com.gendb.model.wrapper.DefaultWrapper;
 import com.gendb.random.RandomValueProvider;
 import java.util.function.LongSupplier;
 
@@ -41,7 +42,7 @@ public class IntegerHandler implements TypeHandler {
   }
 
   @Override
-  public Object yield() {
-    return f.getAsLong();
+  public DefaultWrapper yield() {
+    return new DefaultWrapper(f.getAsLong());
   }
 }

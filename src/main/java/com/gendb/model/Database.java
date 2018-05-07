@@ -42,6 +42,8 @@ public class Database {
   }
 
   public String getCreateStatement() {
-    return String.format("CREATE DATABASE %1$s;\nUSE %1$s;\n", name);
+    return String.format("CREATE DATABASE %1$s;\n%2$s %1$s;\n",
+      name,
+      dbmsName.equals("mysql") ? "USE" : "\\c");
   }
 }

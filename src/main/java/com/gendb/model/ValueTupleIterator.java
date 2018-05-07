@@ -1,11 +1,12 @@
 package com.gendb.model;
 
 import com.gendb.handler.TypeHandler;
+import com.gendb.model.wrapper.DefaultWrapper;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class ValueTupleIterator implements Iterator<List<Object>> {
+class ValueTupleIterator implements Iterator<List<DefaultWrapper>> {
 
   private final int total;
 
@@ -25,7 +26,7 @@ class ValueTupleIterator implements Iterator<List<Object>> {
   }
 
   @Override
-  public List<Object> next() {
+  public List<DefaultWrapper> next() {
     ++current;
     return handlers.stream().map(TypeHandler::yield).collect(Collectors.toList());
   }

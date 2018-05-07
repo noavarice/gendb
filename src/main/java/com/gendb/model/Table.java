@@ -1,6 +1,7 @@
 package com.gendb.model;
 
 import com.gendb.handler.TypeHandler;
+import com.gendb.model.wrapper.DefaultWrapper;
 import com.gendb.random.RandomValueProvider;
 import com.gendb.validation.table.UniqueColumnNames;
 import com.gendb.validation.table.ValidIdColumnName;
@@ -73,7 +74,7 @@ public class Table {
     return String.format("INSERT INTO %1$s (%2$s) VALUES\n", name, columnNames);
   }
 
-  public Iterator<List<Object>> getValuesIterator(final RandomValueProvider provider) {
+  public Iterator<List<DefaultWrapper>> getValuesIterator(final RandomValueProvider provider) {
     final List<TypeHandler> handlers = columns.stream()
       .map(Column::getType)
       .map(type -> type.getHandler(provider))

@@ -2,6 +2,7 @@ package com.gendb.handler.impl;
 
 import com.gendb.handler.TypeHandler;
 import com.gendb.model.DataType;
+import com.gendb.model.wrapper.DefaultWrapper;
 import com.gendb.random.RandomValueProvider;
 
 public class DecimalHandler implements TypeHandler {
@@ -20,7 +21,7 @@ public class DecimalHandler implements TypeHandler {
   }
 
   @Override
-  public Object yield() {
-    return provider.getDecimal(precision, scale);
+  public DefaultWrapper yield() {
+    return new DefaultWrapper(provider.getDecimal(precision, scale));
   }
 }
