@@ -16,6 +16,6 @@ public class TimestampHandler implements TypeHandler {
 
   @Override
   public DefaultWrapper yield() {
-    return new DefaultWrapper(provider.getTimeStamp());
+    return new DefaultWrapper(provider.getTimestamp());
   }
 }

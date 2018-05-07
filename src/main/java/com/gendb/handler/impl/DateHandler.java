@@ -22,6 +22,6 @@ public class DateHandler implements TypeHandler {
 
   @Override
   public DefaultWrapper yield() {
-    return new StringDateWrapper(sdf.format(new Date(provider.getTimeStamp())));
+    return new StringDateWrapper(sdf.format(new Date(provider.getTimestamp())));
   }
 }
