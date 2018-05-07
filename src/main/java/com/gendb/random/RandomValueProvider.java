@@ -2,6 +2,7 @@ package com.gendb.random;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -32,6 +33,12 @@ public class RandomValueProvider {
   }};
 
   private static final int ALPHANUMERIC_CHARS_COUNT = ALPHANUMERIC.size();
+
+  private static final int START_YEAR = 1970;
+
+  private static final int END_YEAR = 2038;
+
+  private static final String DATE_TEMPLATE = "%1$d-01-01 00:00:00";
 
   private final Random rnd;
 
@@ -120,5 +127,16 @@ public class RandomValueProvider {
     }
 
     return sb.toString();
+  }
+
+  private static long startOfYearimestamp(final long year) {
+    return Timestamp.valueOf(String.format(DATE_TEMPLATE, year)).getTime();
+  }
+
+  public long getTimeStamp() {
+    final int year = START_YEAR + Math.abs(rnd.nextInt()) % (END_YEAR - 1);
+    final long start = startOfYearimestamp(year);
+    final long end = startOfYearimestamp(year + 1);
+    return start + Math.abs(rnd.nextLong()) % (end - start);
   }
 }

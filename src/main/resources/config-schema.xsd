@@ -9,6 +9,8 @@
       <xs:enumeration value="decimal"/>
       <xs:enumeration value="char"/>
       <xs:enumeration value="varchar"/>
+      <xs:enumeration value="timestamp"/>
+      <xs:enumeration value="date"/>
     </xs:restriction>
   </xs:simpleType>
 
