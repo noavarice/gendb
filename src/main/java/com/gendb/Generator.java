@@ -5,7 +5,7 @@ import com.gendb.dto.ObjectFactory;
 import com.gendb.mapper.ModelMapper;
 import com.gendb.model.Database;
 import com.gendb.model.Table;
-import com.gendb.model.wrapper.DefaultWrapper;
+import com.gendb.model.wrapper.ValueWrapper;
 import com.gendb.random.RandomValueProvider;
 import java.io.IOException;
 import java.io.InputStream;
@@ -106,21 +106,21 @@ public final class Generator {
     output.write(db.getCreateStatement().getBytes());
     for (final Table t : db.getTables()) {
       output.write((t.getCreateStatement() + t.getInsertStatement()).getBytes());
-      final Iterator<List<DefaultWrapper>> rowIterator = t.getValuesIterator(random);
+      final Iterator<List<ValueWrapper>> rowIterator = t.getValuesIterator(random);
       StringJoiner rowJoiner = new StringJoiner(",");
       int rowsInLine = 0;
       if (rowIterator.hasNext()) {
-        final List<DefaultWrapper> row = rowIterator.next();
+        final List<ValueWrapper> row = rowIterator.next();
         final StringJoiner columnJoiner = new StringJoiner(",", "(", ")");
-        row.forEach(wrapper -> columnJoiner.add(wrapper.processed()));
+        row.forEach(wrapper -> columnJoiner.add(wrapper.queryRepresentation()));
         output.write(columnJoiner.toString().getBytes());
         ++rowsInLine;
       }
 
       while (rowIterator.hasNext()) {
-        final List<DefaultWrapper> row = rowIterator.next();
+        final List<ValueWrapper> row = rowIterator.next();
         final StringJoiner columnJoiner = new StringJoiner(",", "(", ")");
-        row.forEach(wrapper -> columnJoiner.add(wrapper.processed()));
+        row.forEach(wrapper -> columnJoiner.add(wrapper.queryRepresentation()));
         rowJoiner.add(columnJoiner.toString());
         if (++rowsInLine == MAX_ROWS_IN_LINE) {
           rowsInLine = 0;

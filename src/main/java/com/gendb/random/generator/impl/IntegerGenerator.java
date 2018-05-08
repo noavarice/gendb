@@ -1,12 +1,12 @@
-package com.gendb.handler.impl;
+package com.gendb.random.generator.impl;
 
-import com.gendb.handler.TypeHandler;
+import com.gendb.random.generator.TypeGenerator;
 import com.gendb.model.DataType;
-import com.gendb.model.wrapper.DefaultWrapper;
+import com.gendb.model.wrapper.ValueWrapper;
 import com.gendb.random.RandomValueProvider;
 import java.util.function.LongSupplier;
 
-public class IntegerHandler implements TypeHandler {
+public class IntegerGenerator implements TypeGenerator {
 
   private static final long MAX_UNSIGNED_INT = (long)(Integer.MAX_VALUE) - Integer.MIN_VALUE;
 
@@ -42,7 +42,7 @@ public class IntegerHandler implements TypeHandler {
   }
 
   @Override
-  public DefaultWrapper yield() {
-    return new DefaultWrapper(f.getAsLong());
+  public ValueWrapper yield() {
+    return new ValueWrapper(f.getAsLong());
   }
 }

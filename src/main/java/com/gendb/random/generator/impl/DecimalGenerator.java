@@ -1,11 +1,11 @@
-package com.gendb.handler.impl;
+package com.gendb.random.generator.impl;
 
-import com.gendb.handler.TypeHandler;
+import com.gendb.random.generator.TypeGenerator;
 import com.gendb.model.DataType;
-import com.gendb.model.wrapper.DefaultWrapper;
+import com.gendb.model.wrapper.ValueWrapper;
 import com.gendb.random.RandomValueProvider;
 
-public class DecimalHandler implements TypeHandler {
+public class DecimalGenerator implements TypeGenerator {
 
   private RandomValueProvider provider;
 
@@ -21,7 +21,7 @@ public class DecimalHandler implements TypeHandler {
   }
 
   @Override
-  public DefaultWrapper yield() {
-    return new DefaultWrapper(provider.getDecimal(precision, scale));
+  public ValueWrapper yield() {
+    return new ValueWrapper(provider.getDecimal(precision, scale));
   }
 }

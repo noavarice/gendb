@@ -2,11 +2,11 @@ package com.gendb.model.wrapper;
 
 import java.util.Objects;
 
-public class DefaultWrapper {
+public class ValueWrapper {
 
   protected final Object wrapped;
 
-  public DefaultWrapper(final Object wrapped) {
+  public ValueWrapper(final Object wrapped) {
     this.wrapped = wrapped;
   }
 
@@ -21,7 +21,7 @@ public class DefaultWrapper {
    * Returns string representation of object
    * suitable for script generation
    */
-  public String processed() {
+  public String queryRepresentation() {
     return Objects.toString(wrapped);
   }
 }
