@@ -28,12 +28,16 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 /**
  * Main class for SQL generating
  */
 public final class Generator {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(Generator.class);
 
   /**
    * Loads local XSD resource that describes XML configuration file structure
@@ -147,11 +151,9 @@ public final class Generator {
   public void createScript(final Path scriptFilePath, final boolean override) throws IOException {
     if (Files.exists(scriptFilePath, LinkOption.NOFOLLOW_LINKS)) {
       if (override) {
-        final String msg = String.format("Warning: file '%1$s' already exists, override: %2$b", scriptFilePath.toString(), true);
-        System.out.println(msg);
+        LOGGER.warn("File '{}' already exists, override: {}", scriptFilePath, true);
       } else {
-        final String msg = String.format("Error: file '%1$s' already exists, override: %2$b", scriptFilePath.toString(), false);
-        System.out.println(msg);
+        LOGGER.error("Error: file '{}' already exists, override: {}", scriptFilePath, false);
         return;
       }
     }
@@ -161,14 +163,17 @@ public final class Generator {
     try {
       db = getConfig(input);
     } catch (JAXBException e) {
-      final String message = String.format("Errors while parsing XML config:\n%1$s", e.toString());
-      System.out.println(message);
+      LOGGER.error("Error while parsing XML config:\n{}", e);
       return;
     }
 
     final Set<ConstraintViolation<Database>> violations = validator.validate(db);
     if (!violations.isEmpty()) {
-      violations.stream().map(ConstraintViolation::getMessage).forEach(System.out::println);
+      LOGGER.error("Constraint violations are found:\n");
+      violations.stream()
+        .map(ConstraintViolation::getMessage)
+        .map(msg -> msg.concat(System.lineSeparator()))
+        .forEach(LOGGER::error);
       return;
     }
 

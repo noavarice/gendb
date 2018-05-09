@@ -29,11 +29,13 @@ repositories {
 ext {
     mapstructVersion = "1.2.0.Final"
     validationApiVersion = "2.0.0.Final"
+    slf4jVersion = "1.7.25";
 }
 
 dependencies {
     implementation "org.mapstruct:mapstruct-jdk8:$mapstructVersion"
     implementation "javax.validation:validation-api:$validationApiVersion"
+    implementation "org.slf4j:slf4j-api:$slf4jVersion"
 
     apt "org.mapstruct:mapstruct-processor:$mapstructVersion"
 
