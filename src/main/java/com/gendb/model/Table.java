@@ -56,6 +56,7 @@ public class Table {
 
   public String getCreateStatement() {
     final StringJoiner sj = new StringJoiner(",", "(", ")");
+    sj.add("%1$s"); // for DBMS-dependent primary key column declaration
     for (final Column col: columns) {
       sj.add(col.getColumnDefinition());
     }

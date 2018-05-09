@@ -126,7 +126,9 @@ public final class Generator {
     output.write(db.getCreateStatement().getBytes());
     final String dbms = db.getDbmsName();
     for (final Table t : db.getTables()) {
-      output.write((t.getCreateStatement() + t.getInsertStatement()).getBytes());
+      final String pkDeclaration = db.getPrimaryKeyDeclaration(t.getIdColumnName());
+      final String createTable = String.format(t.getCreateStatement(), pkDeclaration);
+      output.write((createTable + t.getInsertStatement()).getBytes());
       final InternalGenerator generator = new InternalGenerator(dbms, t.getColumnTypes(), random);
       final boolean lastLineComplete = t.getRowsCount() % MAX_ROWS_IN_LINE == 0;
       final int lastLineRowCount, completeLinesCount;
