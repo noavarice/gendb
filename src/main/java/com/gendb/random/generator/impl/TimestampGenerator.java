@@ -1,8 +1,8 @@
 package com.gendb.random.generator.impl;
 
-import com.gendb.random.generator.TypeGenerator;
 import com.gendb.model.DataType;
 import com.gendb.random.RandomValueProvider;
+import com.gendb.random.generator.TypeGenerator;
 
 public class TimestampGenerator implements TypeGenerator {
 
