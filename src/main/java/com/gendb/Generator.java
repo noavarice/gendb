@@ -153,7 +153,7 @@ public final class Generator {
       if (override) {
         LOGGER.warn("File '{}' already exists, override: {}", scriptFilePath, true);
       } else {
-        LOGGER.error("Error: file '{}' already exists, override: {}", scriptFilePath, false);
+        LOGGER.error("File '{}' already exists, override: {}", scriptFilePath, false);
         return;
       }
     }
@@ -163,7 +163,7 @@ public final class Generator {
     try {
       db = getConfig(input);
     } catch (JAXBException e) {
-      LOGGER.error("Error while parsing XML config:\n{}", e);
+      LOGGER.error("Error while parsing XML config:\n{}", e.toString());
       return;
     }
 
