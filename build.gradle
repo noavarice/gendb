@@ -29,7 +29,7 @@ repositories {
 ext {
     mapstructVersion = "1.2.0.Final"
     validationApiVersion = "2.0.0.Final"
-    slf4jVersion = "1.7.25";
+    slf4jVersion = "1.7.25"
 }
 
 dependencies {
