@@ -2,8 +2,6 @@ package com.gendb.random.generator.impl;
 
 import com.gendb.random.generator.TypeGenerator;
 import com.gendb.model.DataType;
-import com.gendb.model.wrapper.ValueWrapper;
-import com.gendb.model.wrapper.impl.TimestampWrapper;
 import com.gendb.random.RandomValueProvider;
 
 public class TimestampGenerator implements TypeGenerator {
@@ -16,7 +14,7 @@ public class TimestampGenerator implements TypeGenerator {
   }
 
   @Override
-  public ValueWrapper yield() {
-    return new TimestampWrapper(provider.getTimestamp());
+  public Object yield() {
+    return provider.getTimestamp();
   }
 }

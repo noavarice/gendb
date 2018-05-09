@@ -4,10 +4,10 @@ import java.util.Objects;
 
 public class ValueWrapper {
 
-  protected final Object wrapped;
+  protected Object wrapped;
 
-  public ValueWrapper(final Object wrapped) {
-    this.wrapped = wrapped;
+  public final void setObject(final Object obj) {
+    wrapped = obj;
   }
 
   /**

@@ -2,8 +2,6 @@ package com.gendb.random.generator.impl;
 
 import com.gendb.random.generator.TypeGenerator;
 import com.gendb.model.DataType;
-import com.gendb.model.wrapper.ValueWrapper;
-import com.gendb.model.wrapper.impl.StringDateWrapper;
 import com.gendb.random.RandomValueProvider;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -22,8 +20,9 @@ public class DateGenerator implements TypeGenerator {
   }
 
   @Override
-  public ValueWrapper yield() {
-    final Date date = Date.from(Instant.ofEpochSecond(provider.getTimestamp()));
-    return new StringDateWrapper(sdf.format(date));
+  public Object yield() {
+    final long timestamp = provider.getTimestamp();
+    final Date date = Date.from(Instant.ofEpochSecond(timestamp));
+    return sdf.format(date);
   }
 }

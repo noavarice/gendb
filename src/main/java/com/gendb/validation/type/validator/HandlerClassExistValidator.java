@@ -9,6 +9,10 @@ public class HandlerClassExistValidator implements ConstraintValidator<HandlerCl
 
   @Override
   public boolean isValid(String handler, ConstraintValidatorContext context) {
+    if (handler == null || handler.isEmpty()) {
+      return true;
+    }
+
     try {
       Class.forName(handler, false, this.getClass().getClassLoader());
     } catch (ClassNotFoundException e) {

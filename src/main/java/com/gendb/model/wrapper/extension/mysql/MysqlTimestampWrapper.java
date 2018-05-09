@@ -1,12 +1,8 @@
-package com.gendb.model.wrapper.impl;
+package com.gendb.model.wrapper.extension.mysql;
 
 import com.gendb.model.wrapper.ValueWrapper;
 
-public class TimestampWrapper extends ValueWrapper {
-
-  public TimestampWrapper(Object wrapped) {
-    super(wrapped);
-  }
+public class MysqlTimestampWrapper extends ValueWrapper {
 
   @Override
   public String queryRepresentation() {

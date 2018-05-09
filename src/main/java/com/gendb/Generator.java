@@ -5,13 +5,10 @@ import com.gendb.dto.ObjectFactory;
 import com.gendb.mapper.ModelMapper;
 import com.gendb.model.Database;
 import com.gendb.model.Table;
-import com.gendb.model.wrapper.ValueWrapper;
 import com.gendb.random.RandomValueProvider;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Iterator;
-import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -102,34 +99,41 @@ public final class Generator {
 
   private static final int MAX_ROWS_IN_LINE = 10;
 
+  private static void insertLine(final InternalGenerator generator, final OutputStream output, final int count)
+    throws IOException {
+    final StringJoiner rowJoiner = new StringJoiner(",", System.lineSeparator(), "");
+    for (int i = 0; i < count; ++i) {
+      final StringJoiner columnJoiner = new StringJoiner(",", "(", ")");
+      generator.getRow().forEach(wrapper -> columnJoiner.add(wrapper.queryRepresentation()));
+      rowJoiner.add(columnJoiner.toString());
+    }
+
+    output.write(rowJoiner.toString().getBytes());
+  }
+
   private void writeToStream(final Database db, final OutputStream output) throws IOException {
     output.write(db.getCreateStatement().getBytes());
+    final String dbms = db.getDbmsName();
     for (final Table t : db.getTables()) {
       output.write((t.getCreateStatement() + t.getInsertStatement()).getBytes());
-      final Iterator<List<ValueWrapper>> rowIterator = t.getValuesIterator(random);
-      StringJoiner rowJoiner = new StringJoiner(",");
-      int rowsInLine = 0;
-      if (rowIterator.hasNext()) {
-        final List<ValueWrapper> row = rowIterator.next();
-        final StringJoiner columnJoiner = new StringJoiner(",", "(", ")");
-        row.forEach(wrapper -> columnJoiner.add(wrapper.queryRepresentation()));
-        output.write(columnJoiner.toString().getBytes());
-        ++rowsInLine;
+      final InternalGenerator generator = new InternalGenerator(dbms, t.getColumnTypes(), random);
+      final boolean lastLineComplete = t.getRowsCount() % MAX_ROWS_IN_LINE == 0;
+      final int lastLineRowCount, completeLinesCount;
+      if (lastLineComplete) {
+        lastLineRowCount = MAX_ROWS_IN_LINE;
+        completeLinesCount = t.getRowsCount() / MAX_ROWS_IN_LINE - 1;
+      } else {
+        lastLineRowCount = t.getRowsCount() % MAX_ROWS_IN_LINE;
+        completeLinesCount = t.getRowsCount() / MAX_ROWS_IN_LINE;
       }
 
-      while (rowIterator.hasNext()) {
-        final List<ValueWrapper> row = rowIterator.next();
-        final StringJoiner columnJoiner = new StringJoiner(",", "(", ")");
-        row.forEach(wrapper -> columnJoiner.add(wrapper.queryRepresentation()));
-        rowJoiner.add(columnJoiner.toString());
-        if (++rowsInLine == MAX_ROWS_IN_LINE) {
-          rowsInLine = 0;
-          output.write((",\n" + rowJoiner.toString()).getBytes());
-          rowJoiner = new StringJoiner(",");
-        }
+      for (int i = 0; i < completeLinesCount; ++i) {
+        insertLine(generator, output, MAX_ROWS_IN_LINE);
+        output.write(',');
       }
 
-      output.write((rowJoiner.toString() + ';').getBytes());
+      insertLine(generator, output, lastLineRowCount);
+      output.write((";" + System.lineSeparator()).getBytes());
     }
   }
 

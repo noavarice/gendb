@@ -1,4 +1,4 @@
-package com.gendb.model.wrapper.impl;
+package com.gendb.model.wrapper.extension.common;
 
 import com.gendb.model.wrapper.ValueWrapper;
 import java.util.Date;
@@ -8,10 +8,6 @@ import java.util.Date;
  * to return queryRepresentation value enclosed by quotes
  */
 public class StringDateWrapper extends ValueWrapper {
-
-  public StringDateWrapper(Object wrapped) {
-    super(wrapped);
-  }
 
   @Override
   public String queryRepresentation() {

@@ -1,7 +1,5 @@
 package com.gendb.model;
 
-import com.gendb.random.generator.TypeGenerator;
-import com.gendb.random.RandomValueProvider;
 import com.gendb.validation.Violations;
 import com.gendb.validation.type.DecimalPropertiesPresent;
 import com.gendb.validation.type.HandlerClassExist;
@@ -94,16 +92,6 @@ public class DataType {
     }
 
     return sb.toString();
-  }
-
-  public TypeGenerator getHandler(final RandomValueProvider provider) {
-    try {
-      final TypeGenerator h = (((Class<? extends TypeGenerator>) Class.forName(handlerClass)).newInstance());
-      h.init(this, provider);
-      return h;
-    } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
-      return null;
-    }
   }
 
   public boolean isUnsigned() {
