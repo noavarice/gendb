@@ -6,9 +6,14 @@ import com.gendb.mapper.ModelMapper;
 import com.gendb.model.Database;
 import com.gendb.model.Table;
 import com.gendb.random.RandomValueProvider;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -83,18 +88,20 @@ public final class Generator {
     return mapper.toModel(element.getValue());
   }
 
+  private final Path configPath;
+
   private final Validator validator;
 
-  private final RandomValueProvider random;
+  private RandomValueProvider random;
 
-  public Generator(final Validator validator) {
+  public Generator(final Path configPath, final Validator validator) {
+    this.configPath = configPath;
     this.validator = validator;
     this.random = new RandomValueProvider();
   }
 
-  public Generator(final Validator validator, final RandomValueProvider random) {
-    this.validator = validator;
-    this.random = random;
+  public void setRandomnessProvider(final RandomValueProvider provider) {
+    this.random = provider;
   }
 
   private static final int MAX_ROWS_IN_LINE = 10;
@@ -137,7 +144,19 @@ public final class Generator {
     }
   }
 
-  public void fromStream(final InputStream input, final OutputStream output) throws IOException {
+  public void createScript(final Path scriptFilePath, final boolean override) throws IOException {
+    if (Files.exists(scriptFilePath, LinkOption.NOFOLLOW_LINKS)) {
+      if (override) {
+        final String msg = String.format("Warning: file '%1$s' already exists, override: %2$b", scriptFilePath.toString(), true);
+        System.out.println(msg);
+      } else {
+        final String msg = String.format("Error: file '%1$s' already exists, override: %2$b", scriptFilePath.toString(), false);
+        System.out.println(msg);
+        return;
+      }
+    }
+
+    final FileInputStream input = new FileInputStream(configPath.toFile());
     final Database db;
     try {
       db = getConfig(input);
@@ -153,6 +172,7 @@ public final class Generator {
       return;
     }
 
+    final FileOutputStream output = new FileOutputStream(scriptFilePath.toFile());
     writeToStream(db, output);
   }
 }
