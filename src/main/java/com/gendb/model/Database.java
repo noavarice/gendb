@@ -1,5 +1,6 @@
 package com.gendb.model;
 
+import com.gendb.validation.database.UniqueTableNames;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ public class Database {
   private String name;
 
   @Valid
+  @UniqueTableNames
   private List<Table> tables;
 
   private String dbmsName;

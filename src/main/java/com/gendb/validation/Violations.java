@@ -17,4 +17,6 @@ public class Violations {
   public static final String HANDLER_CLASS_NOT_FOUND = "Handler of type '%1$s' not found or cannot be instantiated";
 
   public static final String NON_UNIQUE_COLUMN_NAMES = "Table '%1$s': columns have non-unique names";
+
+  public static final String NON_UNIQUE_TABLE_NAMES = "Tables have non-unique names";
 }
