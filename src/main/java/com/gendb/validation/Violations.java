@@ -6,8 +6,6 @@ package com.gendb.validation;
  */
 public class Violations {
 
-  public static final String ID_COLUMN_NAME_ALREADY_USED = "Table '%1$s': name of ID column already used";
-
   public static final String NON_POSITIVE_PRECISION = "Precision is set to non-positive value";
 
   public static final String NEGATIVE_PRECISION = "Scale is set to negative value";
@@ -19,4 +17,8 @@ public class Violations {
   public static final String NON_UNIQUE_COLUMN_NAMES = "Table '%1$s': columns have non-unique names";
 
   public static final String NON_UNIQUE_TABLE_NAMES = "Tables have non-unique names";
+
+  public static final String UNKNOWN_FOREIGN_KEY_TARGET_TABLE = "Table '%1$s': unknown table '%2$s' as foreign key reference";
+
+  public static final String NO_CYCLIC_REFERENCES = "Cyclic foreign key referencing found: %1$s";
 }

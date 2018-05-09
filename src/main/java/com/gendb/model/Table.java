@@ -1,14 +1,12 @@
 package com.gendb.model;
 
 import com.gendb.validation.table.UniqueColumnNames;
-import com.gendb.validation.table.ValidIdColumnName;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
-@ValidIdColumnName
 @UniqueColumnNames
 public class Table {
 
@@ -21,6 +19,8 @@ public class Table {
 
   @Valid
   private List<Column> columns;
+
+  private List<ForeignKey> foreignKeys;
 
   public String getName() {
     return name;
@@ -73,5 +73,13 @@ public class Table {
 
   public List<DataType> getColumnTypes() {
     return columns.stream().map(Column::getType).collect(Collectors.toList());
+  }
+
+  public List<ForeignKey> getForeignKeys() {
+    return foreignKeys;
+  }
+
+  public void setForeignKeys(List<ForeignKey> foreignKeys) {
+    this.foreignKeys = foreignKeys;
   }
 }

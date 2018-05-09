@@ -127,6 +127,7 @@ public final class Generator {
     output.write(db.getCreateStatement().getBytes());
     final String dbms = db.getDbmsName();
     for (final Table t : db.getTables()) {
+      LOGGER.info("Start generating table '{}'", t.getName());
       final String pkDeclaration = db.getPrimaryKeyDeclaration(t.getIdColumnName());
       final String createTable = String.format(t.getCreateStatement(), pkDeclaration);
       output.write((createTable + t.getInsertStatement()).getBytes());
@@ -148,6 +149,7 @@ public final class Generator {
 
       insertLine(generator, output, lastLineRowCount);
       output.write((";\n" + System.lineSeparator()).getBytes());
+      LOGGER.info("Finish generating table '{}'", t.getName());
     }
 
     output.write("COMMIT;\n".getBytes());
@@ -174,11 +176,8 @@ public final class Generator {
 
     final Set<ConstraintViolation<Database>> violations = validator.validate(db);
     if (!violations.isEmpty()) {
-      LOGGER.error("Constraint violations are found:\n");
-      violations.stream()
-        .map(ConstraintViolation::getMessage)
-        .map(msg -> msg.concat(System.lineSeparator()))
-        .forEach(LOGGER::error);
+      LOGGER.error("Constraint violations are found");
+      violations.stream().map(ConstraintViolation::getMessage).forEach(LOGGER::error);
       return;
     }
 

@@ -1,12 +1,36 @@
 package com.gendb.model;
 
+import com.gendb.validation.stage.FirstStage;
+import com.gendb.validation.database.NoCyclicReferences;
 import com.gendb.validation.database.UniqueTableNames;
+import com.gendb.validation.database.ValidForeignKeys;
+import com.gendb.validation.stage.SecondStage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.validation.GroupSequence;
 import javax.validation.Valid;
 
+@GroupSequence({Database.class, FirstStage.class, SecondStage.class})
 public class Database {
+
+  private static boolean depend(final Table t1, final Table t2) {
+    return t1.getForeignKeys().stream()
+      .map(ForeignKey::getTargetTable)
+      .anyMatch(t2.getName()::equals);
+  }
+
+  private static int compareTables(final Table t1, final Table t2) {
+    if (depend(t1, t2)) {
+      return 1;
+    }
+
+    if (depend(t2, t1)) {
+      return -1;
+    }
+
+    return 0;
+  }
 
   private static final Map<String, String> DBMS_TO_PK_TYPE = new HashMap<String, String>() {{
     put("mysql", "INTEGER AUTO_INCREMENT");
@@ -18,10 +42,14 @@ public class Database {
   private String name;
 
   @Valid
-  @UniqueTableNames
+  @UniqueTableNames(groups = FirstStage.class)
+  @ValidForeignKeys(groups = FirstStage.class)
+  @NoCyclicReferences(groups = SecondStage.class)
   private List<Table> tables;
 
   private String dbmsName;
+
+  private boolean tablesSorted = false;
 
   public String getName() {
     return name;
@@ -32,6 +60,12 @@ public class Database {
   }
 
   public List<Table> getTables() {
+    if (tablesSorted) {
+      return tables;
+    }
+
+    tablesSorted = true;
+    tables.sort(Database::compareTables);
     return tables;
   }
 
