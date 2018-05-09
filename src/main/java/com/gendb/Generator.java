@@ -123,6 +123,7 @@ public final class Generator {
   }
 
   private void writeToStream(final Database db, final OutputStream output) throws IOException {
+    output.write("START TRANSACTION;".getBytes());
     output.write(db.getCreateStatement().getBytes());
     final String dbms = db.getDbmsName();
     for (final Table t : db.getTables()) {
@@ -146,8 +147,10 @@ public final class Generator {
       }
 
       insertLine(generator, output, lastLineRowCount);
-      output.write((";" + System.lineSeparator()).getBytes());
+      output.write((";\n" + System.lineSeparator()).getBytes());
     }
+
+    output.write("COMMIT;\n".getBytes());
   }
 
   public void createScript(final Path scriptFilePath, final boolean override) throws IOException {
