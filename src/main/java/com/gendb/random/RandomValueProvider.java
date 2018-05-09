@@ -90,7 +90,7 @@ public class RandomValueProvider {
     return Math.abs(nextRandom().intValue()) % MAX_UNSIGNED_SHORT;
   }
 
-  public int getUnsignedSmallint(final short min, final short max) {
+  public int getUnsignedSmallint(final int min, final int max) {
     return nextRandom(min, max).intValue();
   }
 

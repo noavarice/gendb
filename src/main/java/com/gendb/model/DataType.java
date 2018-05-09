@@ -3,11 +3,22 @@ package com.gendb.model;
 import com.gendb.validation.Violations;
 import com.gendb.validation.type.DecimalPropertiesPresent;
 import com.gendb.validation.type.HandlerClassExist;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
 @DecimalPropertiesPresent
 public class DataType {
+
+  private static final Set<String> INTEGER_TYPES = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER) {{
+    addAll(Arrays.asList("smallint", "int", "bigint"));
+  }};
+
+  private static final Set<String> STRING_TYPES = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER) {{
+    addAll(Arrays.asList("char", "varchar"));
+  }};
 
   private String name;
 
@@ -79,12 +90,14 @@ public class DataType {
     this.handlerClass = handlerClass;
   }
 
-  public String getTypeDefinition() {
+  String getTypeDefinition() {
     final StringBuilder sb = new StringBuilder(name.toUpperCase());
     if (name.equals("decimal")) {
       sb.append(String.format("(%1$s,%2$s)", precision, scale));
-    } else if (name.equals("char") || name.equals("varchar")) {
+    } else if (STRING_TYPES.contains(name)) {
       sb.append(String.format("(%1$s)", length));
+    } else if (INTEGER_TYPES.contains(name) && unsigned) {
+      sb.append(" UNSIGNED");
     }
 
     if (!nullable) {

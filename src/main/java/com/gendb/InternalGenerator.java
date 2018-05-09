@@ -10,6 +10,7 @@ import com.gendb.random.generator.TypeGenerator;
 import com.gendb.random.generator.impl.DateGenerator;
 import com.gendb.random.generator.impl.DecimalGenerator;
 import com.gendb.random.generator.impl.IntegerGenerator;
+import com.gendb.random.generator.impl.SmallintGenerator;
 import com.gendb.random.generator.impl.StringGenerator;
 import com.gendb.random.generator.impl.TimestampGenerator;
 import java.util.HashMap;
@@ -47,7 +48,7 @@ class InternalGenerator {
   private static final Map<String, Class<? extends TypeGenerator>> DEFAULT_GENERATORS =
     new HashMap<String, Class<? extends TypeGenerator>>()
   {{
-    put("smallint", IntegerGenerator.class);
+    put("smallint", SmallintGenerator.class);
     put("int", IntegerGenerator.class);
     put("decimal", DecimalGenerator.class);
     put("char", StringGenerator.class);
