@@ -3,6 +3,7 @@ package com.gendb.model;
 import com.gendb.validation.Violations;
 import com.gendb.validation.type.DecimalPropertiesPresent;
 import com.gendb.validation.type.HandlerClassExist;
+import com.gendb.validation.type.ValidNumericBoundaries;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
 @DecimalPropertiesPresent
+@ValidNumericBoundaries
 public class DataType {
 
   private static final Set<String> INTEGER_TYPES = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER) {{

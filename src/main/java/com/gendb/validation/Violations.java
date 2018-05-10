@@ -21,4 +21,6 @@ public class Violations {
   public static final String UNKNOWN_FOREIGN_KEY_TARGET_TABLE = "Table '%1$s': unknown table '%2$s' as foreign key reference";
 
   public static final String NO_CYCLIC_REFERENCES = "Cyclic foreign key referencing found: %1$s";
+
+  public static final String INVALID_NUMERIC_BOUNDARIES = "Minimum boundary (%1$s) more than maximum (%2$s)";
 }
