@@ -1,7 +1,6 @@
 package com.gendb.validation.table.validator;
 
 import com.gendb.model.Column;
-import com.gendb.model.ForeignKey;
 import com.gendb.model.Table;
 import com.gendb.validation.ValidationUtils;
 import com.gendb.validation.table.UniqueColumnNames;
@@ -19,9 +18,6 @@ public class UniqueColumnNamesValidator implements ConstraintValidator<UniqueCol
     final List<String> columnNames = table.getColumns().stream()
       .map(Column::getName)
       .collect(Collectors.toList());
-    columnNames.addAll(table.getForeignKeys().stream()
-      .map(ForeignKey::getColumnName)
-      .collect(Collectors.toList()));
     columnNames.add(table.getIdColumnName());
     final Set<String> uniqueNames = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
     uniqueNames.addAll(columnNames);

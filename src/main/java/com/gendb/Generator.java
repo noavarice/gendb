@@ -130,7 +130,8 @@ public final class Generator {
       LOGGER.info("Start generating table '{}'", t.getName());
       final String pkDeclaration = db.getPrimaryKeyDeclaration(t.getIdColumnName());
       final String createTable = String.format(t.getCreateStatement(), pkDeclaration);
-      output.write((createTable + t.getInsertStatement()).getBytes());
+      final String foreignKeys = db.addForeignKeyDeclarations(t.getName());
+      output.write((createTable + foreignKeys + t.getInsertStatement()).getBytes());
       final InternalGenerator generator = new InternalGenerator(dbms, t.getColumnTypes(), random);
       final boolean lastLineComplete = t.getRowsCount() % MAX_ROWS_IN_LINE == 0;
       final int lastLineRowCount, completeLinesCount;
@@ -157,12 +158,12 @@ public final class Generator {
 
   public void createScript(final Path scriptFilePath, final boolean override) throws IOException {
     if (Files.exists(scriptFilePath, LinkOption.NOFOLLOW_LINKS)) {
-      if (override) {
-        LOGGER.warn("File '{}' already exists, override: {}", scriptFilePath, true);
-      } else {
+      if (!override) {
         LOGGER.error("File '{}' already exists, override: {}", scriptFilePath, false);
         return;
       }
+
+      LOGGER.warn("File '{}' already exists, override: {}", scriptFilePath, true);
     }
 
     final FileInputStream input = new FileInputStream(configPath.toFile());

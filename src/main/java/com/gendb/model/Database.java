@@ -8,11 +8,17 @@ import com.gendb.validation.stage.SecondStage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import javax.validation.GroupSequence;
 import javax.validation.Valid;
 
 @GroupSequence({Database.class, FirstStage.class, SecondStage.class})
 public class Database {
+
+  private static final String FK_DECLARATION_TEMPLATE =
+    "ADD CONSTRAINT FOREIGN KEY (%1$s) REFERENCES %2$s(%3$s)";
 
   private static boolean depend(final Table t1, final Table t2) {
     return t1.getForeignKeys().stream()
@@ -33,7 +39,7 @@ public class Database {
   }
 
   private static final Map<String, String> DBMS_TO_PK_TYPE = new HashMap<String, String>() {{
-    put("mysql", "INTEGER AUTO_INCREMENT");
+    put("mysql", "INTEGER UNSIGNED AUTO_INCREMENT");
     put("postgres", "SERIAL");
   }};
 
@@ -94,5 +100,29 @@ public class Database {
 
   public String getPrimaryKeyDeclaration(final String columnName) {
     return String.format(PK_DECLARATION_TEMPLATE, columnName, DBMS_TO_PK_TYPE.get(dbmsName));
+  }
+
+  public String addForeignKeyDeclarations(final String tableName) {
+    Table table = null;
+    for (final Table t: tables) {
+      if (t.getName().equals(tableName)) {
+        table = t;
+        break;
+      }
+    }
+
+    final Map<String, Table> nameToTable = tables.stream()
+      .collect(Collectors.toMap(Table::getName, Function.identity()));
+    final StringJoiner sj = new StringJoiner(",");
+    for (final ForeignKey fk: table.getForeignKeys()) {
+      final String idColName = nameToTable.get(fk.getTargetTable()).getIdColumnName();
+      sj.add(String.format(
+        FK_DECLARATION_TEMPLATE,
+        fk.getColumnName(),
+        fk.getTargetTable(),
+        idColName));
+    }
+
+    return String.format("ALTER TABLE %1$s %2$s;%3$s", tableName, sj.toString(), System.lineSeparator());
   }
 }
