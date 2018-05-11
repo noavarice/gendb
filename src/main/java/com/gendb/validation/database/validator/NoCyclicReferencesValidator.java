@@ -1,13 +1,12 @@
 package com.gendb.validation.database.validator;
 
-import com.gendb.model.ForeignKey;
-import com.gendb.model.Table;
+import com.gendb.model.validating.ValidatingForeignKey;
+import com.gendb.model.validating.ValidatingTable;
 import com.gendb.validation.ValidationUtils;
 import com.gendb.validation.database.NoCyclicReferences;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,39 +18,39 @@ import javax.validation.ConstraintValidatorContext;
 /**
  * Checks if there is a cycled foreign key chains
  */
-public class NoCyclicReferencesValidator implements ConstraintValidator<NoCyclicReferences, List<Table>> {
+public class NoCyclicReferencesValidator implements ConstraintValidator<NoCyclicReferences, List<ValidatingTable>> {
 
   /**
    * Class for detecting cycles in foreign key declarations
    */
   private class CycleResolver {
 
-    private final Map<String, Table> nameToTable;
+    private final Map<String, ValidatingTable> nameToTable;
 
-    private final List<Table> tables;
+    private final List<ValidatingTable> tables;
 
-    private CycleResolver(final List<Table> tables) {
+    private CycleResolver(final List<ValidatingTable> tables) {
       this.tables = tables;
       this.nameToTable = tables.stream()
-        .collect(Collectors.toMap(Table::getName, Function.identity()));
+        .collect(Collectors.toMap(ValidatingTable::getName, Function.identity()));
     }
 
     /**
      * Inner recursive method for cycle detection
      * @see CycleResolver#getCycle()
      */
-    private boolean getCycleRecursive(final Table table, final List<String> path) {
+    private boolean getCycleRecursive(final ValidatingTable table, final List<String> path) {
       if (path.contains(table.getName())) {
         path.add(table.getName());
         return true;
       }
 
       path.add(table.getName());
-      final List<Table> referencingTables = table.getForeignKeys().stream()
-        .map(ForeignKey::getTargetTable)
+      final List<ValidatingTable> referencingTables = table.getForeignKeys().stream()
+        .map(ValidatingForeignKey::getTargetTable)
         .map(nameToTable::get)
         .collect(Collectors.toList());
-      for (final Table t: referencingTables) {
+      for (final ValidatingTable t: referencingTables) {
         if (getCycleRecursive(t, path)) {
           return true;
         }
@@ -80,7 +79,7 @@ public class NoCyclicReferencesValidator implements ConstraintValidator<NoCyclic
      * Returns empty list if no cycles detected and non-empty list otherwise
      */
     List<String> getCycle() {
-      for (final Table t: tables) {
+      for (final ValidatingTable t: tables) {
         final List<String> path = new ArrayList<>();
         if (getCycleRecursive(t, path)) {
           return shorten(path);
@@ -92,7 +91,7 @@ public class NoCyclicReferencesValidator implements ConstraintValidator<NoCyclic
   }
 
   @Override
-  public boolean isValid(final List<Table> tables, final ConstraintValidatorContext context) {
+  public boolean isValid(final List<ValidatingTable> tables, final ConstraintValidatorContext context) {
     final List<String> path = new CycleResolver(tables).getCycle();
     if (path.isEmpty()) {
       return true;

@@ -1,4 +1,4 @@
-package com.gendb.model;
+package com.gendb.model.pure;
 
 import com.gendb.validation.Violations;
 import com.gendb.validation.type.DecimalPropertiesPresent;

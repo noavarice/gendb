@@ -1,7 +1,7 @@
 package com.gendb.validation.table.validator;
 
-import com.gendb.model.Column;
-import com.gendb.model.Table;
+import com.gendb.model.validating.ValidatingColumn;
+import com.gendb.model.validating.ValidatingTable;
 import com.gendb.validation.ValidationUtils;
 import com.gendb.validation.table.UniqueColumnNames;
 import java.util.List;
@@ -11,12 +11,12 @@ import java.util.stream.Collectors;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class UniqueColumnNamesValidator implements ConstraintValidator<UniqueColumnNames, Table> {
+public class UniqueColumnNamesValidator implements ConstraintValidator<UniqueColumnNames, ValidatingTable> {
 
   @Override
-  public boolean isValid(Table table, ConstraintValidatorContext context) {
+  public boolean isValid(ValidatingTable table, ConstraintValidatorContext context) {
     final List<String> columnNames = table.getColumns().stream()
-      .map(Column::getName)
+      .map(ValidatingColumn::getName)
       .collect(Collectors.toList());
     columnNames.add(table.getIdColumnName());
     final Set<String> uniqueNames = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);

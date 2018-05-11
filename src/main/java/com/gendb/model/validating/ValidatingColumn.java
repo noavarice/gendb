@@ -1,19 +1,19 @@
-package com.gendb.model;
+package com.gendb.model.validating;
 
 import javax.validation.Valid;
 
-public class Column {
+public class ValidatingColumn {
 
   @Valid
-  private DataType type;
+  private ValidatingDataType type;
 
   private String name;
 
-  public DataType getType() {
+  public ValidatingDataType getType() {
     return type;
   }
 
-  public void setType(DataType type) {
+  public void setType(ValidatingDataType type) {
     this.type = type;
   }
 
@@ -23,9 +23,5 @@ public class Column {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  String getColumnDefinition() {
-    return name + ' ' + type.getTypeDefinition();
   }
 }

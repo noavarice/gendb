@@ -1,16 +1,16 @@
 package com.gendb.validation.type.validator;
 
 import com.gendb.TypeUtils;
-import com.gendb.model.DataType;
+import com.gendb.model.validating.ValidatingDataType;
 import com.gendb.validation.ValidationUtils;
 import com.gendb.validation.type.ValidNumericBoundaries;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class ValidNumericBoundariesValidator implements ConstraintValidator<ValidNumericBoundaries, DataType> {
+public class ValidNumericBoundariesValidator implements ConstraintValidator<ValidNumericBoundaries, ValidatingDataType> {
 
   @Override
-  public boolean isValid(final DataType type, final ConstraintValidatorContext context) {
+  public boolean isValid(final ValidatingDataType type, final ConstraintValidatorContext context) {
     if (!TypeUtils.isNumeric(type.getName())) {
       return true;
     }

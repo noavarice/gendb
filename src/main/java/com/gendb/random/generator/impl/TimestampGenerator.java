@@ -1,6 +1,6 @@
 package com.gendb.random.generator.impl;
 
-import com.gendb.model.DataType;
+import com.gendb.model.pure.DataType;
 import com.gendb.random.RandomValueProvider;
 import com.gendb.random.generator.TypeGenerator;
 

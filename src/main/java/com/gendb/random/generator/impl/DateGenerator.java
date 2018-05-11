@@ -1,6 +1,6 @@
 package com.gendb.random.generator.impl;
 
-import com.gendb.model.DataType;
+import com.gendb.model.pure.DataType;
 import com.gendb.random.RandomValueProvider;
 import com.gendb.random.generator.TypeGenerator;
 import java.text.SimpleDateFormat;
@@ -14,7 +14,7 @@ public class DateGenerator implements TypeGenerator {
   private RandomValueProvider provider;
 
   @Override
-  public void init(DataType type, RandomValueProvider provider) {
+  public void init(final DataType type, RandomValueProvider provider) {
     this.provider = provider;
     sdf = new SimpleDateFormat("YYYY-MM-dd");
   }

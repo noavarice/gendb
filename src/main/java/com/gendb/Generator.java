@@ -2,9 +2,12 @@ package com.gendb;
 
 import com.gendb.dto.DatabaseDto;
 import com.gendb.dto.ObjectFactory;
-import com.gendb.mapper.ModelMapper;
-import com.gendb.model.Database;
-import com.gendb.model.Table;
+import com.gendb.mapper.PureModelMapper;
+import com.gendb.mapper.ValidationModelMapper;
+import com.gendb.model.pure.Database;
+import com.gendb.model.pure.Table;
+import com.gendb.model.validating.ValidatingDatabase;
+import com.gendb.model.validating.ValidatingTable;
 import com.gendb.random.RandomValueProvider;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -73,11 +76,8 @@ public final class Generator {
     return unmarshaller;
   }
 
-  /**
-   * Retrieves {@link ModelMapper} implementation through {@link ServiceLoader}
-   */
-  private static ModelMapper createModelMapper() {
-    final ServiceLoader<ModelMapper> mapperServiceLoader = ServiceLoader.load(ModelMapper.class);
+  private static <T> T getMapper(final Class<T> clazz) {
+    final ServiceLoader<T> mapperServiceLoader = ServiceLoader.load(clazz);
     return mapperServiceLoader.iterator().next();
   }
 
@@ -85,11 +85,11 @@ public final class Generator {
    * Performs actual unmarshalling process upon passed XML config file
    * @param input XML config file as {@link InputStream}
    */
-  private static Database getConfig(final InputStream input) throws JAXBException {
+  private static ValidatingDatabase getConfig(final InputStream input) throws JAXBException {
     final Unmarshaller unmarshaller = createUnmarshaller();
-    final ModelMapper mapper = createModelMapper();
+    final ValidationModelMapper mapper = getMapper(ValidationModelMapper.class);
     final JAXBElement<DatabaseDto> element = (JAXBElement<DatabaseDto>)unmarshaller.unmarshal(input);
-    return mapper.toModel(element.getValue());
+    return mapper.toValidationModel(element.getValue());
   }
 
   private final Path configPath;
@@ -167,22 +167,23 @@ public final class Generator {
     }
 
     final FileInputStream input = new FileInputStream(configPath.toFile());
-    final Database db;
+    final ValidatingDatabase validationDatabase;
     try {
-      db = getConfig(input);
+      validationDatabase = getConfig(input);
     } catch (JAXBException e) {
       LOGGER.error("Error while parsing XML config:\n{}", e.toString());
       return;
     }
 
-    final Set<ConstraintViolation<Database>> violations = validator.validate(db);
+    final Set<ConstraintViolation<ValidatingDatabase>> violations = validator.validate(validationDatabase);
     if (!violations.isEmpty()) {
       LOGGER.error("Constraint violations are found");
       violations.stream().map(ConstraintViolation::getMessage).forEach(LOGGER::error);
       return;
     }
 
+    final Database database = getMapper(PureModelMapper.class).toModel(validationDatabase);
     final FileOutputStream output = new FileOutputStream(scriptFilePath.toFile());
-    writeToStream(db, output);
+    writeToStream(database, output);
   }
 }

@@ -1,6 +1,6 @@
 package com.gendb;
 
-import com.gendb.model.DataType;
+import com.gendb.model.pure.DataType;
 import com.gendb.model.wrapper.ValueWrapper;
 import com.gendb.model.wrapper.extension.common.StringDateWrapper;
 import com.gendb.model.wrapper.extension.mysql.MysqlTimestampWrapper;

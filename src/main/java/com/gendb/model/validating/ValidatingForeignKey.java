@@ -1,6 +1,6 @@
-package com.gendb.model;
+package com.gendb.model.validating;
 
-public class ForeignKey {
+public class ValidatingForeignKey {
 
   private String targetTable;
 

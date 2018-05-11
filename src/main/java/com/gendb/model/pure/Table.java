@@ -1,4 +1,4 @@
-package com.gendb.model;
+package com.gendb.model.pure;
 
 import com.gendb.validation.table.UniqueColumnNames;
 import java.util.List;
