@@ -4,10 +4,12 @@ import com.gendb.dto.DataTypeDto;
 import com.gendb.dto.DatabaseDto;
 import com.gendb.dto.ForeignKeyDto;
 import com.gendb.dto.TableDto;
+import com.gendb.dto.ValueOrderDto;
 import com.gendb.model.validating.ValidatingDataType;
 import com.gendb.model.validating.ValidatingDatabase;
 import com.gendb.model.validating.ValidatingForeignKey;
 import com.gendb.model.validating.ValidatingTable;
+import com.gendb.model.validating.ValidatingValueOrder;
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -34,8 +36,12 @@ public interface ValidationModelMapper {
   ValidatingDataType toValidationModel(final DataTypeDto dto);
 
   @Mapping(target = "columns", source = "column")
+  ValidatingValueOrder toValidationModel(final ValueOrderDto dto);
+
+  @Mapping(target = "columns", source = "column")
   @Mapping(target = "rowsCount", source = "rows")
   @Mapping(target = "foreignKeys", source = "foreignKey")
+  @Mapping(target = "valueOrders", source = "valueOrder")
   ValidatingTable toValidationModel(final TableDto dto);
 
   @Mapping(target = "tables", source = "table")

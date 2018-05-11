@@ -20,6 +20,8 @@ public class ValidatingTable {
 
   private List<ValidatingForeignKey> foreignKeys;
 
+  private List<ValidatingValueOrder> valueOrders;
+
   public String getName() {
     return name;
   }
@@ -58,5 +60,13 @@ public class ValidatingTable {
 
   public void setForeignKeys(List<ValidatingForeignKey> foreignKeys) {
     this.foreignKeys = foreignKeys;
+  }
+
+  public List<ValidatingValueOrder> getValueOrders() {
+    return valueOrders;
+  }
+
+  public void setValueOrders(List<ValidatingValueOrder> valueOrders) {
+    this.valueOrders = valueOrders;
   }
 }

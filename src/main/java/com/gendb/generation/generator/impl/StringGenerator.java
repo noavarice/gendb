@@ -1,8 +1,9 @@
-package com.gendb.random.generator.impl;
+package com.gendb.generation.generator.impl;
 
+import com.gendb.generation.GenerationContext;
+import com.gendb.generation.RandomValueProvider;
+import com.gendb.generation.generator.TypeGenerator;
 import com.gendb.model.pure.DataType;
-import com.gendb.random.RandomValueProvider;
-import com.gendb.random.generator.TypeGenerator;
 
 public class StringGenerator implements TypeGenerator {
 
@@ -17,7 +18,7 @@ public class StringGenerator implements TypeGenerator {
   }
 
   @Override
-  public Object yield() {
+  public Object yield(final GenerationContext context) {
     return provider.getAlphanumericString(length);
   }
 }

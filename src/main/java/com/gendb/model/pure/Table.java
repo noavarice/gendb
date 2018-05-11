@@ -1,7 +1,11 @@
 package com.gendb.model.pure;
 
 import com.gendb.validation.table.UniqueColumnNames;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
@@ -21,6 +25,8 @@ public class Table {
   private List<Column> columns;
 
   private List<ForeignKey> foreignKeys;
+
+  private List<ValueOrder> valueOrders;
 
   public String getName() {
     return name;
@@ -81,5 +87,32 @@ public class Table {
 
   public void setForeignKeys(List<ForeignKey> foreignKeys) {
     this.foreignKeys = foreignKeys;
+  }
+
+  public List<ValueOrder> getValueOrders() {
+    return valueOrders;
+  }
+
+  public void setValueOrders(List<ValueOrder> valueOrders) {
+    this.valueOrders = valueOrders;
+  }
+
+  public int generatedBefore(final String col1, final String col2) {
+    final Optional<ValueOrder> optionalOrder = valueOrders.stream()
+      .filter(o -> o.getColumns().containsAll(Arrays.asList(col1, col2)))
+      .findAny();
+    if (!optionalOrder.isPresent()) {
+      return 0;
+    }
+
+    final ValueOrder order = optionalOrder.get();
+    return order.getColumns().indexOf(col1) < order.getColumns().indexOf(col2) ? -1 : 1;
+  }
+
+  public List<Integer> getColumnGenerationOrder() {
+    final List<String> columnNames = columns.stream().map(Column::getName).collect(Collectors.toList());
+    final List<String> copy = new ArrayList<>(columnNames);
+    copy.sort(this::generatedBefore);
+    return copy.stream().map(columnNames::indexOf).collect(Collectors.toList());
   }
 }

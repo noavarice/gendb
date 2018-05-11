@@ -1,9 +1,9 @@
 package com.gendb.model.validating;
 
-import com.gendb.validation.stage.FirstStage;
 import com.gendb.validation.database.NoCyclicReferences;
 import com.gendb.validation.database.UniqueTableNames;
 import com.gendb.validation.database.ValidForeignKeys;
+import com.gendb.validation.stage.FirstStage;
 import com.gendb.validation.stage.SecondStage;
 import java.util.List;
 import javax.validation.GroupSequence;

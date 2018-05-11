@@ -1,4 +1,4 @@
-package com.gendb.random;
+package com.gendb.generation;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -35,8 +35,6 @@ public class RandomValueProvider {
   private static final int ALPHANUMERIC_CHARS_COUNT = ALPHANUMERIC.size();
 
   private static final long TIMESTAMP_DIFF = Instant.now().getEpochSecond() - Instant.EPOCH.getEpochSecond();
-
-  private static final String DATE_TEMPLATE = "%1$d-01-01 00:00:00";
 
   private final Random rnd;
 
@@ -78,36 +76,52 @@ public class RandomValueProvider {
     return new String(chars);
   }
 
-  public short getSignedSmallint() {
+  public long getSignedSmallint() {
     return nextRandom().shortValue();
   }
 
-  public short getSignedSmallint(final short min, final short max) {
-    return nextRandom(min, max).shortValue();
+  public long getSignedSmallint(final Short min, final Short max) {
+    final short realMin = min == null ? Short.MIN_VALUE : min;
+    final short realMax = max == null ? Short.MAX_VALUE : max;
+    return nextRandom(realMin, realMax).shortValue();
   }
 
-  public int getUnsignedSmallint() {
+  public long getUnsignedSmallint() {
     return Math.abs(nextRandom().intValue()) % MAX_UNSIGNED_SHORT;
   }
 
-  public int getUnsignedSmallint(final int min, final int max) {
-    return nextRandom(min, max).intValue();
+  public long getUnsignedSmallint(final Integer min, final Integer max) {
+    final int realMin = min == null ? 0 : min;
+    final int realMax = max == null ? MAX_UNSIGNED_SHORT : max;
+    return nextRandom(realMin, realMax).intValue();
   }
 
-  public int getSignedInt() {
+  public long getSignedInt() {
     return nextRandom().intValue();
   }
 
-  public int getSignedInt(final int min, final int max) {
-    return nextRandom(min, max).intValue();
+  public long getSignedInt(final Integer min, final Integer max) {
+    final int realMin = min == null ? Integer.MIN_VALUE : min;
+    final int realMax = max == null ? Integer.MAX_VALUE : max;
+    return nextRandom(realMin, realMax).intValue();
   }
 
   public long getUnsignedInt() {
     return Math.abs(nextRandom()) % MAX_UNSIGNED_INT;
   }
 
-  public long getUnsignedInt(final long min, final long max) {
-    return nextRandom(min, max);
+  public long getUnsignedInt(final Long min, final Long max) {
+    final long realMin = min == null ? 0 : min;
+    final long realMax = max == null ? MAX_UNSIGNED_INT : max;
+    return nextRandom(realMin, realMax);
+  }
+
+  public long getNumber(final long min, final long max) {
+    if (min == max) {
+      return min;
+    }
+
+    return min + Math.abs(rnd.nextLong()) % (max - min);
   }
 
   public BigDecimal getDecimal(final int precision, final int scale) {

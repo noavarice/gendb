@@ -47,11 +47,18 @@
     <xs:attribute name="columnName" type="Attribute"/>
   </xs:complexType>
 
+  <xs:complexType name="ValueOrderDto">
+    <xs:sequence>
+      <xs:element name="column" type="Attribute" minOccurs="2" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
   <!-- Describes SQL table -->
   <xs:complexType name="TableDto">
     <xs:sequence>
       <xs:element name="column" type="ColumnDto" maxOccurs="unbounded"/>
       <xs:element name="foreignKey" type="ForeignKeyDto" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="valueOrder" type="ValueOrderDto" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="name" type="Attribute" use="required"/>
     <xs:attribute name="idColumnName" type="Attribute" default="id"/>

@@ -1,8 +1,9 @@
-package com.gendb.random.generator.impl;
+package com.gendb.generation.generator.impl;
 
+import com.gendb.generation.GenerationContext;
+import com.gendb.generation.RandomValueProvider;
+import com.gendb.generation.generator.TypeGenerator;
 import com.gendb.model.pure.DataType;
-import com.gendb.random.RandomValueProvider;
-import com.gendb.random.generator.TypeGenerator;
 import java.util.function.LongSupplier;
 
 public class SmallintGenerator implements TypeGenerator {
@@ -35,13 +36,13 @@ public class SmallintGenerator implements TypeGenerator {
       return;
     }
 
-    final int min = invalidMin ? Short.MIN_VALUE : type.getMin().intValue();
-    final int max = invalidMax ? Short.MAX_VALUE : type.getMax().intValue();
-    f = () -> provider.getSignedInt(min, max);
+    final short min = invalidMin ? Short.MIN_VALUE : type.getMin().shortValue();
+    final short max = invalidMax ? Short.MAX_VALUE : type.getMax().shortValue();
+    f = () -> provider.getSignedSmallint(min, max);
   }
 
   @Override
-  public Object yield() {
+  public Object yield(final GenerationContext context) {
     return f.getAsLong();
   }
 }

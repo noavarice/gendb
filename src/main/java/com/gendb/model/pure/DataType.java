@@ -44,6 +44,8 @@ public class DataType {
 
   private Double max;
 
+  private Column minColumn;
+
   public String getName() {
     return name;
   }
@@ -131,5 +133,13 @@ public class DataType {
 
   public void setMax(Double max) {
     this.max = max;
+  }
+
+  public Column getMinColumn() {
+    return minColumn;
+  }
+
+  public void setMinColumn(Column minColumn) {
+    this.minColumn = minColumn;
   }
 }

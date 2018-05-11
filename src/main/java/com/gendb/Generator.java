@@ -2,13 +2,13 @@ package com.gendb;
 
 import com.gendb.dto.DatabaseDto;
 import com.gendb.dto.ObjectFactory;
+import com.gendb.generation.InternalGenerator;
+import com.gendb.generation.RandomValueProvider;
 import com.gendb.mapper.PureModelMapper;
 import com.gendb.mapper.ValidationModelMapper;
 import com.gendb.model.pure.Database;
 import com.gendb.model.pure.Table;
 import com.gendb.model.validating.ValidatingDatabase;
-import com.gendb.model.validating.ValidatingTable;
-import com.gendb.random.RandomValueProvider;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -132,7 +132,7 @@ public final class Generator {
       final String createTable = String.format(t.getCreateStatement(), pkDeclaration);
       final String foreignKeys = db.addForeignKeyDeclarations(t.getName());
       output.write((createTable + foreignKeys + t.getInsertStatement()).getBytes());
-      final InternalGenerator generator = new InternalGenerator(dbms, t.getColumnTypes(), random);
+      final InternalGenerator generator = new InternalGenerator(dbms, t, random);
       final boolean lastLineComplete = t.getRowsCount() % MAX_ROWS_IN_LINE == 0;
       final int lastLineRowCount, completeLinesCount;
       if (lastLineComplete) {

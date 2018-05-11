@@ -1,6 +1,6 @@
 package com.gendb.validation.type.validator;
 
-import com.gendb.TypeUtils;
+import com.gendb.util.TypeUtils;
 import com.gendb.model.validating.ValidatingDataType;
 import com.gendb.validation.ValidationUtils;
 import com.gendb.validation.type.ValidNumericBoundaries;

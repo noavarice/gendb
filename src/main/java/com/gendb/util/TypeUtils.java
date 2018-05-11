@@ -1,4 +1,4 @@
-package com.gendb;
+package com.gendb.util;
 
 import java.util.HashSet;
 import java.util.Set;
