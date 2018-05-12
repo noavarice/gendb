@@ -38,7 +38,6 @@ public abstract class PureModelMapper {
         fkColumn.setName(fk.getColumnName());
         final DataType type = new DataType();
         type.setName("int");
-        type.setUnsigned(true);
         type.setNullable(false);
         type.setMin(1d);
         type.setMax((double)nameToTable.get(fk.getTargetTable()).getRowsCount());

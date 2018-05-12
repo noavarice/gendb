@@ -123,14 +123,19 @@ public final class Generator {
   }
 
   private void writeToStream(final Database db, final OutputStream output) throws IOException {
-    output.write("START TRANSACTION;".getBytes());
     output.write(db.getCreateStatement().getBytes());
     final String dbms = db.getDbmsName();
     for (final Table t : db.getTables()) {
       LOGGER.info("Start generating table '{}'", t.getName());
       final String pkDeclaration = db.getPrimaryKeyDeclaration(t.getIdColumnName());
       final String createTable = String.format(t.getCreateStatement(), pkDeclaration);
-      final String foreignKeys = db.addForeignKeyDeclarations(t.getName());
+      final String foreignKeys;
+      if (t.getForeignKeys().isEmpty()) {
+        foreignKeys = "";
+      } else {
+        foreignKeys = db.addForeignKeyDeclarations(t.getName());
+      }
+
       output.write((createTable + foreignKeys + t.getInsertStatement()).getBytes());
       final InternalGenerator generator = new InternalGenerator(dbms, t, random);
       final boolean lastLineComplete = t.getRowsCount() % MAX_ROWS_IN_LINE == 0;
@@ -152,8 +157,6 @@ public final class Generator {
       output.write((";\n" + System.lineSeparator()).getBytes());
       LOGGER.info("Finish generating table '{}'", t.getName());
     }
-
-    output.write("COMMIT;\n".getBytes());
   }
 
   public void createScript(final Path scriptFilePath, final boolean override) throws IOException {

@@ -13,11 +13,6 @@ public class IntegerGenerator implements TypeGenerator {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(IntegerGenerator.class);
 
-  private static final Map<String, Long> TYPE_TO_MAX_UNSIGNED = new HashMap<String, Long>() {{
-    put("smallint", (long)(Short.MAX_VALUE) - Short.MIN_VALUE);
-    put("int", (long)(Integer.MAX_VALUE) - Integer.MIN_VALUE);
-  }};
-
   private static final Map<String, Long> TYPE_TO_MAX_SIGNED = new HashMap<String, Long>() {{
     put("smallint", (long)Short.MAX_VALUE);
     put("int", (long)(Integer.MAX_VALUE));
@@ -38,13 +33,8 @@ public class IntegerGenerator implements TypeGenerator {
   public void init(final DataType type, final RandomValueProvider provider) {
     this.provider = provider;
     minColumn = type.getMinColumn() == null ? null : type.getMinColumn().getName();
-    if (type.isUnsigned()) {
-      min = (long)(type.getMin() == null ? 0 : type.getMin());
-      max = (long)(type.getMax() == null ? TYPE_TO_MAX_UNSIGNED.get(type.getName()) : type.getMax());
-    } else {
-      min = (long)(type.getMin() == null ? TYPE_TO_MIN_SIGNED.get(type.getName()) : type.getMin());
-      max = (long)(type.getMax() == null ? TYPE_TO_MAX_UNSIGNED.get(type.getName()) : type.getMax());
-    }
+    min = (long)(type.getMin() == null ? TYPE_TO_MIN_SIGNED.get(type.getName()) : type.getMin());
+    max = (long)(type.getMax() == null ? TYPE_TO_MAX_SIGNED.get(type.getName()) : type.getMax());
   }
 
   @Override

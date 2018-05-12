@@ -27,8 +27,6 @@ public class ValidatingDataType {
   @Positive
   private Integer length;
 
-  private boolean unsigned;
-
   private Double min;
 
   private Double max;
@@ -79,14 +77,6 @@ public class ValidatingDataType {
 
   public void setHandlerClass(String handlerClass) {
     this.handlerClass = handlerClass;
-  }
-
-  public boolean isUnsigned() {
-    return unsigned;
-  }
-
-  public void setUnsigned(boolean unsigned) {
-    this.unsigned = unsigned;
   }
 
   public Double getMin() {

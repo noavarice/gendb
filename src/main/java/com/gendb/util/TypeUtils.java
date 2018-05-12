@@ -1,7 +1,9 @@
 package com.gendb.util;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class TypeUtils {
 
@@ -22,7 +24,15 @@ public class TypeUtils {
     add("decimal");
   }};
 
+  private static final Set<String> STRING_TYPES = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER) {{
+    addAll(Arrays.asList("char", "varchar"));
+  }};
+
   public static boolean isNumeric(final String typeName) {
     return NUMERIC_TYPES.contains(typeName);
+  }
+
+  public static boolean isString(final String typeName) {
+    return STRING_TYPES.contains(typeName);
   }
 }
