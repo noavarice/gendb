@@ -97,22 +97,39 @@ public class Table {
     this.valueOrders = valueOrders;
   }
 
-  public int generatedBefore(final String col1, final String col2) {
+  public boolean generatedBefore(final String col1, final String col2) {
     final Optional<ValueOrder> optionalOrder = valueOrders.stream()
       .filter(o -> o.getColumns().containsAll(Arrays.asList(col1, col2)))
       .findAny();
     if (!optionalOrder.isPresent()) {
-      return 0;
+      return true;
     }
 
     final ValueOrder order = optionalOrder.get();
-    return order.getColumns().indexOf(col1) < order.getColumns().indexOf(col2) ? -1 : 1;
+    return order.getColumns().indexOf(col1) < order.getColumns().indexOf(col2);
   }
 
   public List<Integer> getColumnGenerationOrder() {
-    final List<String> columnNames = columns.stream().map(Column::getName).collect(Collectors.toList());
-    final List<String> copy = new ArrayList<>(columnNames);
-    copy.sort(this::generatedBefore);
-    return copy.stream().map(columnNames::indexOf).collect(Collectors.toList());
+    final List<String> originalOrder = columns.stream().map(Column::getName).collect(Collectors.toList());
+    final List<String> generationOrder = new ArrayList<>(originalOrder.size());
+    for (final ValueOrder order: valueOrders) {
+      for (final String newColumn: order.getColumns()) {
+        generationOrder.remove(newColumn);
+        int i = generationOrder.size() - 1;
+        while (i >= 0 && generatedBefore(newColumn, generationOrder.get(i))) {
+          --i;
+        }
+
+        generationOrder.add(i + 1, newColumn);
+      }
+    }
+
+    for (final String column: originalOrder) {
+      if (!generationOrder.contains(column)) {
+        generationOrder.add(column);
+      }
+    }
+
+    return generationOrder.stream().map(originalOrder::indexOf).collect(Collectors.toList());
   }
 }
