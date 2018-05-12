@@ -82,11 +82,11 @@ public class InternalGenerator {
 
   private final List<Integer> order;
 
+  private long rowId;
+
   public InternalGenerator(final String dbms, final Table table, final RandomValueProvider rnd) {
     order = table.getColumnGenerationOrder();
     final List<Column> columns = table.getColumns();
-    final Map<String, Integer> columnToIndex = columns.stream()
-      .collect(Collectors.toMap(Column::getName, columns::indexOf));
     final List<DataType> types = columns.stream().map(Column::getType).collect(Collectors.toList());
     wrappers = types.stream()
       .map(DataType::getName)
@@ -101,18 +101,21 @@ public class InternalGenerator {
         return null;
       })
       .collect(Collectors.toList());
-    context = new GenerationContext(wrappers, columnToIndex);
+    context = new GenerationContext(table, wrappers);
     generators = types.stream()
       .map(t -> getGenerator(t, rnd))
       .collect(Collectors.toList());
+    rowId = 1;
   }
 
   public List<ValueWrapper> getRow() {
+    context.setRowId(rowId);
     for (final int i: order) {
       final Object result = generators.get(i).yield(context);
       wrappers.get(i).setObject(result);
     }
 
+    ++rowId;
     return wrappers;
   }
 }
