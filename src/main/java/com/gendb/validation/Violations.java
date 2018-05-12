@@ -26,4 +26,10 @@ public class Violations {
 
   public static final String ORDERING_COLUMNS_WITH_DIFFERENT_TYPES = "Cannot calculate order between columns "
     + "with different types (table: '%1$s', columns: %2$s)";
+
+  public static final String AMBIGUOUS_COLUMN_ORDER = "Order of columns '%1$s' and '%2$s' is ambiguous";
+
+  public static final String UNKNOWN_COLUMNS_IN_VALUE_ORDER = "Table '%1$s': unknown columns mentioned in 'valueOrder' section";
+
+  public static final String DUPLICATE_COLUMNS_IN_VALUE_ORDER = "Table '%1$s': duplicate columns in single 'valueOrder' section";
 }

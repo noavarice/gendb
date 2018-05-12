@@ -90,7 +90,7 @@ public class Table {
     this.valueOrders = valueOrders;
   }
 
-  public boolean generatedBefore(final String col1, final String col2) {
+  private boolean generatedBefore(final String col1, final String col2) {
     final Optional<ValueOrder> optionalOrder = valueOrders.stream()
       .filter(o -> o.getColumns().containsAll(Arrays.asList(col1, col2)))
       .findAny();

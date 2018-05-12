@@ -1,13 +1,24 @@
 package com.gendb.model.validating;
 
+import com.gendb.validation.stage.FirstStage;
+import com.gendb.validation.stage.SecondStage;
+import com.gendb.validation.stage.ThirdStage;
+import com.gendb.validation.table.DuplicateColumnsInValueOrder;
+import com.gendb.validation.table.KnownColumnsInValueOrder;
 import com.gendb.validation.table.OrderedColumnsHaveCommonType;
+import com.gendb.validation.table.StrictColumnOrder;
 import com.gendb.validation.table.UniqueColumnNames;
 import java.util.List;
+import javax.validation.GroupSequence;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
 @UniqueColumnNames
-@OrderedColumnsHaveCommonType
+@KnownColumnsInValueOrder(groups = FirstStage.class)
+@DuplicateColumnsInValueOrder(groups = FirstStage.class)
+@OrderedColumnsHaveCommonType(groups = SecondStage.class)
+@StrictColumnOrder(groups = ThirdStage.class)
+@GroupSequence({ValidatingTable.class, FirstStage.class, SecondStage.class, ThirdStage.class})
 public class ValidatingTable {
 
   private String name;
