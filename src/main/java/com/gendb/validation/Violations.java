@@ -23,4 +23,7 @@ public class Violations {
   public static final String NO_CYCLIC_REFERENCES = "Cyclic foreign key referencing found: %1$s";
 
   public static final String INVALID_NUMERIC_BOUNDARIES = "Minimum boundary (%1$s) more than maximum (%2$s)";
+
+  public static final String ORDERING_COLUMNS_WITH_DIFFERENT_TYPES = "Cannot calculate order between columns "
+    + "with different types (table: '%1$s', columns: %2$s)";
 }

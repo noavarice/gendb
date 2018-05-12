@@ -1,11 +1,13 @@
 package com.gendb.model.validating;
 
+import com.gendb.validation.table.OrderedColumnsHaveCommonType;
 import com.gendb.validation.table.UniqueColumnNames;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
 @UniqueColumnNames
+@OrderedColumnsHaveCommonType
 public class ValidatingTable {
 
   private String name;

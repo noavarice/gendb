@@ -1,27 +1,20 @@
 package com.gendb.model.pure;
 
-import com.gendb.validation.table.UniqueColumnNames;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 
-@UniqueColumnNames
 public class Table {
 
   private String name;
 
   private String idColumnName;
 
-  @Positive
   private int rowsCount;
 
-  @Valid
   private List<Column> columns;
 
   private List<ForeignKey> foreignKeys;
