@@ -4,6 +4,7 @@ import com.gendb.generation.GenerationContext;
 import com.gendb.generation.RandomValueProvider;
 import com.gendb.generation.generator.TypeGenerator;
 import com.gendb.model.pure.DataType;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -31,7 +32,7 @@ public class DateGenerator implements TypeGenerator {
   @Override
   public Object yield(final GenerationContext context) {
     final Object minColumnValue = context.getValue(minColumn);
-    long timestamp;
+    Timestamp timestamp;
     if (minColumnValue == null) {
       timestamp = provider.getTimestamp();
     } else {
@@ -44,7 +45,6 @@ public class DateGenerator implements TypeGenerator {
       }
     }
 
-    final Date date = Date.from(Instant.ofEpochSecond(timestamp));
-    return sdf.format(date);
+    return sdf.format(timestamp.toLocalDateTime());
   }
 }

@@ -4,6 +4,7 @@ import com.gendb.generation.GenerationContext;
 import com.gendb.generation.RandomValueProvider;
 import com.gendb.generation.generator.TypeGenerator;
 import com.gendb.model.pure.DataType;
+import java.sql.Timestamp;
 
 public class TimestampGenerator implements TypeGenerator {
 
@@ -24,6 +25,6 @@ public class TimestampGenerator implements TypeGenerator {
       return provider.getTimestamp();
     }
 
-    return provider.getTimestamp((Long)minColumnValue);
+    return provider.getTimestamp(((Timestamp)minColumnValue).toInstant().getEpochSecond());
   }
 }

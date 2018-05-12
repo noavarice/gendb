@@ -3,6 +3,7 @@ package com.gendb.generation;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,11 +87,13 @@ public class RandomValueProvider {
     return sb.toString();
   }
 
-  public long getTimestamp() {
-    return Instant.EPOCH.getEpochSecond() + Math.abs(rnd.nextLong()) % TIMESTAMP_DIFF;
+  public Timestamp getTimestamp() {
+    final long unix = Instant.EPOCH.getEpochSecond() + Math.abs(rnd.nextLong()) % TIMESTAMP_DIFF;
+    return new Timestamp(unix * 1000);
   }
 
-  public long getTimestamp(final long min) {
-    return min + Math.abs(rnd.nextLong()) % (Instant.now().getEpochSecond() - min);
+  public Timestamp getTimestamp(final long min) {
+    final long unix = min + Math.abs(rnd.nextLong()) % (Instant.now().getEpochSecond() - min);
+    return new Timestamp(unix * 1000);
   }
 }

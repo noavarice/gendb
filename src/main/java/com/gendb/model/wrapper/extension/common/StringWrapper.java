@@ -7,7 +7,7 @@ import java.util.Date;
  * Wraps {@link String} or {@link Date} values
  * to return queryRepresentation value enclosed by quotes
  */
-public class StringDateWrapper extends ValueWrapper {
+public class StringWrapper extends ValueWrapper {
 
   @Override
   public String queryRepresentation() {

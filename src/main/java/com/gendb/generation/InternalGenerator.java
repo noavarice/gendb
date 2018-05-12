@@ -10,9 +10,7 @@ import com.gendb.model.pure.Column;
 import com.gendb.model.pure.DataType;
 import com.gendb.model.pure.Table;
 import com.gendb.model.wrapper.ValueWrapper;
-import com.gendb.model.wrapper.extension.common.StringDateWrapper;
-import com.gendb.model.wrapper.extension.mysql.MysqlTimestampWrapper;
-import com.gendb.model.wrapper.extension.postgres.PostgresTimestampWrapper;
+import com.gendb.model.wrapper.extension.common.StringWrapper;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,28 +18,16 @@ import java.util.stream.Collectors;
 
 public class InternalGenerator {
 
-  private static final Map<String, Map<String, Class<? extends ValueWrapper>>> TYPE_WRAPPERS =
-    new HashMap<String, Map<String, Class<? extends ValueWrapper>>>()
+  private static final Map<String, Class<? extends ValueWrapper>> TYPE_WRAPPERS =
+    new HashMap<String, Class<? extends ValueWrapper>>()
   {{
-    put("mysql", new HashMap<String, Class<? extends ValueWrapper>>() {{
-      put("smallint", ValueWrapper.class);
-      put("int", ValueWrapper.class);
-      put("decimal", ValueWrapper.class);
-      put("char", StringDateWrapper.class);
-      put("varchar", StringDateWrapper.class);
-      put("timestamp", MysqlTimestampWrapper.class);
-      put("date", StringDateWrapper.class);
-    }});
-
-    put("postgres", new HashMap<String, Class<? extends ValueWrapper>>() {{
-      put("smallint", ValueWrapper.class);
-      put("int", ValueWrapper.class);
-      put("decimal", ValueWrapper.class);
-      put("char", StringDateWrapper.class);
-      put("varchar", StringDateWrapper.class);
-      put("timestamp", PostgresTimestampWrapper.class);
-      put("date", StringDateWrapper.class);
-    }});
+    put("smallint", ValueWrapper.class);
+    put("int", ValueWrapper.class);
+    put("decimal", ValueWrapper.class);
+    put("char", StringWrapper.class);
+    put("varchar", StringWrapper.class);
+    put("timestamp", StringWrapper.class);
+    put("date", StringWrapper.class);
   }};
 
   private static final Map<String, Class<? extends TypeGenerator>> DEFAULT_GENERATORS =
@@ -89,7 +75,7 @@ public class InternalGenerator {
     final List<DataType> types = columns.stream().map(Column::getType).collect(Collectors.toList());
     wrappers = types.stream()
       .map(DataType::getName)
-      .map(TYPE_WRAPPERS.get(dbms)::get)
+      .map(TYPE_WRAPPERS::get)
       .map(c -> {
         try {
           return c.newInstance();
