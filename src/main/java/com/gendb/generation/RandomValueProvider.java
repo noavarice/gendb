@@ -2,16 +2,13 @@ package com.gendb.generation;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class RandomValueProvider {
-
-  private static final long MAX_UNSIGNED_INT = (long)(Integer.MAX_VALUE) - Integer.MIN_VALUE;
-
-  private static final int MAX_UNSIGNED_SHORT = (int)(Short.MAX_VALUE) - Short.MIN_VALUE;
 
   private static final List<Character> DIGITS = new ArrayList<Character>() {{
     for (char c = '0'; c <= '9'; ++c) {
@@ -39,23 +36,11 @@ public class RandomValueProvider {
   private final Random rnd;
 
   public RandomValueProvider() {
-    rnd = new Random(System.currentTimeMillis());
+    rnd = new SecureRandom();
   }
 
   public RandomValueProvider(final Random rnd) {
     this.rnd = rnd;
-  }
-
-  private Long nextRandom() {
-    return rnd.nextLong();
-  }
-
-  private Long nextRandom(final long min, final long max) {
-    if (min == max) {
-      return min;
-    }
-
-    return min + Math.abs(rnd.nextLong()) % (max - min);
   }
 
   private String nextRandomNumeric(final int length) {
@@ -74,46 +59,6 @@ public class RandomValueProvider {
     }
 
     return new String(chars);
-  }
-
-  public long getSignedSmallint() {
-    return nextRandom().shortValue();
-  }
-
-  public long getSignedSmallint(final Short min, final Short max) {
-    final short realMin = min == null ? Short.MIN_VALUE : min;
-    final short realMax = max == null ? Short.MAX_VALUE : max;
-    return nextRandom(realMin, realMax).shortValue();
-  }
-
-  public long getUnsignedSmallint() {
-    return Math.abs(nextRandom().intValue()) % MAX_UNSIGNED_SHORT;
-  }
-
-  public long getUnsignedSmallint(final Integer min, final Integer max) {
-    final int realMin = min == null ? 0 : min;
-    final int realMax = max == null ? MAX_UNSIGNED_SHORT : max;
-    return nextRandom(realMin, realMax).intValue();
-  }
-
-  public long getSignedInt() {
-    return nextRandom().intValue();
-  }
-
-  public long getSignedInt(final Integer min, final Integer max) {
-    final int realMin = min == null ? Integer.MIN_VALUE : min;
-    final int realMax = max == null ? Integer.MAX_VALUE : max;
-    return nextRandom(realMin, realMax).intValue();
-  }
-
-  public long getUnsignedInt() {
-    return Math.abs(nextRandom()) % MAX_UNSIGNED_INT;
-  }
-
-  public long getUnsignedInt(final Long min, final Long max) {
-    final long realMin = min == null ? 0 : min;
-    final long realMax = max == null ? MAX_UNSIGNED_INT : max;
-    return nextRandom(realMin, realMax);
   }
 
   public long getNumber(final long min, final long max) {

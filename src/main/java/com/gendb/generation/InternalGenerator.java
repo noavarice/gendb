@@ -4,7 +4,6 @@ import com.gendb.generation.generator.TypeGenerator;
 import com.gendb.generation.generator.impl.DateGenerator;
 import com.gendb.generation.generator.impl.DecimalGenerator;
 import com.gendb.generation.generator.impl.IntegerGenerator;
-import com.gendb.generation.generator.impl.SmallintGenerator;
 import com.gendb.generation.generator.impl.StringGenerator;
 import com.gendb.generation.generator.impl.TimestampGenerator;
 import com.gendb.model.pure.Column;
@@ -48,7 +47,7 @@ public class InternalGenerator {
   private static final Map<String, Class<? extends TypeGenerator>> DEFAULT_GENERATORS =
     new HashMap<String, Class<? extends TypeGenerator>>()
   {{
-    put("smallint", SmallintGenerator.class);
+    put("smallint", IntegerGenerator.class);
     put("int", IntegerGenerator.class);
     put("decimal", DecimalGenerator.class);
     put("char", StringGenerator.class);
