@@ -89,4 +89,8 @@ public class RandomValueProvider {
   public long getTimestamp() {
     return Instant.EPOCH.getEpochSecond() + Math.abs(rnd.nextLong()) % TIMESTAMP_DIFF;
   }
+
+  public long getTimestamp(final long min) {
+    return min + Math.abs(rnd.nextLong()) % (Instant.now().getEpochSecond() - min);
+  }
 }
