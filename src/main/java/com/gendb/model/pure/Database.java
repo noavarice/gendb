@@ -39,7 +39,7 @@ public class Database {
   }
 
   private static final Map<String, String> DBMS_TO_PK_TYPE = new HashMap<String, String>() {{
-    put("mysql", "INTEGER UNSIGNED AUTO_INCREMENT");
+    put("mysql", "INTEGER AUTO_INCREMENT");
     put("postgres", "SERIAL");
   }};
 

@@ -124,7 +124,6 @@ public final class Generator {
 
   private void writeToStream(final Database db, final OutputStream output) throws IOException {
     output.write(db.getCreateStatement().getBytes());
-    final String dbms = db.getDbmsName();
     for (final Table t : db.getTables()) {
       LOGGER.info("Start generating table '{}'", t.getName());
       final String pkDeclaration = db.getPrimaryKeyDeclaration(t.getIdColumnName());
@@ -137,7 +136,7 @@ public final class Generator {
       }
 
       output.write((createTable + foreignKeys + t.getInsertStatement()).getBytes());
-      final InternalGenerator generator = new InternalGenerator(dbms, t, random);
+      final InternalGenerator generator = new InternalGenerator(t, random);
       final boolean lastLineComplete = t.getRowsCount() % MAX_ROWS_IN_LINE == 0;
       final int lastLineRowCount, completeLinesCount;
       if (lastLineComplete) {

@@ -1,10 +1,12 @@
 package com.gendb.mapper;
 
+import com.gendb.generation.generator.impl.ForeignKeyGenerator;
 import com.gendb.model.pure.Column;
 import com.gendb.model.pure.DataType;
 import com.gendb.model.pure.Database;
 import com.gendb.model.pure.ForeignKey;
 import com.gendb.model.pure.Table;
+import com.gendb.model.validating.ValidatingColumn;
 import com.gendb.model.validating.ValidatingDataType;
 import com.gendb.model.validating.ValidatingDatabase;
 import com.gendb.model.validating.ValidatingTable;
@@ -22,6 +24,9 @@ public abstract class PureModelMapper {
   @Mapping(target = "minColumn", ignore = true)
   abstract DataType toModel(final ValidatingDataType type);
 
+  @Mapping(target = "table", ignore = true)
+  abstract Column toModel(final ValidatingColumn column);
+
   @Mapping(target = "columnTypes", ignore = true)
   @Mapping(target = "columnGenerationOrder", ignore = true)
   abstract Table toModel(final ValidatingTable table);
@@ -33,6 +38,7 @@ public abstract class PureModelMapper {
       .map(this::toModel)
       .collect(Collectors.toList());
     for (final Table table: result) {
+      table.getColumns().forEach(column -> column.setTable(table));
       for (final ForeignKey fk: table.getForeignKeys()) {
         final Column fkColumn = new Column();
         fkColumn.setName(fk.getColumnName());
@@ -41,7 +47,9 @@ public abstract class PureModelMapper {
         type.setNullable(false);
         type.setMin(1d);
         type.setMax((double)nameToTable.get(fk.getTargetTable()).getRowsCount());
+        type.setHandlerClass(ForeignKeyGenerator.class.getCanonicalName());
         fkColumn.setType(type);
+        fkColumn.setTable(table);
         table.getColumns().add(fkColumn);
       }
 

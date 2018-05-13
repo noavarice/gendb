@@ -42,7 +42,8 @@ public class InternalGenerator {
     put("date", TimestampGenerator.class);
   }};
 
-  private static TypeGenerator getGenerator(final DataType type, final RandomValueProvider rnd) {
+  private static TypeGenerator getGenerator(final Column column) {
+    final DataType type = column.getType();
     final String className = type.getHandlerClass();
     try {
       final TypeGenerator gen;
@@ -52,7 +53,7 @@ public class InternalGenerator {
         gen = ((Class<? extends TypeGenerator>) Class.forName(className)).newInstance();
       }
 
-      gen.init(type, rnd);
+      gen.init(column);
       return gen;
     } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
       return null;
@@ -69,11 +70,11 @@ public class InternalGenerator {
 
   private long rowId;
 
-  public InternalGenerator(final String dbms, final Table table, final RandomValueProvider rnd) {
+  public InternalGenerator(final Table table, final RandomValueProvider rnd) {
     order = table.getColumnGenerationOrder();
     final List<Column> columns = table.getColumns();
-    final List<DataType> types = columns.stream().map(Column::getType).collect(Collectors.toList());
-    wrappers = types.stream()
+    wrappers = columns.stream()
+      .map(Column::getType)
       .map(DataType::getName)
       .map(TYPE_WRAPPERS::get)
       .map(c -> {
@@ -86,9 +87,9 @@ public class InternalGenerator {
         return null;
       })
       .collect(Collectors.toList());
-    context = new GenerationContext(table, wrappers);
-    generators = types.stream()
-      .map(t -> getGenerator(t, rnd))
+    context = new GenerationContext(table, wrappers, rnd);
+    generators = columns.stream()
+      .map(InternalGenerator::getGenerator)
       .collect(Collectors.toList());
     rowId = 1;
   }

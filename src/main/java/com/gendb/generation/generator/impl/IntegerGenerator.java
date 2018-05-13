@@ -3,6 +3,7 @@ package com.gendb.generation.generator.impl;
 import com.gendb.generation.GenerationContext;
 import com.gendb.generation.RandomValueProvider;
 import com.gendb.generation.generator.TypeGenerator;
+import com.gendb.model.pure.Column;
 import com.gendb.model.pure.DataType;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,13 +26,11 @@ public class IntegerGenerator implements TypeGenerator {
 
   private String minColumn;
 
-  private RandomValueProvider provider;
-
   private long min, max;
 
   @Override
-  public void init(final DataType type, final RandomValueProvider provider) {
-    this.provider = provider;
+  public void init(final Column column) {
+    final DataType type = column.getType();
     minColumn = type.getMinColumn() == null ? null : type.getMinColumn().getName();
     min = (long)(type.getMin() == null ? TYPE_TO_MIN_SIGNED.get(type.getName()) : type.getMin());
     max = (long)(type.getMax() == null ? TYPE_TO_MAX_SIGNED.get(type.getName()) : type.getMax());
@@ -39,6 +38,7 @@ public class IntegerGenerator implements TypeGenerator {
 
   @Override
   public Object yield(final GenerationContext context) {
+    final RandomValueProvider provider = context.getRandom();
     final Object minColumnValue = context.getValue(minColumn);
     if (minColumnValue == null) {
       return provider.getNumber(min, max);

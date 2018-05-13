@@ -1,13 +1,12 @@
 package com.gendb.model.pure;
 
-import javax.validation.Valid;
-
 public class Column {
 
-  @Valid
   private DataType type;
 
   private String name;
+
+  private Table table;
 
   public DataType getType() {
     return type;
@@ -27,5 +26,13 @@ public class Column {
 
   String getColumnDefinition() {
     return name + ' ' + type.getTypeDefinition();
+  }
+
+  public Table getTable() {
+    return table;
+  }
+
+  public void setTable(Table table) {
+    this.table = table;
   }
 }

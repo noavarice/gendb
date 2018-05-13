@@ -14,9 +14,12 @@ public class GenerationContext {
 
   private final String idColumnName;
 
+  private final RandomValueProvider random;
+
   private long rowId = 0;
 
-  GenerationContext(final Table table, final List<ValueWrapper> row) {
+  GenerationContext(final Table table, final List<ValueWrapper> row, final RandomValueProvider r) {
+    random = r;
     final Map<String, Integer> columnToIndex = table.getColumns().stream()
       .collect(Collectors.toMap(Column::getName, table.getColumns()::indexOf));
     columnToWrapper = new HashMap<>();
@@ -37,7 +40,15 @@ public class GenerationContext {
     return columnToWrapper.get(columnName).plain();
   }
 
+  public long getRowId() {
+    return rowId;
+  }
+
   void setRowId(long rowId) {
     this.rowId = rowId;
+  }
+
+  public RandomValueProvider getRandom() {
+    return random;
   }
 }

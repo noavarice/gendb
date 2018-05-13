@@ -1,12 +1,11 @@
 package com.gendb.generation.generator;
 
 import com.gendb.generation.GenerationContext;
-import com.gendb.generation.RandomValueProvider;
-import com.gendb.model.pure.DataType;
+import com.gendb.model.pure.Column;
 
 public interface TypeGenerator {
 
-  default void init(final DataType type, final RandomValueProvider provider) {}
+  default void init(final Column column) {}
 
   Object yield(final GenerationContext context);
 }
