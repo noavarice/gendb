@@ -18,7 +18,7 @@ import javax.validation.Valid;
 public class Database {
 
   private static final String FK_DECLARATION_TEMPLATE =
-    "ADD CONSTRAINT FOREIGN KEY (%1$s) REFERENCES %2$s(%3$s)";
+    "ADD CONSTRAINT fk%1$d FOREIGN KEY (%2$s) REFERENCES %3$s(%4$s)";
 
   private static boolean depend(final Table t1, final Table t2) {
     return t1.getForeignKeys().stream()
@@ -114,10 +114,12 @@ public class Database {
     final Map<String, Table> nameToTable = tables.stream()
       .collect(Collectors.toMap(Table::getName, Function.identity()));
     final StringJoiner sj = new StringJoiner(",");
+    int fkCounter = 1;
     for (final ForeignKey fk: table.getForeignKeys()) {
       final String idColName = nameToTable.get(fk.getTargetTable()).getIdColumnName();
       sj.add(String.format(
         FK_DECLARATION_TEMPLATE,
+        fkCounter++,
         fk.getColumnName(),
         fk.getTargetTable(),
         idColName));
