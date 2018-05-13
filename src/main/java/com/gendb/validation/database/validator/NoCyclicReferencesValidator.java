@@ -41,6 +41,10 @@ public class NoCyclicReferencesValidator implements ConstraintValidator<NoCyclic
      */
     private boolean getCycleRecursive(final ValidatingTable table, final List<String> path) {
       if (path.contains(table.getName())) {
+        if (path.lastIndexOf(table.getName()) == path.size() - 1) {
+          return false;
+        }
+
         path.add(table.getName());
         return true;
       }
@@ -81,7 +85,7 @@ public class NoCyclicReferencesValidator implements ConstraintValidator<NoCyclic
     List<String> getCycle() {
       for (final ValidatingTable t: tables) {
         final List<String> path = new ArrayList<>();
-        if (getCycleRecursive(t, path)) {
+        if (getCycleRecursive(t, path) && path.stream().distinct().count() > 1) {
           return shorten(path);
         }
       }
@@ -93,7 +97,7 @@ public class NoCyclicReferencesValidator implements ConstraintValidator<NoCyclic
   @Override
   public boolean isValid(final List<ValidatingTable> tables, final ConstraintValidatorContext context) {
     final List<String> path = new CycleResolver(tables).getCycle();
-    if (path.size() <= 2) { // allow FK on itself
+    if (path.isEmpty()) {
       return true;
     }
 
