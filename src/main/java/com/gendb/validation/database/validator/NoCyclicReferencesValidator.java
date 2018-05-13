@@ -93,7 +93,7 @@ public class NoCyclicReferencesValidator implements ConstraintValidator<NoCyclic
   @Override
   public boolean isValid(final List<ValidatingTable> tables, final ConstraintValidatorContext context) {
     final List<String> path = new CycleResolver(tables).getCycle();
-    if (path.isEmpty()) {
+    if (path.size() <= 2) { // allow FK on itself
       return true;
     }
 
