@@ -43,7 +43,7 @@
 
   <xs:complexType name="ForeignKeyDto">
     <xs:attribute name="references" type="Attribute" use="required"/>
-    <xs:attribute name="columnName" type="Attribute"/>
+    <xs:attribute name="columnName" type="Attribute" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="ValueOrderDto">
