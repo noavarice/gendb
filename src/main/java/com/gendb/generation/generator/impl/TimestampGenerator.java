@@ -25,6 +25,6 @@ public class TimestampGenerator implements TypeGenerator {
       return provider.getTimestamp();
     }
 
-    return provider.getTimestamp(((Timestamp)minColumnValue).toInstant().getEpochSecond());
+    return provider.getTimestamp(((Timestamp)minColumnValue).toInstant().toEpochMilli());
   }
 }

@@ -32,7 +32,7 @@ public class RandomValueProvider {
 
   private static final int ALPHANUMERIC_CHARS_COUNT = ALPHANUMERIC.size();
 
-  private static final long TIMESTAMP_DIFF = Instant.now().getEpochSecond() - Instant.EPOCH.getEpochSecond();
+  private static final long TIMESTAMP_DIFF = Instant.now().toEpochMilli() - Instant.EPOCH.toEpochMilli();
 
   private final Random rnd;
 
@@ -88,12 +88,12 @@ public class RandomValueProvider {
   }
 
   public Timestamp getTimestamp() {
-    final long unix = Instant.EPOCH.getEpochSecond() + Math.abs(rnd.nextLong()) % TIMESTAMP_DIFF;
-    return new Timestamp(unix * 1000);
+    final long millis = Instant.EPOCH.toEpochMilli() + Math.abs(rnd.nextLong()) % TIMESTAMP_DIFF;
+    return new Timestamp(millis);
   }
 
   public Timestamp getTimestamp(final long min) {
-    final long unix = min + Math.abs(rnd.nextLong()) % (Instant.now().getEpochSecond() - min);
-    return new Timestamp(unix * 1000);
+    final long millis = min + Math.abs(rnd.nextLong()) % (Instant.now().toEpochMilli() - min);
+    return new Timestamp(millis);
   }
 }

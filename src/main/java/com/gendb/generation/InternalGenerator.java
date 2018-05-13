@@ -1,7 +1,6 @@
 package com.gendb.generation;
 
 import com.gendb.generation.generator.TypeGenerator;
-import com.gendb.generation.generator.impl.DateGenerator;
 import com.gendb.generation.generator.impl.DecimalGenerator;
 import com.gendb.generation.generator.impl.IntegerGenerator;
 import com.gendb.generation.generator.impl.StringGenerator;
@@ -10,6 +9,7 @@ import com.gendb.model.pure.Column;
 import com.gendb.model.pure.DataType;
 import com.gendb.model.pure.Table;
 import com.gendb.model.wrapper.ValueWrapper;
+import com.gendb.model.wrapper.extension.common.DateWrapper;
 import com.gendb.model.wrapper.extension.common.StringWrapper;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +27,7 @@ public class InternalGenerator {
     put("char", StringWrapper.class);
     put("varchar", StringWrapper.class);
     put("timestamp", StringWrapper.class);
-    put("date", StringWrapper.class);
+    put("date", DateWrapper.class);
   }};
 
   private static final Map<String, Class<? extends TypeGenerator>> DEFAULT_GENERATORS =
@@ -39,7 +39,7 @@ public class InternalGenerator {
     put("char", StringGenerator.class);
     put("varchar", StringGenerator.class);
     put("timestamp", TimestampGenerator.class);
-    put("date", DateGenerator.class);
+    put("date", TimestampGenerator.class);
   }};
 
   private static TypeGenerator getGenerator(final DataType type, final RandomValueProvider rnd) {
