@@ -57,6 +57,8 @@ public class Database {
 
   private boolean tablesSorted = false;
 
+  private int fkCounter = 1;
+
   public String getName() {
     return name;
   }
@@ -114,7 +116,6 @@ public class Database {
     final Map<String, Table> nameToTable = tables.stream()
       .collect(Collectors.toMap(Table::getName, Function.identity()));
     final StringJoiner sj = new StringJoiner(",");
-    int fkCounter = 1;
     for (final ForeignKey fk: table.getForeignKeys()) {
       final String idColName = nameToTable.get(fk.getTargetTable()).getIdColumnName();
       sj.add(String.format(
