@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <!-- Enumeration contains common SQL data type names -->
   <xs:simpleType name="DataTypes">
     <xs:restriction base="xs:string">
       <xs:enumeration value="smallint"/>
@@ -21,7 +20,6 @@
     </xs:restriction>
   </xs:simpleType>
 
-  <!-- Contains column type information with all possible attributes -->
   <xs:complexType name="DataTypeDto">
     <xs:attribute name="name" type="DataTypes" use="required"/>
     <xs:attribute name="nullable" type="xs:boolean" default="true"/>
@@ -33,11 +31,23 @@
     <xs:attribute name="max" type="xs:double"/>
   </xs:complexType>
 
-  <!-- Describes column in the SQL table -->
+  <xs:complexType name="DistributionIntervalDto">
+    <xs:attribute name="point" type="xs:double"/>
+    <xs:attribute name="percentage" type="xs:double"/>
+  </xs:complexType>
+
+  <xs:complexType name="DistributionDto">
+    <xs:sequence>
+      <xs:element name="firstPoint" type="xs:double"/>
+      <xs:element name="next" type="DistributionIntervalDto" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:complexType name="ColumnDto">
-    <xs:all>
+    <xs:sequence>
       <xs:element name="type" type="DataTypeDto"/>
-    </xs:all>
+      <xs:element name="distribution" type="DistributionDto" minOccurs="0"/>
+    </xs:sequence>
     <xs:attribute name="name" type="Attribute" use="required"/>
   </xs:complexType>
 
@@ -52,7 +62,6 @@
     </xs:sequence>
   </xs:complexType>
 
-  <!-- Describes SQL table -->
   <xs:complexType name="TableDto">
     <xs:sequence>
       <xs:element name="column" type="ColumnDto" maxOccurs="unbounded"/>
@@ -64,7 +73,6 @@
     <xs:attribute name="rows" type="xs:int" use="required"/>
   </xs:complexType>
 
-  <!-- Set of supported RDBMS -->
   <xs:simpleType name="SupportedDBMS">
     <xs:restriction base="xs:string">
       <xs:enumeration value="mysql"/>
@@ -72,7 +80,6 @@
     </xs:restriction>
   </xs:simpleType>
 
-  <!-- Describes SQL database -->
   <xs:complexType name="DatabaseDto">
     <xs:sequence>
       <xs:element name="table" type="TableDto" maxOccurs="unbounded"/>

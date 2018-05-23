@@ -1,5 +1,7 @@
 package com.gendb.model.pure;
 
+import java.util.List;
+
 public class Column {
 
   private DataType type;
@@ -7,6 +9,8 @@ public class Column {
   private String name;
 
   private Table table;
+
+  private List<DistributionInterval> distributionIntervals;
 
   public DataType getType() {
     return type;
@@ -34,5 +38,13 @@ public class Column {
 
   public void setTable(Table table) {
     this.table = table;
+  }
+
+  public List<DistributionInterval> getDistributionIntervals() {
+    return distributionIntervals;
+  }
+
+  public void setDistributionIntervals(List<DistributionInterval> points) {
+    this.distributionIntervals = points;
   }
 }

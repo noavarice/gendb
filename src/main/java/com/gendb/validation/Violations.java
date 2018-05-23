@@ -32,4 +32,10 @@ public class Violations {
   public static final String UNKNOWN_COLUMNS_IN_VALUE_ORDER = "Table '%1$s': unknown columns mentioned in 'valueOrder' section";
 
   public static final String DUPLICATE_COLUMNS_IN_VALUE_ORDER = "Table '%1$s': duplicate columns in single 'valueOrder' section";
+
+  public static final String UNORDERED_DISTRIBUTION_POINTS = "Points forming distribution are not ordered";
+
+  public static final String INCOMPLETE_DISTRIBUTION_PERCENTAGE = "Total distribution percentage must be equal to 100";
+
+  public static final String DISTRIBUTION_INTERVAL_PERCENTAGE_OUT_OF_BOUNDS = "Distribution interval percentage is out of bounds [0, 100]";
 }

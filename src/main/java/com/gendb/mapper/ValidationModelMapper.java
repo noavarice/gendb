@@ -2,11 +2,13 @@ package com.gendb.mapper;
 
 import com.gendb.dto.DataTypeDto;
 import com.gendb.dto.DatabaseDto;
+import com.gendb.dto.DistributionDto;
 import com.gendb.dto.ForeignKeyDto;
 import com.gendb.dto.TableDto;
 import com.gendb.dto.ValueOrderDto;
 import com.gendb.model.validating.ValidatingDataType;
 import com.gendb.model.validating.ValidatingDatabase;
+import com.gendb.model.validating.ValidatingDistribution;
 import com.gendb.model.validating.ValidatingForeignKey;
 import com.gendb.model.validating.ValidatingTable;
 import com.gendb.model.validating.ValidatingValueOrder;
@@ -17,11 +19,14 @@ import org.mapstruct.Mapping;
 public interface ValidationModelMapper {
 
   @Mapping(target = "targetTable", source = "references")
-  ValidatingForeignKey toModel(final ForeignKeyDto dtoList);
+  ValidatingForeignKey toValidationModel(final ForeignKeyDto dtoList);
 
   @Mapping(target = "name", expression = "java(dto.getName().value())")
   @Mapping(target = "handlerClass", source = "handler")
   ValidatingDataType toValidationModel(final DataTypeDto dto);
+
+  @Mapping(target = "points", source = "next")
+  ValidatingDistribution toValidationModel(final DistributionDto dto);
 
   @Mapping(target = "columns", source = "column")
   ValidatingValueOrder toValidationModel(final ValueOrderDto dto);

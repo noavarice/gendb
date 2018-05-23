@@ -9,6 +9,7 @@ import com.gendb.mapper.ValidationModelMapper;
 import com.gendb.model.pure.Database;
 import com.gendb.model.pure.Table;
 import com.gendb.model.validating.ValidatingDatabase;
+import com.gendb.util.MapperUtils;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,7 +18,6 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
-import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.StringJoiner;
 import javax.validation.ConstraintViolation;
@@ -76,18 +76,13 @@ public final class Generator {
     return unmarshaller;
   }
 
-  private static <T> T getMapper(final Class<T> clazz) {
-    final ServiceLoader<T> mapperServiceLoader = ServiceLoader.load(clazz);
-    return mapperServiceLoader.iterator().next();
-  }
-
   /**
    * Performs actual unmarshalling process upon passed XML config file
    * @param input XML config file as {@link InputStream}
    */
   private static ValidatingDatabase getConfig(final InputStream input) throws JAXBException {
     final Unmarshaller unmarshaller = createUnmarshaller();
-    final ValidationModelMapper mapper = getMapper(ValidationModelMapper.class);
+    final ValidationModelMapper mapper = MapperUtils.getMapper(ValidationModelMapper.class);
     final JAXBElement<DatabaseDto> element = (JAXBElement<DatabaseDto>)unmarshaller.unmarshal(input);
     return mapper.toValidationModel(element.getValue());
   }
@@ -184,7 +179,7 @@ public final class Generator {
       return;
     }
 
-    final Database database = getMapper(PureModelMapper.class).toModel(validationDatabase);
+    final Database database = MapperUtils.getMapper(PureModelMapper.class).toModel(validationDatabase);
     final FileOutputStream output = new FileOutputStream(scriptFilePath.toFile());
     writeToStream(database, output);
   }

@@ -9,6 +9,9 @@ public class ValidatingColumn {
 
   private String name;
 
+  @Valid
+  private ValidatingDistribution distribution;
+
   public ValidatingDataType getType() {
     return type;
   }
@@ -23,5 +26,13 @@ public class ValidatingColumn {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public ValidatingDistribution getDistribution() {
+    return distribution;
+  }
+
+  public void setDistribution(ValidatingDistribution distribution) {
+    this.distribution = distribution;
   }
 }
