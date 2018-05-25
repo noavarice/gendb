@@ -22,6 +22,8 @@ public class ValidatingDatabase {
 
   private String dbmsName;
 
+  private int batchSize;
+
   public String getName() {
     return name;
   }
@@ -44,5 +46,13 @@ public class ValidatingDatabase {
 
   public void setDbmsName(String dbmsName) {
     this.dbmsName = dbmsName;
+  }
+
+  public int getBatchSize() {
+    return batchSize;
+  }
+
+  public void setBatchSize(int batchSize) {
+    this.batchSize = batchSize;
   }
 }

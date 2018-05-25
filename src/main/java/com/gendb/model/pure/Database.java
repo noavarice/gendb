@@ -40,6 +40,8 @@ public class Database {
 
   private String dbmsName;
 
+  private int batchSize;
+
   private boolean tablesSorted = false;
 
   private int fkCounter = 1;
@@ -83,5 +85,13 @@ public class Database {
     return String.format("CREATE DATABASE %1$s;\n%2$s %1$s;\n",
       name,
       dbmsName.equals("mysql") ? "USE" : "\\c");
+  }
+
+  public int getBatchSize() {
+    return batchSize;
+  }
+
+  public void setBatchSize(int batchSize) {
+    this.batchSize = batchSize;
   }
 }

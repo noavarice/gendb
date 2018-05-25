@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.StringJoiner;
 import javax.validation.ConstraintViolation;
@@ -103,46 +104,47 @@ public final class Generator {
     this.random = provider;
   }
 
-  private static final int MAX_ROWS_IN_LINE = 10;
-
-  private static void insertLine(final InternalGenerator generator, final OutputStream output, final int count)
-    throws IOException {
-    final StringJoiner rowJoiner = new StringJoiner(",", System.lineSeparator(), "");
+  private static String getBatch(final InternalGenerator generator, final int count) {
+    final StringJoiner rowJoiner = new StringJoiner(",", System.lineSeparator(), ";");
     for (int i = 0; i < count; ++i) {
       final StringJoiner columnJoiner = new StringJoiner(",", "(", ")");
       generator.getRow().forEach(wrapper -> columnJoiner.add(wrapper.queryRepresentation()));
       rowJoiner.add(columnJoiner.toString());
     }
 
-    output.write(rowJoiner.toString().getBytes());
+    return rowJoiner.toString();
+  }
+
+  private static void write(final OutputStream output, final Object... args) throws IOException {
+    if (args == null) {
+      return;
+    }
+
+    final String summary = Arrays.stream(args).map(Object::toString).reduce("", String::concat);
+    output.write(summary.getBytes());
   }
 
   private void writeToStream(final Database db, final OutputStream output) throws IOException {
-    output.write(db.getCreateStatement().getBytes());
+    write(output, db.getCreateStatement());
+    final int batchSize = db.getBatchSize();
     for (final Table t : db.getTables()) {
       LOGGER.info("Start generating table '{}'", t.getName());
       final String createTable = t.getCreateStatement();
       final String foreignKeys = t.getForeignKeyDeclarations();
-      final String insertStatement = t.getInsertStatement();
-      output.write((createTable + foreignKeys + insertStatement).getBytes());
+      write(output, createTable, foreignKeys);
       final InternalGenerator generator = new InternalGenerator(t, random);
-      final boolean lastLineComplete = t.getRowsCount() % MAX_ROWS_IN_LINE == 0;
-      final int lastLineRowCount, completeLinesCount;
-      if (lastLineComplete) {
-        lastLineRowCount = MAX_ROWS_IN_LINE;
-        completeLinesCount = t.getRowsCount() / MAX_ROWS_IN_LINE - 1;
-      } else {
-        lastLineRowCount = t.getRowsCount() % MAX_ROWS_IN_LINE;
-        completeLinesCount = t.getRowsCount() / MAX_ROWS_IN_LINE;
+      final int fullBatchesCount = t.getRowsCount() / batchSize;
+      final String insertStatement = t.getInsertStatement();
+      for (int i = 0; i < fullBatchesCount; ++i) {
+        final String batch = getBatch(generator, batchSize);
+        write(output, insertStatement, batch);
       }
 
-      for (int i = 0; i < completeLinesCount; ++i) {
-        insertLine(generator, output, MAX_ROWS_IN_LINE);
-        output.write(',');
+      final int lastBatchSize = t.getRowsCount() % batchSize;
+      if (lastBatchSize > 0) {
+        write(output, insertStatement, getBatch(generator, lastBatchSize), System.lineSeparator());
       }
 
-      insertLine(generator, output, lastLineRowCount);
-      output.write((";\n" + System.lineSeparator()).getBytes());
       LOGGER.info("Finish generating table '{}'", t.getName());
     }
   }
