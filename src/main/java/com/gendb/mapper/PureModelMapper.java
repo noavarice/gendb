@@ -22,8 +22,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper
 public abstract class PureModelMapper {
@@ -111,4 +113,9 @@ public abstract class PureModelMapper {
 
   @Mapping(target = "tables", expression = "java(mapTables(database))")
   public abstract Database toModel(final ValidatingDatabase database);
+
+  @AfterMapping
+  void addReverseLink(@MappingTarget final Database db) {
+    Table.database = db;
+  }
 }

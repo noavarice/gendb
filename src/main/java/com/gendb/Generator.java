@@ -121,16 +121,10 @@ public final class Generator {
     output.write(db.getCreateStatement().getBytes());
     for (final Table t : db.getTables()) {
       LOGGER.info("Start generating table '{}'", t.getName());
-      final String pkDeclaration = db.getPrimaryKeyDeclaration(t.getIdColumnName());
-      final String createTable = String.format(t.getCreateStatement(), pkDeclaration);
-      final String foreignKeys;
-      if (t.getForeignKeys().isEmpty()) {
-        foreignKeys = "";
-      } else {
-        foreignKeys = db.addForeignKeyDeclarations(t.getName());
-      }
-
-      output.write((createTable + foreignKeys + t.getInsertStatement()).getBytes());
+      final String createTable = t.getCreateStatement();
+      final String foreignKeys = t.getForeignKeyDeclarations();
+      final String insertStatement = t.getInsertStatement();
+      output.write((createTable + foreignKeys + insertStatement).getBytes());
       final InternalGenerator generator = new InternalGenerator(t, random);
       final boolean lastLineComplete = t.getRowsCount() % MAX_ROWS_IN_LINE == 0;
       final int lastLineRowCount, completeLinesCount;

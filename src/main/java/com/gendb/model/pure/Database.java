@@ -5,20 +5,12 @@ import com.gendb.validation.database.UniqueTableNames;
 import com.gendb.validation.database.ValidForeignKeys;
 import com.gendb.validation.stage.FirstStage;
 import com.gendb.validation.stage.SecondStage;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import javax.validation.GroupSequence;
 import javax.validation.Valid;
 
 @GroupSequence({Database.class, FirstStage.class, SecondStage.class})
 public class Database {
-
-  private static final String FK_DECLARATION_TEMPLATE =
-    "ADD CONSTRAINT fk%1$d FOREIGN KEY (%2$s) REFERENCES %3$s(%4$s)";
 
   private static boolean depend(final Table t1, final Table t2) {
     return t1.getForeignKeys().stream()
@@ -37,13 +29,6 @@ public class Database {
 
     return 0;
   }
-
-  private static final Map<String, String> DBMS_TO_PK_TYPE = new HashMap<String, String>() {{
-    put("mysql", "INTEGER AUTO_INCREMENT");
-    put("postgres", "SERIAL");
-  }};
-
-  private static final String PK_DECLARATION_TEMPLATE = "%1$s %2$s PRIMARY KEY";
 
   private String name;
 
@@ -81,7 +66,7 @@ public class Database {
     this.tables = tables;
   }
 
-  public String getDbmsName() {
+  String getDbmsName() {
     return dbmsName;
   }
 
@@ -98,34 +83,5 @@ public class Database {
     return String.format("CREATE DATABASE %1$s;\n%2$s %1$s;\n",
       name,
       dbmsName.equals("mysql") ? "USE" : "\\c");
-  }
-
-  public String getPrimaryKeyDeclaration(final String columnName) {
-    return String.format(PK_DECLARATION_TEMPLATE, columnName, DBMS_TO_PK_TYPE.get(dbmsName));
-  }
-
-  public String addForeignKeyDeclarations(final String tableName) {
-    Table table = null;
-    for (final Table t: tables) {
-      if (t.getName().equals(tableName)) {
-        table = t;
-        break;
-      }
-    }
-
-    final Map<String, Table> nameToTable = tables.stream()
-      .collect(Collectors.toMap(Table::getName, Function.identity()));
-    final StringJoiner sj = new StringJoiner(",");
-    for (final ForeignKey fk: table.getForeignKeys()) {
-      final String idColName = nameToTable.get(fk.getTargetTable()).getIdColumnName();
-      sj.add(String.format(
-        FK_DECLARATION_TEMPLATE,
-        fkCounter++,
-        fk.getColumnName(),
-        fk.getTargetTable(),
-        idColName));
-    }
-
-    return String.format("ALTER TABLE %1$s %2$s;%3$s", tableName, sj.toString(), System.lineSeparator());
   }
 }

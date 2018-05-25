@@ -2,12 +2,26 @@ package com.gendb.model.pure;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 public class Table {
+
+  private static int fkCounter = 0;
+
+  private static final String FK_DECLARATION_TEMPLATE =
+    "ADD CONSTRAINT fk%1$d FOREIGN KEY (%2$s) REFERENCES %3$s(%4$s)";
+
+  private static final String PK_DECLARATION_TEMPLATE = "%1$s %2$s PRIMARY KEY";
+
+  private static final Map<String, String> DBMS_TO_PK_TYPE = new HashMap<String, String>() {{
+    put("mysql", "INTEGER AUTO_INCREMENT");
+    put("postgres", "SERIAL");
+  }};
 
   private String name;
 
@@ -20,6 +34,8 @@ public class Table {
   private List<ForeignKey> foreignKeys;
 
   private List<ValueOrder> valueOrders;
+
+  public static Database database;
 
   public String getName() {
     return name;
@@ -53,9 +69,14 @@ public class Table {
     this.rowsCount = rowsCount;
   }
 
+  private String getPrimaryKeyDeclaration(final String columnName) {
+    final String dbmsName = database.getDbmsName();
+    return String.format(PK_DECLARATION_TEMPLATE, columnName, DBMS_TO_PK_TYPE.get(dbmsName));
+  }
+
   public String getCreateStatement() {
     final StringJoiner sj = new StringJoiner(",", "(", ")");
-    sj.add("%1$s"); // for DBMS-dependent primary key column declaration
+    sj.add(getPrimaryKeyDeclaration(idColumnName));
     for (final Column col: columns) {
       sj.add(col.getColumnDefinition());
     }
@@ -68,6 +89,27 @@ public class Table {
       .map(Column::getName)
       .collect(Collectors.joining(","));
     return String.format("INSERT INTO %1$s (%2$s) VALUES", name, columnNames);
+  }
+
+  public String getForeignKeyDeclarations() {
+    if (foreignKeys.isEmpty()) {
+      return "";
+    }
+
+    final Map<String, String> nameToIdColumn = database.getTables().stream()
+      .collect(Collectors.toMap(Table::getName, t -> t.idColumnName));
+    final StringJoiner sj = new StringJoiner(",");
+    for (final ForeignKey fk: foreignKeys) {
+      final String idColName = nameToIdColumn.get(fk.getTargetTable());
+      sj.add(String.format(
+        FK_DECLARATION_TEMPLATE,
+        fkCounter++,
+        fk.getColumnName(),
+        fk.getTargetTable(),
+        idColName));
+    }
+
+    return String.format("ALTER TABLE %1$s %2$s;%3$s", name, sj.toString(), System.lineSeparator());
   }
 
   public List<DataType> getColumnTypes() {
