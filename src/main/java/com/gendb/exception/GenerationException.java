@@ -1,12 +1,15 @@
 package com.gendb.exception;
 
-public class IncorrectTypeException extends GenerationException {
+/**
+ * Basic exception for whole application
+ */
+public class GenerationException extends Exception {
 
-  public IncorrectTypeException(final String message) {
+  GenerationException(final String message) {
     super(message);
   }
 
-  public IncorrectTypeException(
+  GenerationException(
       final String message,
       final Throwable cause,
       final boolean suppressionEnabled,

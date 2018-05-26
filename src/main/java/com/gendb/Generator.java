@@ -2,8 +2,10 @@ package com.gendb;
 
 import com.gendb.dto.DatabaseDto;
 import com.gendb.dto.ObjectFactory;
+import com.gendb.exception.GenerationException;
+import com.gendb.exception.ScriptGenerationException;
 import com.gendb.generation.InternalGenerator;
-import com.gendb.generation.RandomValueProvider;
+import com.gendb.generation.RandomProvider;
 import com.gendb.mapper.PureModelMapper;
 import com.gendb.mapper.ValidationModelMapper;
 import com.gendb.model.pure.Database;
@@ -11,6 +13,7 @@ import com.gendb.model.pure.Table;
 import com.gendb.model.validating.ValidatingDatabase;
 import com.gendb.util.MapperUtils;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -92,15 +95,15 @@ public final class Generator {
 
   private final Validator validator;
 
-  private RandomValueProvider random;
+  private RandomProvider random;
 
   public Generator(final Path configPath, final Validator validator) {
     this.configPath = configPath;
     this.validator = validator;
-    this.random = new RandomValueProvider();
+    this.random = new RandomProvider();
   }
 
-  public void setRandomnessProvider(final RandomValueProvider provider) {
+  public void setRandomnessProvider(final RandomProvider provider) {
     this.random = provider;
   }
 
@@ -115,16 +118,20 @@ public final class Generator {
     return rowJoiner.toString();
   }
 
-  private static void write(final OutputStream output, final Object... args) throws IOException {
+  private static void write(final OutputStream output, final Object... args) throws ScriptGenerationException {
     if (args == null) {
       return;
     }
 
     final String summary = Arrays.stream(args).map(Object::toString).reduce("", String::concat);
-    output.write(summary.getBytes());
+    try {
+      output.write(summary.getBytes());
+    } catch (IOException e) {
+      throw new ScriptGenerationException("Failed to perform script file writing", e, false, true);
+    }
   }
 
-  private void writeToStream(final Database db, final OutputStream output) throws IOException {
+  private void writeToStream(final Database db, final OutputStream output) throws GenerationException {
     write(output, db.getCreateStatement());
     final int batchSize = db.getBatchSize();
     for (final Table t : db.getTables()) {
@@ -132,7 +139,7 @@ public final class Generator {
       final String createTable = t.getCreateStatement();
       final String foreignKeys = t.getForeignKeyDeclarations();
       write(output, createTable, foreignKeys);
-      final InternalGenerator generator = new InternalGenerator(t, random);
+      final InternalGenerator generator = InternalGenerator.createGenerator(t, random);
       final int fullBatchesCount = t.getRowsCount() / batchSize;
       final String insertStatement = t.getInsertStatement();
       for (int i = 0; i < fullBatchesCount; ++i) {
@@ -149,7 +156,7 @@ public final class Generator {
     }
   }
 
-  public void createScript(final Path scriptFilePath, final boolean override) throws IOException {
+  public void createScript(final Path scriptFilePath, final boolean override) throws GenerationException {
     if (Files.exists(scriptFilePath, LinkOption.NOFOLLOW_LINKS)) {
       if (!override) {
         LOGGER.error("File '{}' already exists, override: {}", scriptFilePath, false);
@@ -159,7 +166,13 @@ public final class Generator {
       LOGGER.warn("File '{}' already exists, override: {}", scriptFilePath, true);
     }
 
-    final FileInputStream input = new FileInputStream(configPath.toFile());
+    final FileInputStream input;
+    try {
+      input = new FileInputStream(configPath.toFile());
+    } catch (FileNotFoundException e) {
+      throw new ScriptGenerationException("Cannot open configuration file", e, false, true);
+    }
+
     final ValidatingDatabase validationDatabase;
     try {
       validationDatabase = getConfig(input);
@@ -176,7 +189,13 @@ public final class Generator {
     }
 
     final Database database = MapperUtils.getMapper(PureModelMapper.class).toModel(validationDatabase);
-    final FileOutputStream output = new FileOutputStream(scriptFilePath.toFile());
+    final FileOutputStream output;
+    try {
+      output = new FileOutputStream(scriptFilePath.toFile());
+    } catch (FileNotFoundException e) {
+      throw new ScriptGenerationException("Failed to open script file stream", e, false, true);
+    }
+
     writeToStream(database, output);
   }
 }

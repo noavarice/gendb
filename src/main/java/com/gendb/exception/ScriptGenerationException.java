@@ -1,12 +1,12 @@
 package com.gendb.exception;
 
-public class IncorrectTypeException extends GenerationException {
+public class ScriptGenerationException extends GenerationException {
 
-  public IncorrectTypeException(final String message) {
+  ScriptGenerationException(final String message) {
     super(message);
   }
 
-  public IncorrectTypeException(
+  public ScriptGenerationException(
       final String message,
       final Throwable cause,
       final boolean suppressionEnabled,

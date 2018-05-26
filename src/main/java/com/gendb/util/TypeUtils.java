@@ -52,7 +52,7 @@ public class TypeUtils {
     return STRING_TYPES.contains(typeName);
   }
 
-  public static double getMinValue(final String name) {
+  public static double getMinValue(final String name) throws IncorrectTypeException {
     if (!NUMERIC_TYPES.contains(name)) {
       LOGGER.error("Numeric type expected, but '{}' passed", name);
       throw new IncorrectTypeException(name);
@@ -61,7 +61,7 @@ public class TypeUtils {
     return TYPE_TO_MIN_SIGNED.get(Types.SMALLINT);
   }
 
-  public static double getMaxValue(final String name) {
+  public static double getMaxValue(final String name) throws IncorrectTypeException {
     if (!NUMERIC_TYPES.contains(name)) {
       LOGGER.error("Numeric type expected, but '{}' passed", name);
       throw new IncorrectTypeException(name);

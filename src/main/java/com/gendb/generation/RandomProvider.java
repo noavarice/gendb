@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class RandomValueProvider {
+public class RandomProvider {
 
   private static final List<Character> DIGITS = new ArrayList<Character>() {{
     for (char c = '0'; c <= '9'; ++c) {
@@ -36,11 +36,11 @@ public class RandomValueProvider {
 
   private final Random rnd;
 
-  public RandomValueProvider() {
+  public RandomProvider() {
     rnd = new SecureRandom();
   }
 
-  public RandomValueProvider(final Random rnd) {
+  public RandomProvider(final Random rnd) {
     this.rnd = rnd;
   }
 

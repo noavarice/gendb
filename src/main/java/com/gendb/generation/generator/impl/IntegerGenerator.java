@@ -1,7 +1,8 @@
 package com.gendb.generation.generator.impl;
 
+import com.gendb.exception.IncorrectTypeException;
 import com.gendb.generation.GenerationContext;
-import com.gendb.generation.RandomValueProvider;
+import com.gendb.generation.RandomProvider;
 import com.gendb.generation.generator.TypeGenerator;
 import com.gendb.mapper.PureModelMapper;
 import com.gendb.model.pure.Column;
@@ -24,7 +25,7 @@ public class IntegerGenerator implements TypeGenerator {
   private List<ConcreteDistributionInterval> distribution;
 
   @Override
-  public void init(final Column column) {
+  public void init(final Column column) throws IncorrectTypeException {
     final DataType type = column.getType();
     minColumn = type.getMinColumn() == null ? null : type.getMinColumn().getName();
     final PureModelMapper mapper = MapperUtils.getMapper(PureModelMapper.class);
@@ -41,7 +42,7 @@ public class IntegerGenerator implements TypeGenerator {
 
   @Override
   public Object yield(final GenerationContext context) {
-    final RandomValueProvider provider = context.getRandom();
+    final RandomProvider provider = context.getRandom();
     final Object minColumnValue = context.getValue(minColumn);
     final int index = (int)provider.getNumber(0, distribution.size() - 1);
     final ConcreteDistributionInterval interval = distribution.get(index);
