@@ -38,6 +38,5 @@ public interface ValidationModelMapper {
   ValidatingTable toValidationModel(final TableDto dto);
 
   @Mapping(target = "tables", source = "table")
-  @Mapping(target = "dbmsName", expression = "java(dto.getDbms().value())")
   ValidatingDatabase toValidationModel(final DatabaseDto dto);
 }

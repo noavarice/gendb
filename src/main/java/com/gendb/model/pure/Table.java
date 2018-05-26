@@ -18,9 +18,9 @@ public class Table {
 
   private static final String PK_DECLARATION_TEMPLATE = "%1$s %2$s PRIMARY KEY";
 
-  private static final Map<String, String> DBMS_TO_PK_TYPE = new HashMap<String, String>() {{
-    put("mysql", "INTEGER AUTO_INCREMENT");
-    put("postgres", "SERIAL");
+  private static final Map<SupportedDbms, String> DBMS_TO_PK_TYPE = new HashMap<SupportedDbms, String>() {{
+    put(SupportedDbms.MYSQL, "INTEGER AUTO_INCREMENT");
+    put(SupportedDbms.POSTGRESQL, "SERIAL");
   }};
 
   private String name;
@@ -70,8 +70,8 @@ public class Table {
   }
 
   private String getPrimaryKeyDeclaration(final String columnName) {
-    final String dbmsName = database.getDbmsName();
-    return String.format(PK_DECLARATION_TEMPLATE, columnName, DBMS_TO_PK_TYPE.get(dbmsName));
+    final SupportedDbms dbms = database.getDbmsName();
+    return String.format(PK_DECLARATION_TEMPLATE, columnName, DBMS_TO_PK_TYPE.get(dbms));
   }
 
   public String getCreateStatement() {
@@ -89,6 +89,16 @@ public class Table {
       .map(Column::getName)
       .collect(Collectors.joining(","));
     return String.format("INSERT INTO %1$s (%2$s) VALUES", name, columnNames);
+  }
+
+  public String getInsertStatementForConnection() {
+    final String columnNames = columns.stream()
+        .map(Column::getName)
+        .collect(Collectors.joining(","));
+    final String template = columns.stream()
+        .map(col -> "?")
+        .collect(Collectors.joining(","));
+    return String.format("INSERT INTO %1$s (%2$s) VALUES (%3$s);", name, columnNames, template);
   }
 
   public String getForeignKeyDeclarations() {

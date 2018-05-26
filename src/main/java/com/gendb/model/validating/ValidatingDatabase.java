@@ -20,8 +20,6 @@ public class ValidatingDatabase {
   @NoCyclicReferences(groups = SecondStage.class)
   private List<ValidatingTable> tables;
 
-  private String dbmsName;
-
   private int batchSize;
 
   public String getName() {
@@ -38,14 +36,6 @@ public class ValidatingDatabase {
 
   public void setTables(List<ValidatingTable> tables) {
     this.tables = tables;
-  }
-
-  public String getDbmsName() {
-    return dbmsName;
-  }
-
-  public void setDbmsName(String dbmsName) {
-    this.dbmsName = dbmsName;
   }
 
   public int getBatchSize() {

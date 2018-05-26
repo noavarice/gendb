@@ -38,7 +38,7 @@ public class Database {
   @NoCyclicReferences(groups = SecondStage.class)
   private List<Table> tables;
 
-  private String dbmsName;
+  private SupportedDbms dbmsName;
 
   private int batchSize;
 
@@ -68,11 +68,11 @@ public class Database {
     this.tables = tables;
   }
 
-  String getDbmsName() {
+  SupportedDbms getDbmsName() {
     return dbmsName;
   }
 
-  public void setDbmsName(String dbmsName) {
+  public void setDbmsName(SupportedDbms dbmsName) {
     this.dbmsName = dbmsName;
   }
 
@@ -82,9 +82,10 @@ public class Database {
   }
 
   public String getCreateStatement() {
-    return String.format("CREATE DATABASE %1$s;\n%2$s %1$s;\n",
-      name,
-      dbmsName.equals("mysql") ? "USE" : "\\c");
+    return String.format(
+        "CREATE DATABASE %1$s;\n%2$s %1$s;\n",
+        name,
+        dbmsName == SupportedDbms.MYSQL ? "USE" : "\\c");
   }
 
   public int getBatchSize() {

@@ -3,7 +3,9 @@ package com.gendb;
 import com.gendb.dto.DatabaseDto;
 import com.gendb.dto.ObjectFactory;
 import com.gendb.exception.ConfigReadingException;
+import com.gendb.exception.ConnectionException;
 import com.gendb.exception.GenerationException;
+import com.gendb.exception.IncorrectTypeException;
 import com.gendb.exception.ScriptGenerationException;
 import com.gendb.exception.ValidationException;
 import com.gendb.generation.InternalGenerator;
@@ -11,15 +13,23 @@ import com.gendb.generation.RandomProvider;
 import com.gendb.mapper.PureModelMapper;
 import com.gendb.mapper.ValidationModelMapper;
 import com.gendb.model.pure.Database;
+import com.gendb.model.pure.SupportedDbms;
 import com.gendb.model.pure.Table;
 import com.gendb.model.validating.ValidatingDatabase;
+import com.gendb.model.wrapper.ValueWrapper;
 import com.gendb.util.MapperUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.xml.XMLConstants;
@@ -156,6 +166,47 @@ public final class Generator {
     }
   }
 
+  private static void write(
+      final PreparedStatement insert,
+      final InternalGenerator generator,
+      final int batchCount) throws SQLException {
+    for (int batchNumber = 0; batchNumber < batchCount; ++batchNumber) {
+      final List<Object> row = generator.getRow().stream()
+          .map(ValueWrapper::plain)
+          .collect(Collectors.toList());
+      for (int colNumber = 1; colNumber <= row.size(); ++colNumber) {
+        insert.setObject(colNumber, row.get(colNumber));
+      }
+
+      insert.addBatch();
+    }
+
+    insert.executeBatch();
+  }
+
+  private void writeToConnection(final Database dbConfig, final Connection connection)
+      throws SQLException, IncorrectTypeException {
+    final Statement dmlStatement = connection.createStatement();
+    dmlStatement.execute(dbConfig.getCreateStatement());
+    final int batchSize = dbConfig.getBatchSize();
+    for (final Table t: dbConfig.getTables()) {
+      dmlStatement.execute(t.getCreateStatement());
+      final String template = t.getInsertStatementForConnection();
+      final PreparedStatement insertStatement = connection.prepareStatement(template);
+      final InternalGenerator generator = InternalGenerator.createGenerator(t, random);
+      final int fullBatchesCount = t.getRowsCount() / batchSize;
+      for (int i = 0; i < fullBatchesCount; ++i) {
+        write(insertStatement, generator, batchSize);
+      }
+
+      final int lastBatchSize = t.getRowsCount() % batchSize;
+      write(insertStatement, generator, lastBatchSize);
+      insertStatement.close();
+    }
+
+    dmlStatement.close();
+  }
+
   private void validate(final ValidatingDatabase dbConfig) throws ValidationException {
     final Set<ConstraintViolation<ValidatingDatabase>> violations = validator.validate(dbConfig);
     if (violations.isEmpty()) {
@@ -168,10 +219,22 @@ public final class Generator {
     throw new ValidationException(joiner.toString());
   }
 
-  public void createScript(final InputStream input, final OutputStream output) throws GenerationException {
+  public void createScript(final SupportedDbms dbms, final InputStream input, final OutputStream output) throws GenerationException {
     final ValidatingDatabase dbConfig = getConfig(input);
     validate(dbConfig);
     final Database pureConfig = MapperUtils.getMapper(PureModelMapper.class).toModel(dbConfig);
+    pureConfig.setDbmsName(dbms);
     writeToStream(pureConfig, output);
+  }
+
+  public void createDatabase(final InputStream input, final Connection connection) throws GenerationException {
+    final ValidatingDatabase dbConfig = getConfig(input);
+    validate(dbConfig);
+    final Database pureConfig = MapperUtils.getMapper(PureModelMapper.class).toModel(dbConfig);
+    try {
+      writeToConnection(pureConfig, connection);
+    } catch (SQLException e) {
+      throw new ConnectionException("Failed to create database", e, false, true);
+    }
   }
 }

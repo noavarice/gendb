@@ -112,6 +112,7 @@ public abstract class PureModelMapper {
   }
 
   @Mapping(target = "tables", expression = "java(mapTables(database))")
+  @Mapping(target = "dbmsName", ignore = true)
   public abstract Database toModel(final ValidatingDatabase database);
 
   @AfterMapping

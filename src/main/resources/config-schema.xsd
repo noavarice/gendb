@@ -73,19 +73,11 @@
     <xs:attribute name="rows" type="xs:int" use="required"/>
   </xs:complexType>
 
-  <xs:simpleType name="SupportedDBMS">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="mysql"/>
-      <xs:enumeration value="postgres"/>
-    </xs:restriction>
-  </xs:simpleType>
-
   <xs:complexType name="DatabaseDto">
     <xs:sequence>
       <xs:element name="table" type="TableDto" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="name" type="Attribute" use="required"/>
-    <xs:attribute name="dbms" type="SupportedDBMS" use="required"/>
     <xs:attribute name="batchSize" type="xs:positiveInteger" default="10000"/>
   </xs:complexType>
 
