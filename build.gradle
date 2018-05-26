@@ -50,4 +50,4 @@ xjcGenerate {
     readOnly = true
 }
 
-jar.baseName = 'gendb'
+jar.archiveName = 'gendb.jar'
