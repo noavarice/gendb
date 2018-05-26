@@ -27,4 +27,13 @@ jobs:
 
       - run: ./gradlew wrapper build
 
-      - run: mv ./build/libs/gendb-[0-9]+(\.[0-9]+)+-SNAPSHOT.jar $CIRCLE_ARTIFACTS/gendb.jar
+      - run:
+          command:
+            mkdir /tmp/build_artifacts
+            mv ./build/libs/gendb-[0-9]+(\.[0-9]+)+-SNAPSHOT.jar /tmp/build_artifacts/gendb.jar
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - build
