@@ -2,8 +2,10 @@ package com.gendb;
 
 import com.gendb.dto.DatabaseDto;
 import com.gendb.dto.ObjectFactory;
+import com.gendb.exception.ConfigReadingException;
 import com.gendb.exception.GenerationException;
 import com.gendb.exception.ScriptGenerationException;
+import com.gendb.exception.ValidationException;
 import com.gendb.generation.InternalGenerator;
 import com.gendb.generation.RandomProvider;
 import com.gendb.mapper.PureModelMapper;
@@ -12,15 +14,9 @@ import com.gendb.model.pure.Database;
 import com.gendb.model.pure.Table;
 import com.gendb.model.validating.ValidatingDatabase;
 import com.gendb.util.MapperUtils;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -84,21 +80,25 @@ public final class Generator {
    * Performs actual unmarshalling process upon passed XML config file
    * @param input XML config file as {@link InputStream}
    */
-  private static ValidatingDatabase getConfig(final InputStream input) throws JAXBException {
-    final Unmarshaller unmarshaller = createUnmarshaller();
+  private static ValidatingDatabase getConfig(final InputStream input) throws ConfigReadingException {
+    final Unmarshaller unmarshaller;
+    final JAXBElement<DatabaseDto> element;
+    try {
+      unmarshaller = createUnmarshaller();
+      element = (JAXBElement<DatabaseDto>)unmarshaller.unmarshal(input);
+    } catch (JAXBException e) {
+      throw new ConfigReadingException("Failed to get data from configuration file", e, false, true);
+    }
+
     final ValidationModelMapper mapper = MapperUtils.getMapper(ValidationModelMapper.class);
-    final JAXBElement<DatabaseDto> element = (JAXBElement<DatabaseDto>)unmarshaller.unmarshal(input);
     return mapper.toValidationModel(element.getValue());
   }
-
-  private final Path configPath;
 
   private final Validator validator;
 
   private RandomProvider random;
 
-  public Generator(final Path configPath, final Validator validator) {
-    this.configPath = configPath;
+  public Generator(final Validator validator) {
     this.validator = validator;
     this.random = new RandomProvider();
   }
@@ -156,46 +156,22 @@ public final class Generator {
     }
   }
 
-  public void createScript(final Path scriptFilePath, final boolean override) throws GenerationException {
-    if (Files.exists(scriptFilePath, LinkOption.NOFOLLOW_LINKS)) {
-      if (!override) {
-        LOGGER.error("File '{}' already exists, override: {}", scriptFilePath, false);
-        return;
-      }
-
-      LOGGER.warn("File '{}' already exists, override: {}", scriptFilePath, true);
-    }
-
-    final FileInputStream input;
-    try {
-      input = new FileInputStream(configPath.toFile());
-    } catch (FileNotFoundException e) {
-      throw new ScriptGenerationException("Cannot open configuration file", e, false, true);
-    }
-
-    final ValidatingDatabase validationDatabase;
-    try {
-      validationDatabase = getConfig(input);
-    } catch (JAXBException e) {
-      LOGGER.error("Error while parsing XML config:\n{}", e.toString());
+  private void validate(final ValidatingDatabase dbConfig) throws ValidationException {
+    final Set<ConstraintViolation<ValidatingDatabase>> violations = validator.validate(dbConfig);
+    if (violations.isEmpty()) {
       return;
     }
 
-    final Set<ConstraintViolation<ValidatingDatabase>> violations = validator.validate(validationDatabase);
-    if (!violations.isEmpty()) {
-      LOGGER.error("Constraint violations are found");
-      violations.stream().map(ConstraintViolation::getMessage).forEach(LOGGER::error);
-      return;
-    }
+    final StringJoiner joiner = new StringJoiner(System.lineSeparator());
+    joiner.add("Constraint violations are found");
+    violations.stream().map(ConstraintViolation::getMessage).forEach(joiner::add);
+    throw new ValidationException(joiner.toString());
+  }
 
-    final Database database = MapperUtils.getMapper(PureModelMapper.class).toModel(validationDatabase);
-    final FileOutputStream output;
-    try {
-      output = new FileOutputStream(scriptFilePath.toFile());
-    } catch (FileNotFoundException e) {
-      throw new ScriptGenerationException("Failed to open script file stream", e, false, true);
-    }
-
-    writeToStream(database, output);
+  public void createScript(final InputStream input, final OutputStream output) throws GenerationException {
+    final ValidatingDatabase dbConfig = getConfig(input);
+    validate(dbConfig);
+    final Database pureConfig = MapperUtils.getMapper(PureModelMapper.class).toModel(dbConfig);
+    writeToStream(pureConfig, output);
   }
 }
