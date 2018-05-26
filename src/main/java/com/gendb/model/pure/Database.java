@@ -82,10 +82,11 @@ public class Database {
   }
 
   public String getCreateStatement() {
-    return String.format(
-        "CREATE DATABASE %1$s;\n%2$s %1$s;\n",
-        name,
-        dbmsName == SupportedDbms.MYSQL ? "USE" : "\\c");
+    return "CREATE DATABASE " + name;
+  }
+
+  public String getConnectStatement() {
+    return (dbmsName == SupportedDbms.MYSQL ? "USE" : "\\c") + ' ' + name;
   }
 
   public int getBatchSize() {

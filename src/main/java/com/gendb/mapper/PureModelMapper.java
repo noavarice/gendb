@@ -7,6 +7,7 @@ import com.gendb.model.pure.DataType;
 import com.gendb.model.pure.Database;
 import com.gendb.model.pure.DistributionInterval;
 import com.gendb.model.pure.ForeignKey;
+import com.gendb.model.pure.SupportedDbms;
 import com.gendb.model.pure.Table;
 import com.gendb.model.validating.ValidatingColumn;
 import com.gendb.model.validating.ValidatingDataType;
@@ -27,7 +28,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-@Mapper
+@Mapper(imports = SupportedDbms.class)
 public abstract class PureModelMapper {
 
   @Mapping(target = "minColumn", ignore = true)
@@ -112,7 +113,7 @@ public abstract class PureModelMapper {
   }
 
   @Mapping(target = "tables", expression = "java(mapTables(database))")
-  @Mapping(target = "dbmsName", ignore = true)
+  @Mapping(target = "dbmsName", expression = "java(SupportedDbms.fromName(database.getDbms()))")
   public abstract Database toModel(final ValidatingDatabase database);
 
   @AfterMapping

@@ -98,7 +98,7 @@ public class Table {
     final String template = columns.stream()
         .map(col -> "?")
         .collect(Collectors.joining(","));
-    return String.format("INSERT INTO %1$s (%2$s) VALUES (%3$s);", name, columnNames, template);
+    return String.format("INSERT INTO %1$s (%2$s) VALUES (%3$s)", name, columnNames, template);
   }
 
   public String getForeignKeyDeclarations() {

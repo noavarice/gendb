@@ -22,11 +22,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
@@ -175,7 +177,7 @@ public final class Generator {
           .map(ValueWrapper::plain)
           .collect(Collectors.toList());
       for (int colNumber = 1; colNumber <= row.size(); ++colNumber) {
-        insert.setObject(colNumber, row.get(colNumber));
+        insert.setObject(colNumber, row.get(colNumber - 1));
       }
 
       insert.addBatch();
@@ -188,8 +190,10 @@ public final class Generator {
       throws SQLException, IncorrectTypeException {
     final Statement dmlStatement = connection.createStatement();
     dmlStatement.execute(dbConfig.getCreateStatement());
+    dmlStatement.execute(dbConfig.getConnectStatement());
     final int batchSize = dbConfig.getBatchSize();
     for (final Table t: dbConfig.getTables()) {
+      LOGGER.info("Start generating table '{}'", t.getName());
       dmlStatement.execute(t.getCreateStatement());
       final String template = t.getInsertStatementForConnection();
       final PreparedStatement insertStatement = connection.prepareStatement(template);
@@ -202,6 +206,7 @@ public final class Generator {
       final int lastBatchSize = t.getRowsCount() % batchSize;
       write(insertStatement, generator, lastBatchSize);
       insertStatement.close();
+      LOGGER.info("Finish generating table '{}'", t.getName());
     }
 
     dmlStatement.close();
@@ -219,19 +224,20 @@ public final class Generator {
     throw new ValidationException(joiner.toString());
   }
 
-  public void createScript(final SupportedDbms dbms, final InputStream input, final OutputStream output) throws GenerationException {
+  public void createScript(final InputStream input, final OutputStream output) throws GenerationException {
     final ValidatingDatabase dbConfig = getConfig(input);
     validate(dbConfig);
     final Database pureConfig = MapperUtils.getMapper(PureModelMapper.class).toModel(dbConfig);
-    pureConfig.setDbmsName(dbms);
     writeToStream(pureConfig, output);
   }
 
-  public void createDatabase(final InputStream input, final Connection connection) throws GenerationException {
+  public void createDatabase(final InputStream input, final Properties connProps) throws GenerationException {
     final ValidatingDatabase dbConfig = getConfig(input);
     validate(dbConfig);
     final Database pureConfig = MapperUtils.getMapper(PureModelMapper.class).toModel(dbConfig);
     try {
+      final String connUrl = connProps.getProperty("url");
+      final Connection connection = DriverManager.getConnection(connUrl, connProps);
       writeToConnection(pureConfig, connection);
     } catch (SQLException e) {
       throw new ConnectionException("Failed to create database", e, false, true);
