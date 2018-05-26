@@ -20,7 +20,7 @@ jobs:
       - run:
           command: |
             mkdir /tmp/build_artifacts
-            mv ./build/libs/gendb-.+-SNAPSHOT.jar /tmp/build_artifacts/gendb.jar
+            mv ./build/libs/gendb.jar /tmp/build_artifacts/
 
       - store_artifacts:
           path: /tmp/build_artifacts

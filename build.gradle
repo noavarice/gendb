@@ -49,3 +49,5 @@ xjcGenerate {
     targetPackage 'com.gendb.dto'
     readOnly = true
 }
+
+jar.baseName = 'gendb'
