@@ -2,14 +2,14 @@ package com.gendb.model.pure;
 
 public class ConcreteDistributionInterval {
 
-  private long min, max;
+  private double min, max;
 
   private long count;
 
   public ConcreteDistributionInterval() {
   }
 
-  public ConcreteDistributionInterval(final long min, final long max, final int count) {
+  public ConcreteDistributionInterval(final double min, final double max, final int count) {
     this.min = min;
     this.max = max;
     this.count = count;
@@ -23,7 +23,7 @@ public class ConcreteDistributionInterval {
     this.count = count;
   }
 
-  public long getMin() {
+  public double getMin() {
     return min;
   }
 
@@ -31,7 +31,7 @@ public class ConcreteDistributionInterval {
     this.min = min;
   }
 
-  public long getMax() {
+  public double getMax() {
     return max;
   }
 

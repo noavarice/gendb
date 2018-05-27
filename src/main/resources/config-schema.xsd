@@ -5,6 +5,8 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="smallint"/>
       <xs:enumeration value="int"/>
+      <xs:enumeration value="real"/>
+      <xs:enumeration value="double"/>
       <xs:enumeration value="decimal"/>
       <xs:enumeration value="char"/>
       <xs:enumeration value="varchar"/>

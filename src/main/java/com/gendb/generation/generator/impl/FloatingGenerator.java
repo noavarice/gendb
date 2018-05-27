@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class IntegerGenerator implements TypeGenerator {
+public class FloatingGenerator implements TypeGenerator {
 
   private String minColumn;
 
@@ -27,9 +27,10 @@ public class IntegerGenerator implements TypeGenerator {
     final PureModelMapper mapper = MapperUtils.getMapper(PureModelMapper.class);
     final int rowsCount = column.getTable().getRowsCount();
     if (column.getDistributionIntervals().isEmpty()) {
-      final long min = (long)(type.getMin() == null ? TypeUtils.getMinValue(type.getName()) : type.getMin());
-      final long max = (long)(type.getMax() == null ? TypeUtils.getMaxValue(type.getName()) : type.getMax());
-      distribution = new ArrayList<>(Collections.singletonList(new ConcreteDistributionInterval(min, max, rowsCount)));
+      final double min = type.getMin() == null ? TypeUtils.getMinValue(type.getName()) : type.getMin();
+      final double max = type.getMax() == null ? TypeUtils.getMaxValue(type.getName()) : type.getMax();
+      final ConcreteDistributionInterval interval = new ConcreteDistributionInterval(min, max, rowsCount);
+      distribution = new ArrayList<>(Collections.singletonList(interval));
       return;
     }
 
@@ -37,13 +38,13 @@ public class IntegerGenerator implements TypeGenerator {
   }
 
   @Override
-  public Object yield(final GenerationContext context) {
+  public Object yield(GenerationContext context) {
     final RandomProvider provider = context.getRandom();
     final Object minColumnValue = context.getValue(minColumn);
     final int index = (int)provider.getNumber(0, distribution.size() - 1);
     final ConcreteDistributionInterval interval = distribution.get(index);
-    final long min = minColumnValue == null ? (long)interval.getMin() : (Long)minColumnValue;
-    final long result = provider.getNumber(min, (long)interval.getMax());
+    final double min = minColumnValue == null ? interval.getMin() : (Double)minColumnValue;
+    final double result = provider.getNumber(min, interval.getMax());
     if (interval.getCount() == 1) {
       distribution.remove(index);
     } else {

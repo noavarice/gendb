@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Supplier;
 
 public class RandomProvider {
 
@@ -60,6 +61,14 @@ public class RandomProvider {
     }
 
     return new String(chars);
+  }
+
+  public double getNumber(final double min, final double max) {
+    if (min == max) {
+      return min;
+    }
+
+    return min + rnd.nextDouble() * (max - min);
   }
 
   public long getNumber(final long min, final long max) {

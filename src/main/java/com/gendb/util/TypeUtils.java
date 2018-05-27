@@ -20,8 +20,8 @@ public class TypeUtils {
   }};
 
   private static final Set<String> FLOAT_TYPES = new HashSet<String>() {{
-    add("float");
-    add("double");
+    add(Types.FLOAT.getName());
+    add(Types.DOUBLE.getName());
   }};
 
   private static final Set<String> NUMERIC_TYPES = new HashSet<String>() {{
@@ -34,14 +34,18 @@ public class TypeUtils {
     addAll(Arrays.asList(Types.CHAR.getName(), Types.VARCHAR.getName()));
   }};
 
-  private static final Map<Types, Long> TYPE_TO_MAX_SIGNED = new HashMap<Types, Long>() {{
-    put(Types.SMALLINT, (long)Short.MAX_VALUE);
-    put(Types.INT, (long)(Integer.MAX_VALUE));
+  private static final Map<Types, Double> TYPE_TO_MAX_SIGNED = new HashMap<Types, Double>() {{
+    put(Types.SMALLINT, (double)Short.MAX_VALUE);
+    put(Types.INT, (double)(Integer.MAX_VALUE));
+    put(Types.FLOAT, (double)Float.MAX_VALUE);
+    put(Types.DOUBLE, Double.MAX_VALUE);
   }};
 
-  private static final Map<Types, Long> TYPE_TO_MIN_SIGNED = new HashMap<Types, Long>() {{
-    put(Types.SMALLINT, (long)Short.MIN_VALUE);
-    put(Types.INT, (long)(Integer.MIN_VALUE));
+  private static final Map<Types, Double> TYPE_TO_MIN_SIGNED = new HashMap<Types, Double>() {{
+    put(Types.SMALLINT, (double)Short.MIN_VALUE);
+    put(Types.INT, (double)Integer.MIN_VALUE);
+    put(Types.FLOAT, (double)Float.MIN_VALUE);
+    put(Types.DOUBLE, Double.MIN_VALUE);
   }};
 
   public static boolean isNumeric(final String typeName) {
@@ -58,7 +62,7 @@ public class TypeUtils {
       throw new IncorrectTypeException(name);
     }
 
-    return TYPE_TO_MIN_SIGNED.get(Types.SMALLINT);
+    return TYPE_TO_MIN_SIGNED.get(Types.fromName(name));
   }
 
   public static double getMaxValue(final String name) throws IncorrectTypeException {
@@ -67,6 +71,6 @@ public class TypeUtils {
       throw new IncorrectTypeException(name);
     }
 
-    return TYPE_TO_MAX_SIGNED.get(Types.SMALLINT);
+    return TYPE_TO_MAX_SIGNED.get(Types.fromName(name));
   }
 }

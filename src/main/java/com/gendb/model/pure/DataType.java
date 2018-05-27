@@ -1,6 +1,7 @@
 package com.gendb.model.pure;
 
 import com.gendb.util.TypeUtils;
+import com.gendb.util.Types;
 
 public class DataType {
 
@@ -75,7 +76,7 @@ public class DataType {
   }
 
   String getTypeDefinition() {
-    final StringBuilder sb = new StringBuilder(name.toUpperCase());
+    final StringBuilder sb = new StringBuilder(Types.fromName(name).getActualName().toUpperCase());
     if (name.equals("decimal")) {
       sb.append(String.format("(%1$s,%2$s)", precision, scale));
     } else if (TypeUtils.isString(name)) {
