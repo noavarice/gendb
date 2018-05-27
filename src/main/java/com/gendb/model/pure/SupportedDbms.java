@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 public enum SupportedDbms {
 
   MYSQL("mysql"),
-  POSTGRESQL("postgresql"),
+  POSTGRESQL("postgres"),
   ;
 
   private static final Map<String, SupportedDbms> NAME_TO_VALUE = Arrays.stream(SupportedDbms.values())

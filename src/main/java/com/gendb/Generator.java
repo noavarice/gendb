@@ -5,7 +5,6 @@ import com.gendb.dto.ObjectFactory;
 import com.gendb.exception.ConfigReadingException;
 import com.gendb.exception.ConnectionException;
 import com.gendb.exception.GenerationException;
-import com.gendb.exception.IncorrectTypeException;
 import com.gendb.exception.ScriptGenerationException;
 import com.gendb.exception.ValidationException;
 import com.gendb.generation.InternalGenerator;
@@ -13,7 +12,6 @@ import com.gendb.generation.RandomProvider;
 import com.gendb.mapper.PureModelMapper;
 import com.gendb.mapper.ValidationModelMapper;
 import com.gendb.model.pure.Database;
-import com.gendb.model.pure.SupportedDbms;
 import com.gendb.model.pure.Table;
 import com.gendb.model.validating.ValidatingDatabase;
 import com.gendb.model.wrapper.ValueWrapper;
@@ -144,7 +142,6 @@ public final class Generator {
   }
 
   private void writeToStream(final Database db, final OutputStream output) throws GenerationException {
-    write(output, db.getCreateStatement());
     final int batchSize = db.getBatchSize();
     for (final Table t : db.getTables()) {
       LOGGER.info("Start generating table '{}'", t.getName());
@@ -189,8 +186,6 @@ public final class Generator {
   private void writeToConnection(final Database dbConfig, final Connection connection)
       throws SQLException, GenerationException {
     final Statement dmlStatement = connection.createStatement();
-    dmlStatement.execute(dbConfig.getCreateStatement());
-    dmlStatement.execute(dbConfig.getConnectStatement());
     final int batchSize = dbConfig.getBatchSize();
     for (final Table t: dbConfig.getTables()) {
       LOGGER.info("Start generating table '{}'", t.getName());
@@ -237,8 +232,9 @@ public final class Generator {
     final Database pureConfig = MapperUtils.getMapper(PureModelMapper.class).toModel(dbConfig);
     try {
       final String connUrl = connProps.getProperty("url");
-      final Connection connection = DriverManager.getConnection(connUrl, connProps);
-      writeToConnection(pureConfig, connection);
+      final Connection dbConnection = DriverManager.getConnection(connUrl, connProps);
+      writeToConnection(pureConfig, dbConnection);
+      dbConnection.close();
     } catch (SQLException e) {
       throw new ConnectionException("Failed to create database", e, false, true);
     }

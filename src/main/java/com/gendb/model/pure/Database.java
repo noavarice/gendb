@@ -30,8 +30,6 @@ public class Database {
     return 0;
   }
 
-  private String name;
-
   @Valid
   @UniqueTableNames(groups = FirstStage.class)
   @ValidForeignKeys(groups = FirstStage.class)
@@ -45,14 +43,6 @@ public class Database {
   private boolean tablesSorted = false;
 
   private int fkCounter = 1;
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
 
   public List<Table> getTables() {
     if (tablesSorted) {
@@ -74,19 +64,6 @@ public class Database {
 
   public void setDbmsName(SupportedDbms dbmsName) {
     this.dbmsName = dbmsName;
-  }
-
-  @Override
-  public String toString() {
-    return name;
-  }
-
-  public String getCreateStatement() {
-    return "CREATE DATABASE " + name;
-  }
-
-  public String getConnectStatement() {
-    return (dbmsName == SupportedDbms.MYSQL ? "USE" : "\\c") + ' ' + name;
   }
 
   public int getBatchSize() {

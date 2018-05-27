@@ -86,7 +86,6 @@
     <xs:sequence>
       <xs:element name="table" type="TableDto" maxOccurs="unbounded"/>
     </xs:sequence>
-    <xs:attribute name="name" type="Attribute" use="required"/>
     <xs:attribute name="dbms" type="SupportedDbmsDto" use="required"/>
     <xs:attribute name="batchSize" type="xs:positiveInteger" default="10000"/>
   </xs:complexType>

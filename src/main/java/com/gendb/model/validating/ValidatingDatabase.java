@@ -12,8 +12,6 @@ import javax.validation.Valid;
 @GroupSequence({ValidatingDatabase.class, FirstStage.class, SecondStage.class})
 public class ValidatingDatabase {
 
-  private String name;
-
   @Valid
   @UniqueTableNames(groups = FirstStage.class)
   @ValidForeignKeys(groups = FirstStage.class)
@@ -23,14 +21,6 @@ public class ValidatingDatabase {
   private int batchSize;
 
   private String dbms;
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
 
   public List<ValidatingTable> getTables() {
     return tables;
