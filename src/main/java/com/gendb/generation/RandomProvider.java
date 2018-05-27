@@ -67,7 +67,7 @@ public class RandomProvider {
       return min;
     }
 
-    return min + Math.abs(rnd.nextLong()) % (max - min);
+    return min + Math.abs(rnd.nextLong()) % (max - min + 1);
   }
 
   public BigDecimal getDecimal(final int precision, final int scale) {

@@ -9,7 +9,7 @@ public class GenerationException extends Exception {
     super(message);
   }
 
-  GenerationException(
+  public GenerationException(
       final String message,
       final Throwable cause,
       final boolean suppressionEnabled,

@@ -1,8 +1,9 @@
 package com.gendb.generation;
 
-import com.gendb.exception.IncorrectTypeException;
+import com.gendb.exception.GenerationException;
 import com.gendb.generation.generator.TypeGenerator;
 import com.gendb.generation.generator.impl.DecimalGenerator;
+import com.gendb.generation.generator.impl.DictionaryHandler;
 import com.gendb.generation.generator.impl.IntegerGenerator;
 import com.gendb.generation.generator.impl.StringGenerator;
 import com.gendb.generation.generator.impl.TimestampGenerator;
@@ -44,18 +45,22 @@ public final class InternalGenerator {
     put("date", TimestampGenerator.class);
   }};
 
-  private static TypeGenerator getGenerator(final Column column) throws IncorrectTypeException {
+  private static TypeGenerator getGenerator(final Column column) throws GenerationException {
     final DataType type = column.getType();
     final String className = type.getHandlerClass();
     final TypeGenerator gen;
     try {
       if (className == null || className.isEmpty()) {
-        gen = DEFAULT_GENERATORS.get(type.getName()).newInstance();
+        if (type.getDictionary() != null) {
+          gen = new DictionaryHandler();
+        } else {
+          gen = DEFAULT_GENERATORS.get(type.getName()).newInstance();
+        }
       } else {
         gen = ((Class<? extends TypeGenerator>) Class.forName(className)).newInstance();
       }
     } catch (ReflectiveOperationException e) {
-      throw new IncorrectTypeException("Failed to instantiate type generator class", e, false, true);
+      throw new GenerationException("Failed to instantiate type generator class", e, false, true);
     }
 
     gen.init(column);
@@ -86,7 +91,7 @@ public final class InternalGenerator {
 
   public static InternalGenerator createGenerator(
       final Table table,
-      final RandomProvider rnd) throws IncorrectTypeException {
+      final RandomProvider rnd) throws GenerationException {
     final List<Integer> order = table.getColumnGenerationOrder();
     final List<Column> columns = table.getColumns();
     final List<Class<? extends ValueWrapper>> classes = columns.stream()
@@ -101,7 +106,7 @@ public final class InternalGenerator {
       try {
         wrappers.add(classes.get(i).newInstance());
       } catch (ReflectiveOperationException e) {
-        throw new IncorrectTypeException("Failed to instantiate value wrapper class", e, false, true);
+        throw new GenerationException("Failed to instantiate value wrapper class", e, false, true);
       }
     }
 

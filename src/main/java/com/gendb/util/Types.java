@@ -7,6 +7,8 @@ public enum Types {
   DECIMAL("decimal"),
   CHAR("char"),
   VARCHAR("varchar"),
+  TIMESTAMP("timestamp"),
+  DATE("date"),
   ;
 
   private final String name;

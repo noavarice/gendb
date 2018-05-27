@@ -10,15 +10,15 @@ public class Violations {
 
   public static final String NEGATIVE_PRECISION = "Scale is set to negative value";
 
-  public static final String DECIMAL_PROPERTIES_MISSED = "ValidatingColumn has type 'decimal' while precision and scale are not provided";
+  public static final String DECIMAL_PROPERTIES_MISSED = "Column has type 'decimal' while precision and scale are not provided";
 
   public static final String HANDLER_CLASS_NOT_FOUND = "Handler of type '%1$s' not found or cannot be instantiated";
 
-  public static final String NON_UNIQUE_COLUMN_NAMES = "ValidatingTable '%1$s': columns have non-unique names";
+  public static final String NON_UNIQUE_COLUMN_NAMES = "Table '%1$s': columns have non-unique names";
 
   public static final String NON_UNIQUE_TABLE_NAMES = "Tables have non-unique names";
 
-  public static final String UNKNOWN_FOREIGN_KEY_TARGET_TABLE = "ValidatingTable '%1$s': unknown table '%2$s' as foreign key reference";
+  public static final String UNKNOWN_FOREIGN_KEY_TARGET_TABLE = "Table '%1$s': unknown table '%2$s' as foreign key reference";
 
   public static final String NO_CYCLIC_REFERENCES = "Cyclic foreign key referencing found: %1$s";
 
@@ -38,4 +38,8 @@ public class Violations {
   public static final String INCOMPLETE_DISTRIBUTION_PERCENTAGE = "Total distribution percentage must be equal to 100";
 
   public static final String DISTRIBUTION_INTERVAL_PERCENTAGE_OUT_OF_BOUNDS = "Distribution interval percentage is out of bounds [0, 100]";
+
+  public static final String DICTIONARY_NOT_EXISTS = "Dictionary file '%1$s' does not exist";
+
+  public static final String PRECISION_NOT_LESS_THAN_SCALE = "Precision (%1$d) is less than decimal scale (%2$d)";
 }

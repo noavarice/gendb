@@ -29,6 +29,8 @@
     <xs:attribute name="length" type="xs:int" default="1"/>
     <xs:attribute name="min" type="xs:double"/>
     <xs:attribute name="max" type="xs:double"/>
+    <xs:attribute name="dictionary" type="Attribute"/>
+    <xs:attribute name="sequential" type="xs:boolean" default="false"/>
   </xs:complexType>
 
   <xs:complexType name="DistributionIntervalDto">

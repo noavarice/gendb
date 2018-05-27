@@ -187,7 +187,7 @@ public final class Generator {
   }
 
   private void writeToConnection(final Database dbConfig, final Connection connection)
-      throws SQLException, IncorrectTypeException {
+      throws SQLException, GenerationException {
     final Statement dmlStatement = connection.createStatement();
     dmlStatement.execute(dbConfig.getCreateStatement());
     dmlStatement.execute(dbConfig.getConnectStatement());

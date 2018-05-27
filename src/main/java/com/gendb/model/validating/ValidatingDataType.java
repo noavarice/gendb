@@ -1,14 +1,21 @@
 package com.gendb.model.validating;
 
 import com.gendb.validation.Violations;
+import com.gendb.validation.stage.FirstStage;
 import com.gendb.validation.type.DecimalPropertiesPresent;
+import com.gendb.validation.type.DictionaryExists;
 import com.gendb.validation.type.HandlerClassExist;
+import com.gendb.validation.type.PrecisionLessThanScale;
 import com.gendb.validation.type.ValidNumericBoundaries;
+import javax.validation.GroupSequence;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
 @DecimalPropertiesPresent
 @ValidNumericBoundaries
+@DictionaryExists
+@PrecisionLessThanScale(groups = FirstStage.class)
+@GroupSequence({ValidatingDataType.class, FirstStage.class})
 public class ValidatingDataType {
 
   private String name;
@@ -30,6 +37,10 @@ public class ValidatingDataType {
   private Double min;
 
   private Double max;
+
+  private String dictionary;
+
+  private boolean sequential;
 
   public String getName() {
     return name;
@@ -93,5 +104,21 @@ public class ValidatingDataType {
 
   public void setMax(Double max) {
     this.max = max;
+  }
+
+  public String getDictionary() {
+    return dictionary;
+  }
+
+  public void setDictionary(String dictionary) {
+    this.dictionary = dictionary;
+  }
+
+  public boolean isSequential() {
+    return sequential;
+  }
+
+  public void setSequential(boolean sequential) {
+    this.sequential = sequential;
   }
 }

@@ -22,6 +22,10 @@ public class DataType {
 
   private Column minColumn;
 
+  private String dictionary;
+
+  private boolean sequential;
+
   public String getName() {
     return name;
   }
@@ -111,5 +115,21 @@ public class DataType {
 
   public void setMinColumn(Column minColumn) {
     this.minColumn = minColumn;
+  }
+
+  public String getDictionary() {
+    return dictionary;
+  }
+
+  public void setDictionary(String dictionary) {
+    this.dictionary = dictionary;
+  }
+
+  public boolean isSequential() {
+    return sequential;
+  }
+
+  public void setSequential(boolean sequential) {
+    this.sequential = sequential;
   }
 }
