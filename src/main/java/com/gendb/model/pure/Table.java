@@ -19,7 +19,7 @@ public class Table {
   private static final String PK_DECLARATION_TEMPLATE = "%1$s %2$s PRIMARY KEY";
 
   private static final Map<SupportedDbms, String> DBMS_TO_PK_TYPE = new HashMap<SupportedDbms, String>() {{
-    put(SupportedDbms.MYSQL, "INTEGER AUTO_INCREMENT");
+    put(SupportedDbms.MYSQL, "INT AUTO_INCREMENT");
     put(SupportedDbms.POSTGRESQL, "SERIAL");
   }};
 
