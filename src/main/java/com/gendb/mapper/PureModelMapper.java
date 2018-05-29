@@ -17,6 +17,7 @@ import com.gendb.model.validating.ValidatingDistributionPoint;
 import com.gendb.model.validating.ValidatingTable;
 import com.gendb.model.validating.ValidatingValueOrder;
 import com.gendb.util.Fn;
+import com.gendb.util.Types;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -88,7 +89,7 @@ public abstract class PureModelMapper {
         final Column fkColumn = new Column();
         fkColumn.setName(fk.getColumnName());
         final DataType type = new DataType();
-        type.setName("int");
+        type.setName(Types.INT.getName());
         type.setNullable(false);
         type.setMin(1d);
         type.setMax((double)nameToTable.get(fk.getTargetTable()).getRowsCount());

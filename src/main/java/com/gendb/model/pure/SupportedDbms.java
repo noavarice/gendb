@@ -25,6 +25,10 @@ public enum SupportedDbms {
   }
 
   public static SupportedDbms fromName(final String name) {
+    if (!NAME_TO_VALUE.containsKey(name)) {
+      throw new IllegalArgumentException("Unknown DBMS type: " + name);
+    }
+
     return NAME_TO_VALUE.get(name);
   }
 }
