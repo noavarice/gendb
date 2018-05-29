@@ -26,9 +26,11 @@
     <xs:attribute name="name" type="DataTypes" use="required"/>
     <xs:attribute name="nullable" type="xs:boolean" default="true"/>
     <xs:attribute name="handler" type="Attribute"/>
-    <xs:attribute name="precision" type="xs:int"/>
-    <xs:attribute name="scale" type="xs:int"/>
-    <xs:attribute name="length" type="xs:int" default="1"/>
+    <xs:attribute name="precision" type="xs:positiveInteger"/>
+    <xs:attribute name="scale" type="xs:nonNegativeInteger"/>
+    <xs:attribute name="length" type="xs:positiveInteger"/>
+    <xs:attribute name="minLength" type="xs:positiveInteger"/>
+    <xs:attribute name="maxLength" type="xs:positiveInteger"/>
     <xs:attribute name="min" type="xs:double"/>
     <xs:attribute name="max" type="xs:double"/>
     <xs:attribute name="dictionary" type="Attribute"/>

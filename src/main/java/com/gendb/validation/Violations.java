@@ -6,10 +6,6 @@ package com.gendb.validation;
  */
 public class Violations {
 
-  public static final String NON_POSITIVE_PRECISION = "Precision is set to non-positive value";
-
-  public static final String NEGATIVE_PRECISION = "Scale is set to negative value";
-
   public static final String DECIMAL_PROPERTIES_MISSED = "Column has type 'decimal' while precision and scale are not provided";
 
   public static final String HANDLER_CLASS_NOT_FOUND = "Handler of type '%1$s' not found or cannot be instantiated";
@@ -42,4 +38,10 @@ public class Violations {
   public static final String DICTIONARY_NOT_EXISTS = "Dictionary file '%1$s' does not exist";
 
   public static final String PRECISION_NOT_LESS_THAN_SCALE = "Precision (%1$d) is less than decimal scale (%2$d)";
+
+  public static final String STRING_PROPERTIES_MISSED = "For column with type 'CHAR[n]' or"
+      + "'VARCHAR[n]' must be either set 'length' or both of 'minLength', 'maxLength' attributes";
+
+  public static final String STRING_MIN_LENGTH_MORE_THAN_MAX_LENGTH = "For column with type 'CHAR[n]'"
+      + " or 'VARCHAR[n]' value of 'minLength' attribute must be no more than 'maxLength' value";
 }

@@ -3,6 +3,9 @@ package com.gendb.model.pure;
 import com.gendb.util.TypeUtils;
 import com.gendb.util.Types;
 
+/**
+ * Model representing data type for single SQL column.
+ */
 public class DataType {
 
   private String name;
@@ -16,6 +19,10 @@ public class DataType {
   private Integer scale;
 
   private Integer length;
+
+  private Integer minLength;
+
+  private Integer maxLength;
 
   private Double min;
 
@@ -80,7 +87,7 @@ public class DataType {
     if (name.equals("decimal")) {
       sb.append(String.format("(%1$s,%2$s)", precision, scale));
     } else if (TypeUtils.isString(name)) {
-      sb.append(String.format("(%1$s)", length));
+      sb.append(String.format("(%1$s)", length != null ? length : maxLength));
     }
 
     if (!nullable) {
@@ -132,5 +139,21 @@ public class DataType {
 
   public void setSequential(boolean sequential) {
     this.sequential = sequential;
+  }
+
+  public Integer getMinLength() {
+    return minLength;
+  }
+
+  public void setMinLength(Integer minLength) {
+    this.minLength = minLength;
+  }
+
+  public Integer getMaxLength() {
+    return maxLength;
+  }
+
+  public void setMaxLength(Integer maxLength) {
+    this.maxLength = maxLength;
   }
 }

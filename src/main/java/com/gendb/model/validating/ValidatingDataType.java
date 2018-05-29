@@ -1,20 +1,21 @@
 package com.gendb.model.validating;
 
-import com.gendb.validation.Violations;
 import com.gendb.validation.stage.FirstStage;
 import com.gendb.validation.type.DecimalPropertiesPresent;
 import com.gendb.validation.type.DictionaryExists;
 import com.gendb.validation.type.HandlerClassExist;
 import com.gendb.validation.type.PrecisionLessThanScale;
+import com.gendb.validation.type.ProperMinAndMaxLength;
+import com.gendb.validation.type.StringPropertiesPresent;
 import com.gendb.validation.type.ValidNumericBoundaries;
 import javax.validation.GroupSequence;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 
 @DecimalPropertiesPresent
 @ValidNumericBoundaries
 @DictionaryExists
+@StringPropertiesPresent
 @PrecisionLessThanScale(groups = FirstStage.class)
+@ProperMinAndMaxLength(groups = FirstStage.class)
 @GroupSequence({ValidatingDataType.class, FirstStage.class})
 public class ValidatingDataType {
 
@@ -25,14 +26,15 @@ public class ValidatingDataType {
   @HandlerClassExist
   private String handlerClass;
 
-  @Positive(message = Violations.NON_POSITIVE_PRECISION)
   private Integer precision;
 
-  @PositiveOrZero(message = Violations.NEGATIVE_PRECISION)
   private Integer scale;
 
-  @Positive
   private Integer length;
+
+  private Integer minLength;
+
+  private Integer maxLength;
 
   private Double min;
 
@@ -120,5 +122,21 @@ public class ValidatingDataType {
 
   public void setSequential(boolean sequential) {
     this.sequential = sequential;
+  }
+
+  public Integer getMinLength() {
+    return minLength;
+  }
+
+  public void setMinLength(Integer minLength) {
+    this.minLength = minLength;
+  }
+
+  public Integer getMaxLength() {
+    return maxLength;
+  }
+
+  public void setMaxLength(Integer maxLength) {
+    this.maxLength = maxLength;
   }
 }
