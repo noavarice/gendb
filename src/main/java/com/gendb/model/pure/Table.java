@@ -122,20 +122,12 @@ public class Table {
     return String.format("ALTER TABLE %1$s %2$s;%3$s", name, sj.toString(), System.lineSeparator());
   }
 
-  public List<DataType> getColumnTypes() {
-    return columns.stream().map(Column::getType).collect(Collectors.toList());
-  }
-
   public List<ForeignKey> getForeignKeys() {
     return foreignKeys;
   }
 
   public void setForeignKeys(List<ForeignKey> foreignKeys) {
     this.foreignKeys = foreignKeys;
-  }
-
-  public List<ValueOrder> getValueOrders() {
-    return valueOrders;
   }
 
   public void setValueOrders(List<ValueOrder> valueOrders) {

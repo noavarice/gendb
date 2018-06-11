@@ -1,15 +1,7 @@
 package com.gendb.model.pure;
 
-import com.gendb.validation.database.NoCyclicReferences;
-import com.gendb.validation.database.UniqueTableNames;
-import com.gendb.validation.database.ValidForeignKeys;
-import com.gendb.validation.stage.FirstStage;
-import com.gendb.validation.stage.SecondStage;
 import java.util.List;
-import javax.validation.GroupSequence;
-import javax.validation.Valid;
 
-@GroupSequence({Database.class, FirstStage.class, SecondStage.class})
 public class Database {
 
   private static boolean depend(final Table t1, final Table t2) {
@@ -30,10 +22,6 @@ public class Database {
     return 0;
   }
 
-  @Valid
-  @UniqueTableNames(groups = FirstStage.class)
-  @ValidForeignKeys(groups = FirstStage.class)
-  @NoCyclicReferences(groups = SecondStage.class)
   private List<Table> tables;
 
   private SupportedDbms dbmsName;

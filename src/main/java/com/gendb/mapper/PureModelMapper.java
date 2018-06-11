@@ -73,7 +73,6 @@ public abstract class PureModelMapper {
   @Mapping(target = "distributionIntervals", expression = "java(mapDistribution(column.getDistribution()))")
   abstract Column toModel(final ValidatingColumn column);
 
-  @Mapping(target = "columnTypes", ignore = true)
   @Mapping(target = "columnGenerationOrder", ignore = true)
   abstract Table toModel(final ValidatingTable table);
 
